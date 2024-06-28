@@ -1,0 +1,13 @@
+.head-image-wrapper{
+    position: relative;
+    top: -60px;
+    .head-image.block{
+     background-color: var(--link-color);
+     border-radius: 10px;
+     &>div{
+        position: relative;
+        top: -10px;
+        right: 20px;
+     }
+    }
+}
