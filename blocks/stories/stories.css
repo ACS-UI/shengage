@@ -17,10 +17,11 @@
 
 .stories>ul>li {
     border: 1px solid var(--dark-color);
-    background-color: var(--link-color);
-    color: var(--white);
+    background-color: var(--white);
+    color: var(--black);
     border-radius: 20px;
-    max-width: 220px;
+    max-width: 486px;
+    min-width: 380px;
 }
 
 .stories .stories-story-body {
