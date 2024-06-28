@@ -9,3 +9,7 @@ main .section.black-bar-container{
     }
 
 }
+
+header.header-wrapper nav a:any-link{
+    color: var(--black);
+}
