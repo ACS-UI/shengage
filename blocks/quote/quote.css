@@ -1,0 +1,19 @@
+@media (width >=900px) {
+    
+    .section>div.quote-wrapper {
+        box-sizing: border-box;
+        max-width: 100%;
+        width: 100%;
+        padding: 50px 150px 80px 150px;
+
+        div {
+            text-align: center;
+        }
+
+        img {
+            height: 100px;
+            width: 100px;
+        }
+    }
+
+}
