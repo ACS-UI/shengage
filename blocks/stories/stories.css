@@ -4,7 +4,7 @@
     padding: 0;
     display: flex;
     width: fit-content;
-    column-gap: 20px;
+    column-gap: 25px;
 }
 
 .stories.block {
@@ -16,7 +16,7 @@
 }
 
 .stories>ul>li {
-    border: 1px solid var(--dark-color);
+    box-shadow: 1px 3px 9px 0px rgba(0, 0, 0, 0.42);
     background-color: var(--white);
     color: var(--black);
     border-radius: 20px;
@@ -71,6 +71,7 @@ ul.story-container {
     overflow: auto hidden;
     scroll-snap-type: x mandatory;
     flex: 0 0 calc(100% - 16px);
+    padding: 20px 0px;
 }
 
 .story-container::-webkit-scrollbar {

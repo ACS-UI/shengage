@@ -1,10 +1,13 @@
 @media (width >=900px) {
-    
+    .section.quote-container {
+        padding-bottom: 0;
+    }
+
     .section>div.quote-wrapper {
         box-sizing: border-box;
         max-width: 100%;
         width: 100%;
-        padding: 50px 150px 80px 150px;
+        padding: 50px 150px 0px 150px;
 
         div {
             text-align: center;
