@@ -1,9 +1,9 @@
 /* header and nav layout */
 header .nav-wrapper {
   background-color: var(--background-color);
-  width: 100%;
+  width: 100vw;
   z-index: 2;
-  position: fixed;
+  /* position: fixed; */
 }
 
 header nav {
@@ -189,6 +189,7 @@ header nav .nav-sections ul > li > ul > li {
 @media (width >= 900px) {
   header{
     position: absolute;
+    top: 0;
   }
   
   header .nav-wrapper{
