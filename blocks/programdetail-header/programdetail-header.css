@@ -1,0 +1,19 @@
+.programdetail-header{
+    height: 540px;  
+    background-image: url("../../assets/progdetheader.webp");
+    background-repeat: no-repeat;   
+}
+
+.programdetail-header img{
+    max-width: 340px;
+    box-shadow: 10px 10px var(--link-color);
+}
+
+.programdetail-header h2{
+    color: #fff;
+}
+
+.programdetail-header .row-1 div{
+    display: flex;
+    padding: 1rem 2.5rem;
+}
