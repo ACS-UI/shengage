@@ -83,3 +83,9 @@ li.card-slide {
   justify-content: center;
   align-items: center;  
 }
+
+.section.cards-container{
+  background-image: url("../../assets/background-footer.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
