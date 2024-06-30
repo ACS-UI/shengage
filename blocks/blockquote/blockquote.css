@@ -1,6 +1,7 @@
 .blockquote div{
     padding: 3rem;
 }
+
 .blockquote div div{
     display: flex;
     flex-direction: column;

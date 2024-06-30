@@ -7,7 +7,7 @@
         box-sizing: border-box;
         max-width: 100%;
         width: 100%;
-        padding: 50px 150px 0px 150px;
+        padding: 50px 150px 0;
 
         div {
             text-align: center;

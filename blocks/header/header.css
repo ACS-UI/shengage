@@ -1,4 +1,3 @@
-/* header and nav layout */
 header .nav-wrapper {
   background-color: var(--background-color);
   width: 100vw;
@@ -283,7 +282,6 @@ header nav .nav-tools {
   grid-area: tools;
 }
 
-/*breadcrumbs */
 /* breadcrumbs */
 header .breadcrumbs {
   display: none;

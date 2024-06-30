@@ -12,11 +12,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
     /* Centering elements */
 }
 
 .stories>ul>li {
-    box-shadow: 1px 3px 9px 0px rgba(0, 0, 0, 0.42);
+    box-shadow: 1px 3px 9px 0 rgb(0 0 0 / 42%);
     background-color: var(--white);
     color: var(--black);
     border-radius: 20px;
@@ -71,7 +72,7 @@ ul.story-container {
     overflow: auto hidden;
     scroll-snap-type: x mandatory;
     flex: 0 0 calc(100% - 16px);
-    padding: 20px 0px;
+    padding: 20px 0;
 }
 
 .story-container::-webkit-scrollbar {
