@@ -282,3 +282,54 @@ header nav .nav-sections ul > li > ul > li {
 header nav .nav-tools {
   grid-area: tools;
 }
+
+/*breadcrumbs */
+/* breadcrumbs */
+header .breadcrumbs {
+  display: none;
+  padding: 0;
+  width: 100%;
+  height: var(--breadcrumbs-height);
+  max-width: 1200px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  font-size: var(--breadcrumbs-font-size);
+  
+}
+
+header .breadcrumbs ol {
+  display: flex;
+  flex-flow: wrap;
+  list-style: none;
+  padding: 0;
+  gap: 1ch;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+header .breadcrumbs ol li {
+  padding-inline-start: 0;
+  opacity: 0.7;
+  color: #c2c2c2;
+  font-style: italic;
+}
+
+header .breadcrumbs ol li:not(:last-child)::after {
+  content: "/";
+  padding-left: 1ch;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+header .breadcrumbs ol li a:any-link {
+  color: #c2c2c2;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+header .breadcrumbs ol li:last-of-type {
+  opacity: 1;
+}
+
+@media screen and (width >= 900px) {
+  header .breadcrumbs {
+    display: block;
+  }
+}

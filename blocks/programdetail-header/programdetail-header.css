@@ -1,19 +1,43 @@
-.programdetail-header{
-    height: 540px;  
+.programdetail-header{ 
+    margin-top: 4rem;
+    min-height: 350px;  
     background-image: url("../../assets/progdetheader.webp");
     background-repeat: no-repeat;   
+    background-color: #f4f4f6;
+    color: #fff;
+    padding-top: 1.5rem;
+ 
+   
+    
 }
 
 .programdetail-header img{
+  
     max-width: 340px;
     box-shadow: 10px 10px var(--link-color);
 }
 
 .programdetail-header h2{
     color: #fff;
+    padding-left: 2.5rem;
 }
 
-.programdetail-header .row-1 div{
+.programdetail-header .row-0 p{
+    color: #000000;
+    padding-left: 2.5rem;
+}
+
+.programdetail-header .row-1{
+    background-color: #f4f4f6;   
+}
+
+.programdetail-header .row-1 img{
+    position: absolute;
+    top: 150px;
+    right: 50px;
+}
+.programdetail-header .row-1 div{   
     display: flex;
     padding: 1rem 2.5rem;
+    color: black;
 }
