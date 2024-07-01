@@ -16,31 +16,43 @@ export default function decorate(block) {
       }
     });
   });
-  const homeBannerimgs = document.querySelectorAll('.col-1 img');
-  let currentSlide = 0;
 
-  function homeBannerSlider() {
-    homeBannerimgs.forEach((image, id) => {
-      currentSlide = id;
-      if (id === 0) {
-        image.classList.add('showslide');
-      } else {
-        image.classList.add('hideslide');
-      }
+  const sliderContainer = document.querySelector('.col-1');
+  const dotContainer = document.createElement('div');
+  dotContainer.classList.add('dot-container');
+  const dots = ['dot active', 'dot'];
+  dots.forEach((className) => {
+    const div = document.createElement('div');
+    className.split(' ').forEach((cls) => {
+      div.classList.add(cls);
     });
-    homeBannerimgs.forEach((image, id) => {
-      image.addEventListener('click', () => {
-        homeBannerimgs[id].classList.remove('showslide');
-        homeBannerimgs[id].classList.add('hideslide');
-        homeBannerimgs[currentSlide].classList.add('showslide');
-        homeBannerimgs[currentSlide].classList.remove('hideslide');
-        if (currentSlide < homeBannerimgs.length - 1) {
-          currentSlide += 1;
-        } else {
-          currentSlide -= 1;
-        }
-      });
-    });
+    dotContainer.append(div);
+  });
+  sliderContainer.append(dotContainer);
+  const slides = document.querySelectorAll('.col-1 img');
+  slides.forEach((image, id) => {
+    if (id === 0) {
+      image.classList.add('showslide');
+    }
+  });
+  const allDots = document.querySelectorAll('.dot');
+
+  let currentSlide = 0;
+  function next() {
+    if (currentSlide === slides.length - 1) {
+      currentSlide = 0;
+    } else {
+      currentSlide += 1;
+    }
+
+    document.querySelector('.col-1 img.showslide').classList.remove('showslide');
+    slides[currentSlide].classList.add('showslide');
+
+    document.querySelector('.dot.active').classList.remove('active');
+    allDots[currentSlide].classList.add('active');
   }
-  homeBannerSlider();
+
+  setInterval(() => {
+    next();
+  }, 3000);
 }
