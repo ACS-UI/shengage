@@ -4,7 +4,8 @@ export default function decorate(block) {
 
   // setup image columns
   [...block.children].forEach((row) => {
-    [...row.children].forEach((col) => {
+    [...row.children].forEach((col, id) => {
+      col.classList.add(`col-${id}`);
       const pic = col.querySelector('picture');
       if (pic) {
         const picWrapper = pic.closest('div');
@@ -15,4 +16,31 @@ export default function decorate(block) {
       }
     });
   });
+  const homeBannerimgs = document.querySelectorAll('.col-1 img');
+  let currentSlide = 0;
+
+  function homeBannerSlider() {
+    homeBannerimgs.forEach((image, id) => {
+      currentSlide = id;
+      if (id === 0) {
+        image.classList.add('showslide');
+      } else {
+        image.classList.add('hideslide');
+      }
+    });
+    homeBannerimgs.forEach((image, id) => {
+      image.addEventListener('click', () => {
+        homeBannerimgs[id].classList.remove('showslide');
+        homeBannerimgs[id].classList.add('hideslide');
+        homeBannerimgs[currentSlide].classList.add('showslide');
+        homeBannerimgs[currentSlide].classList.remove('hideslide');
+        if (currentSlide < homeBannerimgs.length - 1) {
+          currentSlide += 1;
+        } else {
+          currentSlide -= 1;
+        }
+      });
+    });
+  }
+  homeBannerSlider();
 }

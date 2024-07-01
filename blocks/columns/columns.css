@@ -38,3 +38,11 @@
   background-repeat: no-repeat;
   background-position: center center;
 }
+
+.showslide{
+  display: block;
+}
+
+.hideslide{
+  display: none;
+}
