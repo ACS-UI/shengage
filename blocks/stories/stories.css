@@ -59,13 +59,12 @@
     align-items: center;
     column-gap: 10px;
 
-    .dot1,
-    .dot2,
-    .dot3 {
+    .dot{
         width: 10px;
         height: 10px;
         border: 1px solid var(--black);
         border-radius: 100%;
+        cursor: pointer;
 
         &.active {
             background-color: var(--black);

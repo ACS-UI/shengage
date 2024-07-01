@@ -55,6 +55,7 @@
           height: 10px;
           border: 1px solid var(--black);
           border-radius: 100%;
+          cursor: pointer;
           
           &.active{
             background-color: var(--black);
