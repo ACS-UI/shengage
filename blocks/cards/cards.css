@@ -19,7 +19,7 @@
   background-color: var(--link-color);
   color: var(--white);
   border-radius: 20px;
-  max-width: 220px;
+  max-width: 260px;
 }
 
 .cards .cards-card-body {
@@ -87,7 +87,7 @@ ul.card-container {
 
 
 li.card-slide {
-  min-width: 220px; 
+  min-width: 260px; 
   scroll-snap-align: start; 
   display: flex;
   flex-direction: column;
