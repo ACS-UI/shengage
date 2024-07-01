@@ -1,5 +1,9 @@
+.section.blockquote-container{
+    padding: 0 32px;
+}
+
 .blockquote div{
-    padding: 3rem;
+    padding: 0 3rem;
 }
 
 .blockquote div div{
@@ -9,5 +13,9 @@
     justify-content: center;
     height: auto;
     
+}
+
+.blockquote img{
+    height: 100px;
 }
 

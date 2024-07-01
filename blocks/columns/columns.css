@@ -31,3 +31,18 @@
     order: unset;
   }
 }
+
+.section.columns-container{
+  background-image: url("../../assets/background-header.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.showslide{
+  display: block;
+}
+
+.hideslide{
+  display: none;
+}

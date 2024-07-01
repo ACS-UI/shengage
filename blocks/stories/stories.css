@@ -1,4 +1,4 @@
-.section.stories-container{
+.section.stories-container {
     background-image: url('../../assets/background-footer.png');
     background-position: -905px 0;
 }
@@ -60,7 +60,7 @@
     column-gap: 10px;
 
     .dot1,
-    .dot2, 
+    .dot2,
     .dot3 {
         width: 10px;
         height: 10px;
@@ -77,7 +77,7 @@ ul.story-container {
     width: 100%;
     display: flex;
     transition: transform 0.5s ease;
-    
+
     /* overflow: auto hidden; */
     scroll-snap-type: x mandatory;
     flex: 0 0 calc(100% - 16px);
