@@ -10,7 +10,22 @@ export default function decorate(block) {
     while (row.firstElementChild) li.append(row.firstElementChild);
     [...li.children].forEach((div) => {
       if (div.children.length === 1 && div.querySelector('picture')) div.className = 'cards-card-image';
-      else div.className = 'cards-card-body';
+      else {
+        div.className = 'cards-card-body';
+
+        // Fetch the SVG content
+        fetch('../../assets/whitecircleArrow.svg')
+          .then((response) => response.text())
+          .then((svgContent) => {
+            // Create a container div to hold the SVG content
+            const svgContainer = document.createElement('div');
+            svgContainer.innerHTML = svgContent;
+
+            // Append the SVG content to the div
+            div.appendChild(svgContainer);
+          })
+          .catch((error) => console.error('Error fetching SVG:', error));
+      }
     });
     ul.append(li);
   });

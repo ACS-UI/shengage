@@ -16,8 +16,8 @@ export default function decorate(block) {
 
         // Fetch the SVG content
         fetch('../../assets/cricleArrow.svg')
-          .then(response => response.text())
-          .then(svgContent => {
+          .then((response) => response.text())
+          .then((svgContent) => {
             // Create a container div to hold the SVG content
             const svgContainer = document.createElement('div');
             svgContainer.innerHTML = svgContent;
@@ -25,10 +25,9 @@ export default function decorate(block) {
             // Append the SVG content to the div
             div.appendChild(svgContainer);
           })
-          .catch(error => console.error('Error fetching SVG:', error));
+          .catch((error) => console.error('Error fetching SVG:', error));
       }
     });
-
 
     ul.append(li);
   });

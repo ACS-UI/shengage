@@ -22,8 +22,18 @@
   max-width: 260px;
 }
 
-.cards .cards-card-body {
-  margin: 16px;
+.cards .cards-card-body{
+  p{
+    font-size: 16px;
+  }
+
+  box-sizing: border-box;
+  margin-block: 10px;
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  gap: 20px;
+  align-items: center;
 }
 
 .cards .cards-card-image {
