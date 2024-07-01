@@ -1,3 +1,8 @@
+.section.stories-container{
+    background-image: url('../../assets/background-footer.png');
+    background-position: -905px 0;
+}
+
 .stories>ul {
     list-style: none;
     margin: 0;
