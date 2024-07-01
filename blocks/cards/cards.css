@@ -56,10 +56,20 @@
           border: 1px solid var(--black);
           border-radius: 100%;
           cursor: pointer;
-          
+
           &.active{
             background-color: var(--black);
           }
+  }
+
+  .arrow {
+    width: 15px;
+    height: 15px;
+    background-image: url('../../assets/arrow.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform:rotate(39deg)
   }
 }
 
