@@ -3,8 +3,27 @@
   flex-direction: column;
 }
 
+.columns h2{
+  margin: 0;
+}
+
 .columns img {
   width: 100%;
+}
+
+.columns>div>.columns-img-col img {
+  display: block;
+}
+
+.columns #shengage {
+  .icon {
+    height: auto;
+    width: 100%;
+  }
+
+  img {
+    width: 250px;
+  }
 }
 
 .columns > div > div {
@@ -13,10 +32,6 @@
 
 .columns > div > .columns-img-col {
   order: 0;
-}
-
-.columns > div > .columns-img-col img {
-  display: block;
 }
 
 @media (width >= 900px) {
