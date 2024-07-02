@@ -69,6 +69,7 @@ body {
   color: var(--text-color);
   background-color: var(--background-color);
   display: none;
+  overflow-x: hidden ;
 }
 
 body.appear {
