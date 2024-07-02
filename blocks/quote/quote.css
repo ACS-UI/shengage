@@ -6,7 +6,7 @@
     .section>div.quote-wrapper {
         box-sizing: border-box;
         max-width: 100%;
-        width: 100%;
+        width: calc(100% - 300px);
         padding: 50px 150px 0;
 
         div {
