@@ -40,3 +40,7 @@
     padding: 1rem 2.5rem  2.5rem 0;
     color: black;
 }
+
+.programdetail-header .row-1 div p:first-of-type{
+    max-width: 70%;
+}

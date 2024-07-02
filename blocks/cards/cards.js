@@ -61,6 +61,8 @@ export default function decorate(block) {
     if (currentCard > 0) {
       currentCard -= 1;
     }
+    buttonBack.classList.add('active');
+    buttonNext.classList.remove('active');
     setScrollTo();
   });
 
@@ -68,6 +70,8 @@ export default function decorate(block) {
     if (currentCard < listOfCardElements.length - 1) {
       currentCard += 1;
     }
+    buttonNext.classList.add('active');
+    buttonBack.classList.remove('active');
     setScrollTo();
   });
 
