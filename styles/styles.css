@@ -10,30 +10,6 @@
  * governing permissions and limitations under the License.
  */
 
- @font-face {
-   font-family: 'Adobe Clean';
-   font-weight: 400;
-   src: url('/assets/fonts/adobe-clean-400.woff2') format('woff2');
- }
-
- @font-face {
-   font-family: 'Adobe Clean';
-   font-weight: 700;
-   src: url('/assets/fonts/adobe-clean-700.woff2') format('woff2');
- }
-
- @font-face {
-   font-family: 'Adobe Clean';
-   font-weight: 800;
-   src: url('/assets/fonts/adobe-clean-800.woff2') format('woff2');
- }
-
- @font-face {
-   font-family: 'Adobe Clean';
-   font-weight: 900;
-   src: url('/assets/fonts/adobe-clean-900.woff2') format('woff2');
- }
-
 :root {
   /* colors */
   --white: #fff;
