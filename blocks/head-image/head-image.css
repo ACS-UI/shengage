@@ -6,8 +6,9 @@
     h1 {
         position: absolute;
         width: 537px;
-        top: 30px;
+        top: 45px;
         left: 50px;
+        margin: 0;
     }
 
     .head-image.block {
