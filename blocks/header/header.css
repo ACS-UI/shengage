@@ -26,6 +26,13 @@ header nav[aria-expanded='true'] {
     'tools tools' var(--nav-height) / auto 1fr;
   overflow-y: auto;
   min-height: 100vh;
+
+  /* custom style below */
+  z-index: 2;
+  position: relative;
+  background: #fff;
+  width: 70%;
+  float: left;
 }
 
 @media (width >= 600px) {
