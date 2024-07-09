@@ -6,7 +6,7 @@
     h1 {
         position: absolute;
         width: 537px;
-        top: 50px;
+        top: 75px;
         left: 50px;
         margin: 0;
     }
@@ -14,6 +14,10 @@
     .head-image.block {
         background-color: var(--link-color);
         border-radius: 10px;
+
+        img{
+            border-radius: 10px;
+        }
 
         &>div {
             position: relative;
