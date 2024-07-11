@@ -13,7 +13,8 @@
 
 .col-1 img{
   display: none;
-  aspect-ratio: 1/1;
+  aspect-ratio: 4/3;
+  object-fit: contain;
 }
 
 .columns>div>.columns-img-col img {
@@ -24,6 +25,7 @@
   .icon {
     height: auto;
     width: 100%;
+    margin-top: 6rem;
   }
 
   img {
@@ -39,7 +41,7 @@
   background-image: url("../../assets/back-bg.png");
   background-repeat: no-repeat;
   order: 0;
-  padding: 3rem 0.5rem 1.5rem;
+  padding: 6rem 0.5rem 3rem;
 }
 
 @media (width >= 900px) {
