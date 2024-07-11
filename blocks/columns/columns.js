@@ -40,6 +40,7 @@ export default function decorate(block) {
     const allDots = document.querySelectorAll('.dot');
 
     let currentSlide = 0;
+    // eslint-disable-next-line no-inner-declarations
     function next() {
       if (currentSlide === slides.length - 1) {
         currentSlide = 0;
@@ -57,10 +58,5 @@ export default function decorate(block) {
     setInterval(() => {
       next();
     }, 3000);
-  } 
-
+  }
 }
-
-
-
-

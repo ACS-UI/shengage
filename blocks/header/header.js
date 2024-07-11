@@ -220,11 +220,9 @@ export default async function decorate(block) {
     if (link && link.pathname === window.location.pathname) {
       if (id === 0) {
         menuitem.classList.add('activehome');
-      }
-      else {
+      } else {
         menuitem.classList.add('activemenu');
       }
-     
     }
   });
 }
