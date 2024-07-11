@@ -1,0 +1,15 @@
+.section.shengage-header-container{      
+    padding: 0;
+}
+
+.shengage-header{
+    background-color: #000000;
+    color: #fff;   
+}
+
+.shengage-header h2{
+    color: #fff;
+    position: absolute;
+    top : 50px;    
+}
+
