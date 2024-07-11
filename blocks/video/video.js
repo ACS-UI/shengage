@@ -4,7 +4,7 @@ export default function decorate(block) {
     block.innerHTML = `
     <div class="video-background">
         <video autoplay loop muted playsinline class="desktop">
-            <source src="${videourl.innerText}" type="video/mp4">            
+            <source src="../../assets/ACS-GDC-shEngage.mp4" type="video/mp4">            
         </video>
         </div>
         <div class="video-overlay">
