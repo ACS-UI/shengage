@@ -214,4 +214,15 @@ export default async function decorate(block) {
   if (getMetadata('breadcrumbs').toLowerCase() === 'true') {
     navWrapper.append(await buildBreadcrumbs());
   }
+  const menuItems = document.querySelectorAll('.nav-sections ul li');
+  menuItems.forEach((menuitem, id) => {
+    const link = menuitem.querySelector('a');
+    if (link && link.pathname === window.location.pathname) {
+      if (id === 0) {
+        menuitem.classList.add('activehome');
+      } else {
+        menuitem.classList.add('activemenu');
+      }
+    }
+  });
 }

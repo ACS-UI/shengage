@@ -1,3 +1,9 @@
+.individualstory{
+  h2{
+    margin: 0 auto;
+  }
+}
+
 .individualstory p img{
    float: left;
    box-shadow: 10px 10px var(--link-color);

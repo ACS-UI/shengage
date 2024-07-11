@@ -264,6 +264,20 @@ header nav .nav-sections ul > li > ul > li {
     font-size: 14px;
   }
 
+  .activehome::after{
+    content: url('../../assets/whitarrow.svg');
+    display: inline-block;
+      height: 5px;
+      width: 5px; 
+    }
+
+ .activemenu::after{
+  content: url('../../assets/arrow.svg');
+  display: inline-block;
+    height: 5px;
+    width: 5px; 
+  }
+
   header nav .nav-sections .default-content-wrapper > ul > li > ul {
     display: none;
     position: relative;

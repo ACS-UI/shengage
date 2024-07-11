@@ -2,10 +2,6 @@
     padding: 0 32px;
 }
 
-.blockquote div{
-    padding: 0 3rem;
-}
-
 .blockquote div div{
     display: flex;
     flex-direction: column;
