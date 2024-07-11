@@ -267,15 +267,19 @@ header nav .nav-sections ul > li > ul > li {
   .activehome::after{
     content: url('../../assets/whitarrow.svg');
     display: inline-block;
-      height: 5px;
-      width: 5px; 
+    margin-left: 2px;
+    scale: 0.7;
+    position: relative;
+    top: 2px;
     }
 
  .activemenu::after{
-  content: url('../../assets/arrow.svg');
-  display: inline-block;
-    height: 5px;
-    width: 5px; 
+    content: url('../../assets/arrow.svg');
+    display: inline-block;
+    margin-left: 2px;
+    scale: 0.7;
+    position: relative;
+    top: 2px;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li > ul {
