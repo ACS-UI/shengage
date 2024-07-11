@@ -39,11 +39,50 @@
     left: 9px;
 }
 
-.programdetail-header .row-1 div{   
+.programdetail-header .row-1 div {
     display: flex;
-    padding: 1rem 2.5rem  2.5rem 0;
+    padding: 1rem 2.5rem 2.5rem 0;
     color: black;
 }
+
+.programdetail-header.bigger-image {
+    .row-1 {
+        &>div {
+            display: flex;
+            padding: 1rem 2.5rem 2.5rem 0;
+            color: var(--black);
+
+            h2{
+                max-width: 70%;
+                position: static;
+                width: 55%;
+                flex-shrink: 0;
+                color: var(--black);
+            }
+
+            p{
+                    max-width: 100%;
+            width: 100%;
+            }
+
+            picture {
+                width: 100%;
+                display: block;
+            }
+
+            img {
+                max-width: 757px;
+                width: 100%;
+                height: auto;
+                aspect-ratio: 757 / 396;
+                position: absolute;
+                top: -89px;
+                left: 9px;
+            }
+        }
+    }
+}
+
 
 .programdetail-header .row-1 div p:first-of-type{
     max-width: 70%;
