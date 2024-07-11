@@ -265,7 +265,7 @@ header nav .nav-sections ul > li > ul > li {
   }
 
   .activehome::after{
-    content: url('../../assets/whitarrow.svg');
+    content: url('../../assets/whitarrow.svg');    
     display: inline-block;
     margin-left: 2px;
     scale: 0.7;
