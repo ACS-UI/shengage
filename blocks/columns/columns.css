@@ -13,7 +13,7 @@
 
 .col-1 img{
   display: none;
-  height: 500px;
+  aspect-ratio: 1/1;
 }
 
 .columns>div>.columns-img-col img {
