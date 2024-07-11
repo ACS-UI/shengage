@@ -265,23 +265,21 @@ header nav .nav-sections ul > li > ul > li {
   }
 
   .activehome::after{
-    content: '';
-    background-image: url('../../assets/whitarrow.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
+    content: url('../../assets/whitarrow.svg');    
     display: inline-block;
-    height: 13px;
-    width: 13px;
-  }
+    margin-left: 2px;
+    scale: 0.7;
+    position: relative;
+    top: 2px;
+    }
 
  .activemenu::after{
-  content: '';
-  background-image: url('../../assets/arrow.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
-  display: inline-block;
-  height: 13px;
-  width: 13px;
+    content: url('../../assets/arrow.svg');
+    display: inline-block;
+    margin-left: 2px;
+    scale: 0.7;
+    position: relative;
+    top: 2px;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li > ul {
