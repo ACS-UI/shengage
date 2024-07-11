@@ -228,3 +228,7 @@ main .section.light,
 main .section.highlight {
   background-color: transparent;
 }
+
+.d-none{
+  display: none;
+}

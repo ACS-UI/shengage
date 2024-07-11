@@ -26,6 +26,13 @@ header nav[aria-expanded='true'] {
     'tools tools' var(--nav-height) / auto 1fr;
   overflow-y: auto;
   min-height: 100vh;
+
+  /* custom style below */
+  z-index: 2;
+  position: absolute;
+  background: #fff;
+  width: 70%;
+  float: left;
 }
 
 @media (width >= 600px) {
@@ -43,8 +50,20 @@ header nav[aria-expanded='true'] {
   header nav[aria-expanded='true'] {
     min-height: 0;
     overflow: visible;
-  }
+    float: unset;
+    background: transparent;
+    width: unset;
+    position: relative;
+    }
 }
+
+  @media (width <900px) {
+    header nav[aria-expanded='true'] {
+      li a {
+        color: var(--black);
+      }
+    }
+  }
 
 header nav p {
   margin: 0;
