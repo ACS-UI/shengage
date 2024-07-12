@@ -1,0 +1,25 @@
+.video{
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;  
+}
+
+.video .video-background{
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.video .video-overlay {
+    position: absolute;  
+    bottom: 0;
+    width: 80%;
+    height: 160px;
+    background-color: #707070;
+    color:#fff;
+    padding: 27px 40px;
+    font-size: 20pt;    
+}
