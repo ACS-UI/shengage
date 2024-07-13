@@ -14,7 +14,7 @@ export default function decorate(block) {
         div.className = 'cards-card-body';
         const href = div.querySelector('a').getAttribute('href') || '/program';
         div.setAttribute('data-href', href);
-        div.onclick = function () {
+        div.onclick = () => {
           window.location.href = div.getAttribute('data-href');
         };
 
@@ -81,7 +81,7 @@ export default function decorate(block) {
       setScrollTo();
     }
   }
-  
+
   buttonBack.addEventListener('click', back);
   buttonNext.addEventListener('click', forward);
   buttonArrrow.addEventListener('click', forward);
