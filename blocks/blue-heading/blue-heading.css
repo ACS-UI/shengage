@@ -1,0 +1,5 @@
+.blue-heading{
+    h2 , h3 , h1{
+        color: var(--blue-heading);
+    }
+}

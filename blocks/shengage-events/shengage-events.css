@@ -84,9 +84,8 @@ padding: 0;
 }
 
 .bluecard{
-    
     .impactcard6{
-        background-color: #0077B5;
+        background-color: var(--blue-text);
         width: 227px;
     }
 
