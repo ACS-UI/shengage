@@ -1,6 +1,21 @@
 .eventscontainer{
     display: flex;
     column-gap: 1rem;
+
+    .button-container{
+        a , .button{
+            border-radius: 10px;
+            
+            &::after {
+                    content: url(../../assets/whitarrow.svg);
+                    display: inline-block;
+                    margin-left: 2px;
+                    scale: 0.7;
+                    position: relative;
+                    top: 2px;
+                }
+        }
+    }
 }
 
 .eventscontainer .col-0,
