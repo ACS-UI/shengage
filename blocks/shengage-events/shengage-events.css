@@ -3,9 +3,11 @@
     column-gap: 1rem;
 
     .button-container{
+        text-align: right;
+        
         a , .button{
             border-radius: 10px;
-            
+
             &::after {
                     content: url(../../assets/whitarrow.svg);
                     display: inline-block;
