@@ -7,7 +7,7 @@ footer {
 }
 
 footer .footer {
-  max-width: 1200px;
+  max-width: var(--gutter-width);
   margin: auto;
 }
 

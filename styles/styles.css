@@ -43,6 +43,9 @@
 
   /* nav height */
   --nav-height: 64px;
+
+  /* page width */
+  --gutter-width:1200px;
 }
 
 @font-face {
@@ -220,7 +223,7 @@ main .section {
 
 @media (width >= 900px) {
   .section > div {
-    max-width: 1200px;
+    max-width: var(--gutter-width);
     margin: auto;
   }
 }
