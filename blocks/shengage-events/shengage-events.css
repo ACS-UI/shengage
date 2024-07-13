@@ -8,10 +8,6 @@
     width: 50vw;   
 }
 
-.bluecard{
-    clear: both;
-}
-
 .bluecard .eventscontainer .col-0{
     order: 2;
  }
@@ -67,10 +63,14 @@ margin: 0;
 padding: 0;
 }
 
+table.card {
+    zoom: 0.7;
+}
 
 .impactcard4{
     background-color: #b80d00;
     min-width: 220px;
+    margin-left: 0;
 }
 
 .impactcard5{
@@ -84,9 +84,12 @@ padding: 0;
 }
 
 .bluecard{
+    clear: both;
+
     .impactcard6{
         background-color: var(--blue-text);
         width: 227px;
+        margin-left: 0;
     }
 
     .impactcard7{
