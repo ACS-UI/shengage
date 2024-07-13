@@ -40,7 +40,7 @@ export default function decorate(block) {
 
   const dotContainer = document.createElement('div');
   dotContainer.classList.add('dot-container');
-  const dots = ['dot1 active', 'dot2', 'arrow'];
+  const dots = ['dot1 dot active', 'dot2 dot', 'arrow'];
   dots.forEach((className) => {
     const div = document.createElement('div');
     className.split(' ').forEach((cls) => {
@@ -51,8 +51,10 @@ export default function decorate(block) {
   block.append(dotContainer);
 
   // start of carousal code
-  const buttonBack = document.querySelector('.dot1');
-  const buttonNext = document.querySelector('.dot2');
+  const buttonBack = dotContainer.querySelector('.dot1');
+  const buttonNext = dotContainer.querySelector('.dot2');
+  const buttonArrrow = dotContainer.querySelector('.arrow');
+
   const listOfCardElements = document.querySelectorAll('.card-slide');
   const cardContainer = document.querySelector('.card-container');
   let currentCard = 0;
@@ -62,30 +64,26 @@ export default function decorate(block) {
     cardContainer.scrollTo({ left: scrollLeft, behavior: 'smooth' });
   }
 
-  buttonBack.addEventListener('click', () => {
+  function back() {
     if (currentCard > 0) {
       currentCard -= 1;
     }
     buttonBack.classList.add('active');
     buttonNext.classList.remove('active');
     setScrollTo();
-  });
+  }
 
-  buttonNext.addEventListener('click', () => {
+  function forward() {
     if (currentCard < listOfCardElements.length - 1) {
       currentCard += 1;
     }
     buttonNext.classList.add('active');
     buttonBack.classList.remove('active');
     setScrollTo();
-  });
-
-  listOfCardElements.forEach((cardElement, index) => {
-    cardElement.addEventListener('click', () => {
-      currentCard = index;
-      const scrollLeft = currentCard * listOfCardElements[0].offsetWidth;
-      cardContainer.scrollTo({ left: scrollLeft, behavior: 'smooth' });
-    });
-  });
+  }
+  
+  buttonBack.addEventListener('click', back);
+  buttonNext.addEventListener('click', forward);
+  buttonArrrow.addEventListener('click', forward);
   // carousal code end
 }

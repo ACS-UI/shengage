@@ -28,7 +28,7 @@
 
 .cards .cards-card-body{
   cursor: pointer;
-  
+
   p{
     font-size: 16px;
     max-height: 20px;
@@ -73,7 +73,7 @@
   align-items: center;
   column-gap: 10px;
 
-  .dot1 , .dot2{
+  .dot{
         width: 10px;
           height: 10px;
           border: 1px solid var(--black);
@@ -86,6 +86,7 @@
   }
 
   .arrow {
+    cursor: pointer;
     width: 15px;
     height: 15px;
     background-image: url('../../assets/arrow.svg');
