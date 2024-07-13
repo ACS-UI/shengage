@@ -74,12 +74,12 @@ export default function decorate(block) {
   }
 
   function forward() {
-    if (currentCard < listOfCardElements.length - 1) {
+    if (currentCard < listOfCardElements.length - 1 && !buttonNext.classList.contains('active')) {
       currentCard += 1;
+      buttonNext.classList.add('active');
+      buttonBack.classList.remove('active');
+      setScrollTo();
     }
-    buttonNext.classList.add('active');
-    buttonBack.classList.remove('active');
-    setScrollTo();
   }
   
   buttonBack.addEventListener('click', back);
