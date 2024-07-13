@@ -1,0 +1,16 @@
+.footnote{
+    p{  
+        font-family: var(--body-font-family);
+        color: #292929;
+        font-size: 40px;
+    }
+
+    p::before{
+        content: '';
+        display: block;
+        width: 100%;
+        height: 2px;
+        background-color: #707070;
+    }
+}
+
