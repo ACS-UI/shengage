@@ -12,6 +12,11 @@ export default function decorate(block) {
       if (div.children.length === 1 && div.querySelector('picture')) div.className = 'cards-card-image';
       else {
         div.className = 'cards-card-body';
+        const href = div.querySelector('a').getAttribute('href') || '/program';
+        div.setAttribute('data-href', href);
+        div.onclick = function () {
+          window.location.href = div.getAttribute('data-href');
+        };
 
         // Fetch the SVG content
         fetch('../../assets/whitecircleArrow.svg')
