@@ -25,6 +25,10 @@
         img{
             border-radius: 10px;
         }
+        
+        p{
+            margin: 0;
+        }
 
         &>div {
             position: relative;
@@ -36,4 +40,10 @@
 
 .section.head-image-container {
     background-color: #f4f4f6;
+
+    .default-content-wrapper{
+        p{
+            margin-top: 0;
+        }
+    }
 }
