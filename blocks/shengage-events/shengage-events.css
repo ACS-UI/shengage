@@ -80,6 +80,10 @@ margin: 0;
 padding: 0;
 }
 
+.card h3{
+    font-size: 80px;
+}
+
 table.card {
     zoom: 0.7;
 }
