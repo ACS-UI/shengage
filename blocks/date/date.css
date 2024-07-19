@@ -1,0 +1,18 @@
+.section .date-wrapper {
+    margin-block: 20px;
+
+    p {
+        font-size: 28px;
+        color: #0077B5;
+        margin: 0;
+
+        &::before {
+            content: '';
+            display: block;
+            height: 4px;
+            width: 160px;
+            background-color: #0077B5;
+        }
+
+    }
+}
