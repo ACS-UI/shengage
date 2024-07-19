@@ -4,12 +4,13 @@
 
     .video-wrapper{
         max-width: unset;
+        overflow: hidden;
     }
 
 .video {
     position: relative;
     width: 100vw;
-    height: 560px;
+    height: 600px;
     display: flex;
     justify-content: center;
 }
@@ -27,17 +28,18 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: 0 15%;
 }
 
 .video .video-overlay {
     position: absolute;
     bottom: 0;
     width: 80%;
-    height: 160px;
-    background-color: #707070;
+    height: 120px;
+    background-color: rgba(112 112 112 / 80%);
     color: #fff;
     padding: 27px 40px;
-    font-size: 20pt;
+    font-size: 24px;
 }
 
 }
