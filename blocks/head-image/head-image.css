@@ -13,7 +13,8 @@
 
         @media (width >=900px) {
             width: 537px;
-            top: 75px;
+            top: 50%;
+            transform: translate(0, -50%);
             left: 50px;
         }
     }
