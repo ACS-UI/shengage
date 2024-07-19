@@ -27,7 +27,7 @@ export default function decorate(block) {
     console.error('Unable to find textFields or its children.');
   }
 
-  //Entire animation login below
+  // Entire animation login below
 
   const animateValue = (el, start, end, duration) => {
     let startTime = null;
@@ -35,7 +35,10 @@ export default function decorate(block) {
     const step = (timestamp) => {
       if (!startTime) startTime = timestamp;
       const progress = timestamp - startTime;
-      const current = Math.min(Math.floor(progress / duration * (end - start) + start), end);
+      const current = Math.min(
+        Math.floor((progress / duration) * (end - start) + start),
+        end,
+      );
       el.textContent = current;
       if (progress < duration) {
         window.requestAnimationFrame(step);
@@ -46,7 +49,7 @@ export default function decorate(block) {
   };
 
   const callback = (entries, observer) => {
-    entries.forEach(entry => {
+    entries.forEach((entry) => {
       if (entry.isIntersecting) {
         const h3 = entry.target;
         const endValue = parseInt(h3.textContent, 10);
@@ -58,11 +61,8 @@ export default function decorate(block) {
 
   const observer = new IntersectionObserver(callback, { threshold: 0.1 });
 
-  let allCards = document.querySelectorAll('.eventscontainer .card h3');
-  allCards.forEach(h3 => {
+  const allCards = document.querySelectorAll('.eventscontainer .card h3');
+  allCards.forEach((h3) => {
     observer.observe(h3);
   });
-
 }
-
-
