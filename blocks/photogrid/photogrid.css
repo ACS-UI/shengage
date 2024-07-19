@@ -1,0 +1,24 @@
+.photogrid-wrapper {
+    .photogrid {
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            margin-block: 50px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+
+            li {
+                overflow: hidden;
+                flex: 0 0 calc(50% - 10px);
+                box-sizing: border-box;
+
+                img {
+                    width: auto;
+                    height: 100%;
+                }
+            }
+        }
+    }
+}
