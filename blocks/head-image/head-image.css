@@ -18,6 +18,13 @@
         }
     }
 
+    .white-heading {
+        h2,
+        h1 {
+            color: var(--white);
+        }
+    }
+
     .head-image.block {
         background-color: var(--link-color);
         border-radius: 10px;
