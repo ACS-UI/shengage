@@ -18,6 +18,10 @@
                 }
         }
     }
+
+    p[class^='text'] {
+        font-size: 18px;
+    }
 }
 
 .eventscontainer .col-0,
