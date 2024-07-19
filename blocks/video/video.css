@@ -10,7 +10,7 @@
 .video {
     position: relative;
     width: 100vw;
-    height: 600px;
+    height: 660px;
     display: flex;
     justify-content: center;
 }
@@ -35,10 +35,10 @@
     position: absolute;
     bottom: 0;
     width: 80%;
-    height: 120px;
-    background-color: rgba(112 112 112 / 80%);
+    height: auto;
+    background-color: rgba(112 112 112 / 50%);
     color: #fff;
-    padding: 27px 40px;
+    padding: 20px;
     font-size: 24px;
 }
 
