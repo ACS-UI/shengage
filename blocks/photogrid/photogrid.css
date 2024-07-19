@@ -9,6 +9,10 @@
             flex-wrap: wrap;
             gap: 20px;
 
+            br{
+                display: none;
+            }
+
             li {
                 overflow: hidden;
                 flex: 0 0 calc(50% - 10px);
