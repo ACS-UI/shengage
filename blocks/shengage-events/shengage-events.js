@@ -29,7 +29,7 @@ export default function decorate(block) {
 
   // Entire animation login below
 
-  const animateValue = (el, start, end, duration) => {
+  const animateValue = (el, start, end, duration, suffix) => {
     let startTime = null;
 
     const step = (timestamp) => {
@@ -39,7 +39,7 @@ export default function decorate(block) {
         Math.floor((progress / duration) * (end - start) + start),
         end,
       );
-      el.textContent = current;
+      el.textContent = current + suffix;
       if (progress < duration) {
         window.requestAnimationFrame(step);
       }
@@ -52,8 +52,13 @@ export default function decorate(block) {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         const h3 = entry.target;
-        const endValue = parseInt(h3.textContent, 10);
-        animateValue(h3, 0, endValue, 2000); // Animate over 2 seconds
+        const text = h3.textContent;
+        const numberMatch = text.match(/\d+/);
+        if (numberMatch) {
+          const endValue = parseInt(numberMatch[0], 10);
+          const suffix = text.replace(numberMatch[0], '');
+          animateValue(h3, 0, endValue, 2000, suffix); // Animate over 2 seconds
+        }
         observer.unobserve(h3);
       }
     });
