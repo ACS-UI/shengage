@@ -1,3 +1,7 @@
+.section.shengage-events-container{
+    padding-bottom: 2rem;
+}
+
 .eventscontainer{
     display: flex;
     column-gap: 1rem;
@@ -18,7 +22,7 @@
                 }
         }
     }
-
+ 
     p[class^='text'] {
         font-size: 18px;
     }
@@ -76,6 +80,8 @@
     width: 250px;
     border-radius: 10px;
     height: 230px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .card h3,
@@ -114,6 +120,10 @@ table.card {
     background-color: #ec584c;
 }
 
+.redcard p.textfield3{
+    font-size: 2rem;
+}
+
 .bluecard{
     clear: both;
 
@@ -126,5 +136,9 @@ table.card {
     .impactcard7{
         background-color: #31a6ff;
         width: 255px;
+    }
+
+    p.textfield5{
+        font-size: 2rem;
     }
 }
