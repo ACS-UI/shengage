@@ -7,6 +7,24 @@
         height: 100px;
         width: 100px;
     }
+
+    div:nth-child(2) {        
+        div{       
+            img{
+                float: left;
+                border-radius: 15px;
+                box-shadow: 10px 10px var(--link-color);                          
+                width: 200px;
+                height: auto;
+                margin-right: 2rem;
+            }
+
+            p{
+                text-align: left;                
+            }
+        }
+        
+    }
 }
 
 @media (width >=900px) {
@@ -17,8 +35,8 @@
     .section>div.quote-wrapper {
         box-sizing: border-box;
         max-width: 100%;
-        width: calc(100% - 300px);
-        padding: 50px 150px 0;
+        width: calc(100% - 10px);
+        padding: 50px 0;       
     }
 
 }
