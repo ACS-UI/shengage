@@ -1,7 +1,7 @@
 export default function decorate(block) {
   const photoList = block.querySelectorAll('ul li');
-
-  photoList.forEach((photoEl) => {
+  let imgIndex = 0;
+  photoList.forEach((photoEl ,index) => {
     const imagePath = photoEl.querySelector('img').src;
     const popUpBox = document.createElement('div');
     popUpBox.classList.add('popup-container');
@@ -26,8 +26,10 @@ export default function decorate(block) {
         </button>
         </div>`;
     block.append(popUpBox);
+
     function openModal() {
       document.querySelector('.popup-container').style.display = 'block';
+      imgIndex = index ;
     }
 
     function closeModal() {
@@ -84,7 +86,7 @@ export default function decorate(block) {
     const nextImageSrc = photoList[n].querySelector('img').src;
     document.querySelector('.popup-image .fullimage').setAttribute('src', nextImageSrc);
   }
-  let imgIndex = 0;
+
   prevBtn?.addEventListener('click', () => {
     imgIndex -= 1;
     if (imgIndex < 0) imgIndex = photoList.length - 1;
