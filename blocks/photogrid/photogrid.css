@@ -14,13 +14,10 @@
             }
 
             li {
+                cursor: pointer;
                 width: 280px;
                 height: 200px;                
                 border-radius: 10px;
-                border: 1px solid gainsboro;
-                background-color: rgba(255 255 255 / 80%);
-                
-        
 
                 img {
                     width: 100%;
@@ -28,7 +25,15 @@
                     object-fit: contain;
                     object-fit: cover;
                     object-position: center center;
-                    border-radius: 10px;          
+
+                    &:hover{
+                            transform: scale(1.3);
+                            border: 3px solid transparent;
+                            border-radius: 5px;
+                            background-image: linear-gradient(to right, hsla(0, 0%, 100%, 0), hsla(0, 0%, 100%, 0)), linear-gradient(90deg, #d20be1, #ca403b);
+                            background-origin: border-box;
+                            background-clip: content-box, border-box;
+                    }     
                 }
             }
         }

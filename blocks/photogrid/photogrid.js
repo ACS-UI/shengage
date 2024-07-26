@@ -26,7 +26,33 @@ export default function decorate(block) {
         </button>
         </div>`;
     block.append(popUpBox);
+    function openModal() {
+      document.querySelector('.popup-container').style.display = 'block';
+    }
 
+    function closeModal() {
+      document.querySelector('.popup-container').style.display = 'none';
+    }
+    const elem = document.documentElement;
+    function openFullscreen() {
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+      }
+    }
+
+    function closeFullscreen() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+    }
     photoEl.addEventListener('click', () => {
       document.querySelector('.popup-image .fullimage').setAttribute('src', imagePath);
       openModal();
@@ -52,40 +78,15 @@ export default function decorate(block) {
     });
   });
 
-  function openModal() {
-    document.querySelector('.popup-container').style.display = 'block';
-  }
-
-  function closeModal() {
-    document.querySelector('.popup-container').style.display = 'none';
-  }
-  const elem = document.documentElement;
-  function openFullscreen() {
-    if (elem.requestFullscreen) {
-      elem.requestFullscreen();
-    } else if (elem.webkitRequestFullscreen) {
-      elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) {
-      elem.msRequestFullscreen();
-    }
-  }
-
-  function closeFullscreen() {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
-    }
-  }
-
   const nextBtn = document.querySelector('.next');
   const prevBtn = document.querySelector('.prev');
-
+  function showSlides(n) {
+    const nextImageSrc = photoList[n].querySelector('img').src;
+    document.querySelector('.popup-image .fullimage').setAttribute('src', nextImageSrc);
+  }
   let imgIndex = 0;
   prevBtn?.addEventListener('click', () => {
-    imgIndex = imgIndex -= 1;
+    imgIndex -= 1;
     if (imgIndex < 0) imgIndex = photoList.length - 1;
     showSlides(imgIndex);
   });
@@ -94,9 +95,4 @@ export default function decorate(block) {
     imgIndex = (imgIndex += 1) % photoList.length;
     showSlides(imgIndex);
   });
-
-  function showSlides(n) {
-    const nextImageSrc = photoList[n].querySelector('img').src;
-    document.querySelector('.popup-image .fullimage').setAttribute('src', nextImageSrc);
-  }
 }
