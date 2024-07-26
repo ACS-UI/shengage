@@ -52,6 +52,7 @@
     .default-content-wrapper{
         p{
             margin-top: 0;
+            font-size: 20px;
         }
     }
 }
