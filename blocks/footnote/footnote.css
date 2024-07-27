@@ -3,7 +3,7 @@
 }
 
 .footnote-wrapper{
-    background-color: #eaeaea;
+    background-color: #EB1000;
     padding: 10px 24px;
     border-radius: 10px;
 }
@@ -11,8 +11,9 @@
 .footnote{
     p{  
         font-family: var(--body-font-family);
-        color: #292929;
-        font-size: 1.5rem;
+        color: #fff;
+        font-size: 28px;
+        font-weight: normal;
     }   
 }
 
