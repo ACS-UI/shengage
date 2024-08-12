@@ -1,0 +1,27 @@
+.section.date-calendar-blue-box-container {
+    padding: 0;
+}
+
+.date-calendar-blue-box{
+    color: #fff;
+}
+
+.date-calendar-blue-box h2 {
+    color: #fff;
+    position: absolute;
+    top: 80px;
+    right: 100px;
+    font-size: 18px;
+    width: 150px;
+    height: 50px;
+    padding-left: 18px;
+    background-color: #2680EB;
+    border-radius:10px ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('../../assets/calendar.svg');
+    background-size: 28px;
+    background-repeat: no-repeat;
+    background-position: 18px;
+}
