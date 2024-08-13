@@ -58,6 +58,36 @@
         background-position: 18px;
     }
 
+    ul{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap:15px;
+
+        li{
+            height: 20px;
+
+            &:first-child {
+                font-size: 30px;
+                height: 30px;
+               color: var(--link-color);
+                }
+            
+            &:nth-child(2) {
+                font-size: 22px;
+                color: var(--link-color);
+                }
+            
+                &:nth-child(3) {
+                  font-size: 18px;
+                  margin-top: 40px;
+                }
+        }
+        
+    }
+
     a{
         position: absolute;
         top: initial;
