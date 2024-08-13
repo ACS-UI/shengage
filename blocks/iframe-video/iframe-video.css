@@ -1,0 +1,41 @@
+.section.iframe-video-container {
+    padding: 0;
+
+    .iframe-video-wrapper {
+        max-width: unset;
+    }
+
+    .iframe-video {
+        width: 100vw;
+
+    }
+
+    .iframe-video .iframe-video-background {
+        width: 100%;
+        height: 100%;
+        background-color: #EB1000;
+    }
+
+    .iframe-video .iframe-video-background video {
+        width: 100%;
+        height: 660px;
+        object-fit: cover;
+        object-position: 0 15%;
+    }
+
+    .iframe-video.podcast .iframe-video-background video {
+        object-position: 0 85%;
+    }
+
+    .iframe-video .iframe-video-overlay {
+        width: 100%;
+        height: auto;
+        background-color: #EB1000;
+        color: #fff;
+        padding: 20px;
+        font-size: 24px;
+        margin: auto;
+        box-sizing: border-box;
+    }
+
+}
