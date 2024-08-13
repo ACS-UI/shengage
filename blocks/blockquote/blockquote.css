@@ -25,6 +25,14 @@
         }
     }
 
+    .button-container{
+        a{
+            color: #eb1000;
+            text-decoration: none;
+            background-color: transparent;
+        }
+    }
+
     
 }
 
