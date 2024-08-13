@@ -3,12 +3,13 @@
 }
 
 .blockquote.block{
-   border: 1px  #707070;
+   border: 1px solid #707070;
     border-radius: 18px;
     padding: 32px;
-    box-shadow: inset 0 3px 6px #707070;
+    box-shadow: inset 0 3px 6px #00000029;
     font-size: 40px;
     text-align: center;
+    opacity: 0.88;
 }
 
 .blockquote div div{
@@ -17,6 +18,10 @@
     align-items: center;
     justify-content: center;
     height: auto;
+
+    p{
+        margin: 0;
+    }
     
 }
 
@@ -29,6 +34,20 @@
     p{
         color: #eb1000;
         font-size: 34px;
+        font-weight: bold;
         text-align: center;
+
+        a{
+            color: #eb1000;
+            text-decoration: none;
+        }
+    }
+
+    
+}
+
+.story-text {
+    p{
+        font-size: 27px;
     }
 }
