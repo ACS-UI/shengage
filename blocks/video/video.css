@@ -23,6 +23,10 @@
     object-position: 0 15%;
 }
 
+.video.podcast .video-background video {
+    object-position: 0 85%;
+}
+
 .video .video-overlay {   
     width: 100%;
     height: auto;
