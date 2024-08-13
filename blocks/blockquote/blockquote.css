@@ -12,6 +12,28 @@
     opacity: 0.88;
 }
 
+.red-text {
+    p {
+        color: #eb1000;
+        font-size: 34px;
+        font-weight: bold;
+        text-align: center;
+
+        a {
+            color: #eb1000;
+            text-decoration: none;
+        }
+    }
+
+    
+}
+
+.story-text {
+    p {
+        font-size: 27px;
+    }
+}
+
 .blockquote div div{
     display: flex;
     flex-direction: column;
@@ -27,27 +49,4 @@
 
 .blockquote img{
     height: 100px;
-}
-
-
-.red-text{
-    p{
-        color: #eb1000;
-        font-size: 34px;
-        font-weight: bold;
-        text-align: center;
-
-        a{
-            color: #eb1000;
-            text-decoration: none;
-        }
-    }
-
-    
-}
-
-.story-text {
-    p{
-        font-size: 27px;
-    }
 }
