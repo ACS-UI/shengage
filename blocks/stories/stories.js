@@ -37,6 +37,11 @@ export default function decorate(block) {
 
   const dotContainer = document.createElement('div');
   dotContainer.classList.add('dot-container');
+
+  if (ul.children.length < 4) {
+    dotContainer.classList.add('d-none');
+  }
+
   const dots = ['dot dot1 active', 'dot dot2', 'dot dot3'];
   dots.forEach((className) => {
     const div = document.createElement('div');
