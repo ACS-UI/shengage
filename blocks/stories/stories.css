@@ -39,6 +39,25 @@
     justify-content: space-between;
     width: 91%;
 
+    blockquote{
+        position: absolute;
+        top:-66px;
+        margin: 0;
+        right: -22px;
+        color: #fff;
+        width: 150px;
+        height: 50px;
+        padding-left: 18px;
+        background-color: #2680EB;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-image: url('../../assets/calendar.svg');
+        background-size: 28px;
+        background-repeat: no-repeat;
+        background-position: 18px;
+    }
+
     a{
         position: absolute;
         top: initial;
