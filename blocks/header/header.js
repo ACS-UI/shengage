@@ -110,7 +110,12 @@ async function buildBreadcrumbsFromNavTree(nav, currentUrl) {
       menuItem = menuItem.closest('ul')?.closest('li');
     } while (menuItem);
   } else if (currentUrl !== homeUrl) {
-    crumbs.unshift({ title: getMetadata('og:title'), url: currentUrl });
+    const prevUrl = document.referrer;
+    if (prevUrl !== '' && prevUrl !== homeUrl && prevUrl !== currentUrl) {
+      const prevTitle = prevUrl.substring(prevUrl.lastIndexOf('/') + 1);
+      crumbs.push({ title: prevTitle, url: prevUrl });
+    }
+    crumbs.push({ title: getMetadata('og:title'), url: currentUrl });
   }
 
   const placeholders = await fetchPlaceholders();
