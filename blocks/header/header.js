@@ -115,8 +115,8 @@ async function buildBreadcrumbsFromNavTree(nav, currentUrl) {
       const prevTitle = prevUrl.substring(prevUrl.lastIndexOf('/') + 1);
       crumbs.push({ title: prevTitle, url: prevUrl });
     }
-   crumbs.push({ title: getMetadata('og:title'), url: currentUrl });
-  } 
+    crumbs.push({ title: getMetadata('og:title'), url: currentUrl });
+  }
 
   const placeholders = await fetchPlaceholders();
   const homePlaceholder = placeholders.breadcrumbsHomeLabel || 'Home';
