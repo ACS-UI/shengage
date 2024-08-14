@@ -3,7 +3,7 @@ export default function decorate(block) {
   block.innerHTML = '';
   block.innerHTML = `
     <div class="video-background">
-        <video autoplay loop muted playsinline class="desktop">
+        <video autoplay loop playsinline class="desktop">
             <source src="${videourl.innerText}" type="video/mp4">            
         </video>
         </div>
