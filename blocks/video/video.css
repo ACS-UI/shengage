@@ -24,7 +24,7 @@
             border-radius: 5px;
         }
 
-        #unmuteButton:hover {
+        #unmute:hover {
             background-color: rgb(0 0 0 / 70%);
         }
 }
@@ -46,6 +46,8 @@
     object-position: 0 85%;
 }
 
+
+
 .video .video-overlay {   
     width: 100%;
     height: auto;
@@ -57,6 +59,14 @@
     box-sizing: border-box;
 }
 
+.video.podcast {
+    .video-overlay {
+        .hero-text {
+            max-width: var(--gutter-width);
+            margin: auto;
+        }
 
+    }
+}
 
 }
