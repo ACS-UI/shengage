@@ -23,7 +23,7 @@ async function getCommentData() {
   try {
     const response = await fetch(apiUrl);
     if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
+      throw new Error(response.statusText);
     }
     const data = await response.json();
     return data;

@@ -25,7 +25,7 @@ export function getConfig() {
   }
   const ims = {
     client_id: 'shengage',
-    environment: 'prod',
+    environment: 'stage',
   };
 
   window.exlm = window.exlm || {};
