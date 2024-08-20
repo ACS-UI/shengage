@@ -1,0 +1,50 @@
+main .section.reaction-container {
+    padding: 40px 0;
+    border-top: 1px solid #CCCCCD;
+    border-bottom: 1px solid #CCCCCD;
+    max-width: var(--gutter-width);
+    margin: 0 auto;
+}
+
+.reaction-container p {
+    font-size: 27px;
+    margin: 0 0 23px;
+    text-align: center;
+}
+
+.reaction-container div:nth-child(2)>div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.reaction-container div:nth-child(2) div p {
+    width: 80px;
+    height: 80px;
+    border: 1px solid #CCCCCD;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 5px;
+    cursor: pointer;
+    opacity: .5;
+}
+
+.reaction-container div:nth-child(2) div p:hover, 
+.reaction-container div:nth-child(2) div p.active {
+    background-color: #EB1000;
+    opacity: 1;
+}
+
+.reaction-container div:nth-child(2) div p .icon {
+    height: 40px;
+    width: 40px;
+}
+
+@media (width >= 600px) {
+    .reaction-container div:nth-child(2) div p {
+        width: 110px;
+        height: 110px;
+    }
+  }

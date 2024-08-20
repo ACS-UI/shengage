@@ -11,9 +11,29 @@ import {
   waitForLCP,
   loadBlocks,
   loadCSS,
+  loadScript,
 } from './aem.js';
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
+
+/**
+ * get site config
+ */
+export function getConfig() {
+  if (window.exlm && window.exlm.config) {
+    return window.exlm.config;
+  }
+  const ims = {
+    client_id: 'shengage',
+    environment: 'prod',
+  };
+
+  window.exlm = window.exlm || {};
+  window.exlm.config = {
+    ims,
+  };
+  return window.exlm.config;
+}
 
 /**
  * Builds hero block and prepends to main in a new section.
@@ -93,12 +113,35 @@ async function loadEager(doc) {
   }
 }
 
+export async function loadIms() {
+  const { ims } = getConfig();
+  window.imsLoaded = window.imsLoaded || new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => reject(new Error('IMS timeout')), 5000);
+    window.adobeid = {
+      scope:
+        'additional_info,AdobeID,openid,person',
+      locale: 'en_US',
+      ...ims,
+      onReady: () => {
+        // eslint-disable-next-line no-console
+        console.log('Adobe IMS Ready!');
+        resolve(); // resolve the promise, consumers can now use window.adobeIMS
+        clearTimeout(timeout);
+      },
+      onError: reject,
+    };
+    loadScript('https://auth.services.adobe.com/imslib/imslib.min.js');
+  });
+  return window.imsLoaded;
+}
+
 /**
  * Loads everything that doesn't need to be delayed.
  * @param {Element} doc The container element
  */
 async function loadLazy(doc) {
   const main = doc.querySelector('main');
+  loadIms(); // start it early, asyncronously
   await loadBlocks(main);
 
   const { hash } = window.location;
@@ -114,6 +157,19 @@ async function loadLazy(doc) {
   sampleRUM('lazy');
   sampleRUM.observe(main.querySelectorAll('div[data-block-name]'));
   sampleRUM.observe(main.querySelectorAll('picture > img'));
+}
+
+/**
+ * creates an element from html string
+ * @param {string} html
+ * @returns {HTMLElement}
+ */
+
+export function htmlToElement(html) {
+  const template = document.createElement('template');
+  const trimmedHtml = html.trim(); // Never return a text node of whitespace as the result
+  template.innerHTML = trimmedHtml;
+  return template.content.firstElementChild;
 }
 
 /**
