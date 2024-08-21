@@ -242,7 +242,9 @@ export default async function decorate(block) {
     const commentText = block.querySelector('#commentText').value.trim();
     if (!commentText) return;
     e.preventDefault();
-    window.adobeIMS.signIn();
+    if (!isSignedIn) {
+      window.adobeIMS.signIn();
+    }
     parentId = comments.length > 0
       ? Math.max(...comments.map((comment) => parseInt(comment.commentId, 10))) : 1;
 
