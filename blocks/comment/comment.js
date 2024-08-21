@@ -217,8 +217,8 @@ async function isSignedInUser() {
 }
 
 export default async function decorate(block) {
-  await getUserData();
   isSignedIn = await isSignedInUser();
+  await getUserData();
   comments = await getCommentData();
   const btnText = !isSignedIn ? 'Please login to comment' : 'Post a comment';
   const commentContainer = htmlToElement(`
