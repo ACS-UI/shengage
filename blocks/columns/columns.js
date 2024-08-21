@@ -12,6 +12,11 @@ export default function decorate(block) {
         if (picWrapper && picWrapper.children.length === 1) {
           // picture is only content in column
           picWrapper.classList.add('columns-img-col');
+          /* to add cube video */
+          picWrapper.innerHTML = '';
+          picWrapper.innerHTML = `<video loop='true' controls autoplay>
+          <source src="assets/SHEngage-Cube-Video.mp4" type="video/mp4">
+          </video>`;
         }
       }
     });

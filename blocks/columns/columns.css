@@ -21,6 +21,10 @@
   display: block;
 }
 
+.columns>div>.columns-img-col video {
+ background: transparent;
+}
+
 .columns #shengage {
   .icon {
     height: auto;

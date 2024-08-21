@@ -3,14 +3,16 @@
 }
 
 .blockquote.block{
-   border: 1px solid #707070;
+border: 1px solid #707070;
     border-radius: 18px;
     padding: 32px;
     box-shadow: inset 0 3px 6px #00000029;
     font-size: 40px;
     text-align: center;
-    opacity: 0.88;
-    background-color: #f4f4f4;
+    background: rgb(131, 58, 180);
+    background: linear-gradient(200deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+    color: #fff;
+
 }
 
 .red-text {
@@ -23,6 +25,13 @@
         a {
             color: #eb1000;
             text-decoration: none;
+
+           
+        }
+
+        a:hover{
+            text-decoration: underline;
+            color: #4390fe;
         }
     }
 
