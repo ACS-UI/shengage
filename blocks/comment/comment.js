@@ -25,14 +25,14 @@ async function getUserData() {
 }
 
 async function getCommentData() {
-  const apiUrl = 'http://localhost:8080/read';
+  const apiUrl = 'https://51837-shengageapp-stage.adobeioruntime.net/api/v1/web/shengage/getComments';
   try {
     const response = await fetch(apiUrl);
     if (!response.ok) {
       throw new Error(response.statusText);
     }
     const data = await response.json();
-    return data;
+    return data.data;
   } catch (error) {
     console.error('Fetch error:', error);
     return null;
@@ -122,12 +122,12 @@ const formatRelativeTime = (timestamp) => {
 
 function triggerApiCall() {
   // Example API call:
-  fetch('http://localhost:8080/save', {
+  fetch('https://51837-shengageapp-stage.adobeioruntime.net/api/v1/web/shengage/postComment', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(comments),
+    body: JSON.stringify({ data: comments }),
   })
     .then((response) => response.json())
     .then((data) => console.log('Success:', data))

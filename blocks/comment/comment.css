@@ -17,8 +17,8 @@ main .section.comment-container {
 }
 
 .avatar {
-  width: 104px;
-  height: 104px;
+  width: 84px;
+  height: 84px;
   border-radius: 50%;
   margin-right: 40px;
 }
