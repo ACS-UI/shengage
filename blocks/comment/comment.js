@@ -2,20 +2,26 @@
  * Reaction Block
  * Collects the user's reaction
  */
-import { htmlToElement } from '../../scripts/scripts.js';
+import { htmlToElement, loadIms } from '../../scripts/scripts.js';
 
 let comments = [];
 let userDetails = {};
 let parentId;
+let commentsSectionDiv;
 let currentOpenReplyForm = null;
+let isSignedIn = false;
 
-function getUserData() {
-  // user details
-  return {
-    id: 'UR001',
-    name: 'Karvannan',
+async function getUserData() {
+  userDetails = {
+    id: 'UN001',
+    name: 'you',
     avatar: '../assets/profile.png',
   };
+
+  if (window.adobeIMS) {
+    userDetails.id = (await window.adobeIMS.getProfile()).userId;
+    userDetails.name = (await window.adobeIMS.getProfile()).displayName;
+  }
 }
 
 async function getCommentData() {
@@ -39,17 +45,57 @@ function getIndianTimestamp() {
   return new Date(now.getTime() + istOffset);
 }
 
-function prepareData(commentText, currentLevel = 0) {
-  const storryId = document.querySelector('meta[name="storryid"]')?.getAttribute('content');
-  const commentId = currentLevel === 0 ? `${parseInt(parentId, 10) + 1}` : `${parentId}.${currentLevel + 1}`;
-  return {
+function getCommentById(data, parent) {
+  const directMatch = data.find((comment) => comment.commentId === parent);
+  if (directMatch) {
+    return directMatch;
+  }
+  return data
+    .flatMap((comment) => comment.reply || [])
+    .reduce((acc, replies) => acc || getCommentById([replies], parent), null);
+}
+
+function getMaxCommentId(data) {
+  return data.reduce((max, comment) => {
+    const compareIds = (id1, id2) => {
+      const arr1 = id1.split('.').map(Number);
+      const arr2 = id2.split('.').map(Number);
+      for (let i = 0; i < Math.max(arr1.length, arr2.length); i += 1) {
+        const segment1 = arr1[i] || 0;
+        const segment2 = arr2[i] || 0;
+        if (segment1 > segment2) return id1;
+        if (segment1 < segment2) return id2;
+      }
+      return id1;
+    };
+    return compareIds(comment.commentId, max) === comment.commentId ? comment.commentId : max;
+  }, '0');
+}
+
+const prepareComment = (commentText, currentLevel = 0) => {
+  const storryId = document.querySelector('meta[name="storryid"]')?.content;
+  const currentComment = getCommentById(comments, parentId);
+  const maxId = currentComment?.reply ? getMaxCommentId(currentComment.reply) : 0;
+  const newId = maxId ? `${parentId}.${parseInt(maxId.split('.').pop(), 10) + 1}` : `${parentId}.1`;
+  const commentId = currentLevel === 0 ? `${parseInt(parentId, 10) + 1}` : newId;
+
+  const newComment = {
     storryId,
     commentId,
     commentText,
     postedBy: userDetails,
     postedDate: getIndianTimestamp(),
   };
-}
+
+  if (currentComment) {
+    currentComment.reply = currentComment.reply
+      ? [...currentComment.reply, newComment] : [newComment];
+  } else {
+    comments.push(newComment);
+  }
+
+  return newComment;
+};
 
 const formatRelativeTime = (timestamp) => {
   const difference = Date.now() - new Date(timestamp).getTime();
@@ -116,13 +162,9 @@ function createCommentHtml(data) {
 
 function toggleReplyForm(commentId) {
   const replyForm = document.getElementById(`reply-form-${commentId}`);
-
   if (currentOpenReplyForm && currentOpenReplyForm !== replyForm) {
-    // Close the currently open reply form
     currentOpenReplyForm.style.display = 'none';
   }
-
-  // Toggle the visibility of the clicked reply form
   if (replyForm.style.display === 'none' || !replyForm.style.display) {
     replyForm.style.display = 'block';
     currentOpenReplyForm = replyForm;
@@ -137,12 +179,16 @@ function submitReply(commentId) {
   const replyForm = document.getElementById(`reply-form-${commentId}`);
   const textarea = replyForm.querySelector('textarea');
   const replyText = textarea.value.trim();
-  if (replyText) {
-    alert(`Reply: ${replyText}`);
-    textarea.value = ''; // Clear the textarea
-    replyForm.style.display = 'none'; // Hide the reply form
-    currentOpenReplyForm = null; // Reset the currently open reply form tracker
-  }
+  if (!replyText) return;
+  parentId = commentId;
+
+  const data = prepareComment(replyText, 1);
+  if (!data.storryId) return;
+  triggerApiCall(data);
+  updateElement();
+  textarea.value = '';
+  replyForm.style.display = 'none';
+  currentOpenReplyForm = null;
 }
 
 // Function to handle event delegation
@@ -156,42 +202,54 @@ function handleEventDelegation(event) {
   }
 }
 
-export default async function decorate(block) {
-  userDetails = await getUserData();
-  comments = await getCommentData();
+function updateElement() {
+  commentsSectionDiv.innerHTML = comments.map(createCommentHtml).join('');
+  commentsSectionDiv.addEventListener('click', handleEventDelegation);
+}
 
+async function isSignedInUser() {
+  try {
+    await loadIms();
+    return window?.adobeIMS?.isSignedInUser() || false;
+  } catch (err) {
+    return false;
+  }
+}
+
+export default async function decorate(block) {
+  await getUserData();
+  comments = await getCommentData();
+  isSignedIn = await isSignedInUser();
+  const btnText = !isSignedIn ? 'Please login to comment' : 'Post a comment';
   const commentContainer = htmlToElement(`
-    <div class="comment-area">
-        <div class="comment-input">
-            <img src="${userDetails.avatar}" alt="Avatar" class="avatar">
-            <textarea id="commentText" rows="5" placeholder="What are your thoughts?"></textarea>
-        </div>
-        <div class="comment-actions right">
-          <button class="post-comment" id="postComment">Post a comment</button>
-        </div>
-        <div id="commentsSection"></div>
-    </div>
-  `);
+        <div class="comment-area">
+            <div class="comment-input">
+                <img src="${userDetails.avatar}" alt="Avatar" class="avatar">
+                <textarea id="commentText" rows="5" placeholder="What are your thoughts?"></textarea>
+            </div>
+            <div class="comment-actions right">
+              <button class="post-comment" id="postComment">${btnText}</button>
+            </div>
+            <div id="commentsSection"></div>
+        </div>`);
 
   block.innerHTML = '';
   block.appendChild(commentContainer);
-  const commentsSectionDiv = block.querySelector('#commentsSection');
-  commentsSectionDiv.innerHTML = comments.map(createCommentHtml).join('');
-  commentsSectionDiv.addEventListener('click', handleEventDelegation);
+  commentsSectionDiv = block.querySelector('#commentsSection');
+  updateElement();
 
-  block.querySelector('#postComment').addEventListener('click', () => {
+  block.querySelector('#postComment').addEventListener('click', (e) => {
     const commentText = block.querySelector('#commentText').value.trim();
+    if (!commentText) return;
+    e.preventDefault();
+    window.adobeIMS.signIn();
     parentId = comments.length > 0
       ? Math.max(...comments.map((comment) => parseInt(comment.commentId, 10))) : 1;
 
-    if (!commentText) return;
-
-    const data = prepareData(commentText);
+    const data = prepareComment(commentText);
     if (!data.storryId) return;
-    comments.push(data);
     triggerApiCall(data);
-    commentsSectionDiv.innerHTML = comments.map(createCommentHtml).join('');
-    commentsSectionDiv.addEventListener('click', handleEventDelegation);
+    updateElement();
     block.querySelector('#commentText').value = '';
   });
 }
