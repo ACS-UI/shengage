@@ -21,8 +21,12 @@ export default function decorate(block) {
   unmute.addEventListener('click', () => {
     if (video.muted) {
       video.muted = false;
-      video.play();
-      unmute.style.display = 'none'; // Hide the unmute button after it's clicked
+      // video.play();
+      unmute.innerText = 'Mute';
+    }
+    else {
+      video.muted = true;
+      unmute.innerText = 'Unmute';
     }
   });
 }
