@@ -70,6 +70,7 @@ header nav p {
   line-height: 1;
 }
 
+header nav,
 header nav a:any-link {
   color: var(--white);
 }
@@ -197,6 +198,7 @@ header nav .nav-sections ul > li {
 
 header nav .nav-sections ul > li > ul {
   margin-top: 0;
+ 
 }
 
 header nav .nav-sections ul > li > ul > li {
@@ -254,7 +256,7 @@ header nav .nav-sections ul > li > ul > li {
     justify-content: end;
     gap: 4em;
     margin: 0;
-    font-size: var(--body-font-size-xs);
+    font-size: 14px;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li {
@@ -290,11 +292,10 @@ header nav .nav-sections ul > li > ul > li {
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] > ul {
     display: block;
     position: absolute;
-    left: -1em;
-    width: 200px;
-    margin-top: 12px;
-    padding: 1em;
-    background-color: var(--light-color);
+    left: -2.5em;
+    width: 220px;
+    margin-top: 12px;    
+    background : url('../../assets/back-bg.png');
     white-space: initial;
   }
 
@@ -307,11 +308,31 @@ header nav .nav-sections ul > li > ul > li {
     height: 0;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-bottom: 8px solid var(--light-color);
+    border-bottom: 8px solid var(--black);
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li > ul > li {
-    padding: 8px 0;
+    width:inherit;   
+    background-color : black;
+    display: flex;
+    align-items: center;
+    
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li > ul > li::before {
+      content: url('../../assets/white-arrow.svg');
+      display: inline-block;
+      scale: 0.5;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li > ul > li:hover{
+    width: inherit;
+    text-decoration: none;
+    background-color: #2680EB;
+  }
+ 
+  header nav .nav-sections .default-content-wrapper > ul > li > ul > li a:hover{
+    text-decoration: none;
   }
 }
 
