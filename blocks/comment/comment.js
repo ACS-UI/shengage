@@ -18,7 +18,7 @@ async function getUserData() {
     avatar: '../assets/profile.png',
   };
 
-  if (window.adobeIMS) {
+  if (isSignedIn) {
     userDetails.id = (await window.adobeIMS.getProfile()).userId;
     userDetails.name = (await window.adobeIMS.getProfile()).displayName;
   }
@@ -218,8 +218,8 @@ async function isSignedInUser() {
 
 export default async function decorate(block) {
   await getUserData();
-  comments = await getCommentData();
   isSignedIn = await isSignedInUser();
+  comments = await getCommentData();
   const btnText = !isSignedIn ? 'Please login to comment' : 'Post a comment';
   const commentContainer = htmlToElement(`
         <div class="comment-area">
