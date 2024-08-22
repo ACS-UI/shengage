@@ -23,8 +23,7 @@ export default function decorate(block) {
       video.muted = false;
       // video.play();
       unmute.innerText = 'Mute';
-    }
-    else {
+    } else {
       video.muted = true;
       unmute.innerText = 'Unmute';
     }
