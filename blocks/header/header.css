@@ -194,14 +194,12 @@ header nav .nav-sections ul {
 
 header nav .nav-sections ul > li {
   font-weight: 700;
-}
-
-header nav .nav-sections ul > li > ul {
-  margin-top: 0;
- 
+  padding-left: 16px;
 }
 
 header nav .nav-sections ul > li > ul > li {
+  margin-top: 0;
+  padding-left: 0;
   font-weight: 500;
 }
 
@@ -232,24 +230,17 @@ header nav .nav-sections ul > li > ul > li {
   }
 
   header nav .nav-sections .nav-drop::after {
-    content: '';
+    content: url('../../assets/whitarrow.svg');    
     display: inline-block;
-    position: absolute;
-    top: 0.5em;
-    right: 2px;
-    transform: rotate(135deg);
-    width: 6px;
-    height: 6px;
-    border: 2px solid currentcolor;
-    border-radius: 0 1px 0 0;
-    border-width: 2px 2px 0 0;
+    margin-left: 2px;
+    scale: 0.7;
+    position: relative;
+    top: 2px;
   }
 
-  header nav .nav-sections .nav-drop[aria-expanded='true']::after {
-    top: unset;
-    bottom: 0.5em;
-    transform: rotate(315deg);
-  }
+   header nav .nav-sections li.nav-drop[aria-expanded='true'] {    
+    padding-left: 16px;
+  } 
 
   header nav .nav-sections ul {
     display: flex;
@@ -257,6 +248,7 @@ header nav .nav-sections ul > li > ul > li {
     gap: 4em;
     margin: 0;
     font-size: 14px;
+    margin-right: 6rem;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li {
@@ -273,7 +265,7 @@ header nav .nav-sections ul > li > ul > li {
     scale: 0.7;
     position: relative;
     top: 2px;
-    }
+  }
 
  .activemenu::after{
     content: url('../../assets/arrow.svg');
@@ -287,33 +279,24 @@ header nav .nav-sections ul > li > ul > li {
   header nav .nav-sections .default-content-wrapper > ul > li > ul {
     display: none;
     position: relative;
+   
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] > ul {
     display: block;
     position: absolute;
-    left: -2.5em;
-    width: 220px;
-    margin-top: 12px;    
-    background : url('../../assets/back-bg.png');
-    white-space: initial;
-  }
-
-  header nav .nav-sections .default-content-wrapper > ul > li > ul::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    left: 8px;
-    width: 0;
-    height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 8px solid var(--black);
-  }
+    left: 0;
+    top: -10px;
+    padding-top: 40px;
+    width: 199px;
+    background-color: #000;
+    border-radius: 11px;
+    border: 2px solid #eb1000;
+    z-index: -10;
+ }
 
   header nav .nav-sections .default-content-wrapper > ul > li > ul > li {
-    width:inherit;   
-    background-color : black;
+    width:inherit;
     display: flex;
     align-items: center;
     
@@ -321,8 +304,12 @@ header nav .nav-sections ul > li > ul > li {
 
   header nav .nav-sections .default-content-wrapper > ul > li > ul > li::before {
       content: url('../../assets/white-arrow.svg');
-      display: inline-block;
-      scale: 0.5;
+      display: inline-block;     
+      scale: 0.3;
+      height: 20px;
+      width: 14px;
+      margin-bottom: 8px;
+      margin-right: 10px;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li > ul > li:hover{
