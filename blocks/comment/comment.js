@@ -109,7 +109,7 @@ const prepareComment = (commentText, currentLevel = 0) => {
 };
 
 const formatRelativeTime = (timestamp) => {
-  const difference = Date.now() - new Date(timestamp).getTime();
+  const difference = getIndianTimestamp().getTime() - new Date(timestamp).getTime();
 
   const timeUnits = [
     { unit: 'year', value: 365 * 24 * 60 * 60 * 1000 },
