@@ -9,39 +9,10 @@ border: 1px solid #707070;
     box-shadow: inset 0 3px 6px #00000029;
     font-size: 40px;
     text-align: center;
-    background: rgb(131, 58, 180);
-    background: linear-gradient(200deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+    background: rgb(131 58 180);
+    background: linear-gradient(200deg, rgb(131 58 180 / 100%) 0%, rgb(253 29 29 / 100%) 50%, rgb(252 176 69 / 100%) 100%);
     color: #fff;
 
-}
-
-.red-text {
-    p {
-        color: #eb1000;
-        font-size: 34px;
-        font-weight: bold;
-        text-align: center;
-
-        a {
-            color: #eb1000;
-            text-decoration: underline;
-        }
-
-        a:hover{
-            text-decoration: underline;
-            color: #4390fe;
-        }
-    }
-
-    .button-container{
-        a{
-            color: #eb1000;
-            text-decoration: underline;
-            background-color: transparent;
-        }
-    }
-
-    
 }
 
 .story-text {
@@ -50,15 +21,40 @@ border: 1px solid #707070;
     }
 }
 
-.blockquote div div{
+.blockquote div div {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: auto;
 
-    p{
+    p {
         margin: 0;
+    }
+
+}
+
+.red-text {
+    .button-container {
+            p {
+                    color: #eb1000;
+                    font-size: 34px;
+                    font-weight: bold;
+                    text-align: center;
+            
+                }
+
+        a {
+            color: #eb1000;
+            background-color: transparent;
+            text-decoration: underline;
+
+            &:hover {
+                    text-decoration: underline;
+                    color: #4390fe;
+            
+                }
+        }
     }
     
 }
