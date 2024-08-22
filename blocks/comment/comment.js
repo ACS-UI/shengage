@@ -223,7 +223,7 @@ function submitLike(commentId) {
     newComment.likedBy = [userDetails.id];
   }
   replaceCommentById(comments, parentId, newComment);
-  if (!userDetails.userDetails.id) return;
+  if (!userDetails.id) return;
   triggerApiCall(comments);
   updateElement();
 }
