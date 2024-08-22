@@ -10,11 +10,10 @@ let parentId;
 let commentsSectionDiv;
 let currentOpenReplyForm = null;
 let isSignedIn = false;
+let config = {};
 
 async function getUserData() {
   userDetails = {
-    id: 'UN001',
-    name: 'you',
     avatar: '../assets/profile.png',
   };
 
@@ -25,7 +24,7 @@ async function getUserData() {
 }
 
 async function getCommentData() {
-  const apiUrl = 'https://51837-shengageapp-stage.adobeioruntime.net/api/v1/web/shengage/getComments';
+  const apiUrl = `${config.apiEndpoint}/getComments`;
   try {
     const response = await fetch(apiUrl);
     if (!response.ok) {
@@ -53,6 +52,18 @@ function getCommentById(data, parent) {
   return data
     .flatMap((comment) => comment.reply || [])
     .reduce((acc, replies) => acc || getCommentById([replies], parent), null);
+}
+function replaceCommentById(data, parent, newComment) {
+  let updatedComment = null;
+  data.some((comment) => {
+    if (comment.commentId === parent) {
+      updatedComment = Object.assign(comment, newComment);
+      return true;
+    }
+    return comment.reply && replaceCommentById(comment.reply, parent, newComment);
+  });
+
+  return updatedComment;
 }
 
 function getMaxCommentId(data) {
@@ -122,7 +133,7 @@ const formatRelativeTime = (timestamp) => {
 
 function triggerApiCall() {
   // Example API call:
-  fetch('https://51837-shengageapp-stage.adobeioruntime.net/api/v1/web/shengage/postComment', {
+  fetch(`${config.apiEndpoint}/postComment`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -136,21 +147,27 @@ function triggerApiCall() {
 
 function createCommentHtml(data) {
   const repliesHtml = data.reply ? data.reply.map(createCommentHtml).join('') : '';
+  const replyLength = data.commentId.split('.').length;
+  const replyBtn = (replyLength >= 2 || !isSignedIn) ? '' : `<button class="reply-button" data-comment-id="${data.commentId}">Reply</button>`;
+  const likeText = data.likedBy && data.likedBy.includes(userDetails.id) ? 'Dislike' : 'Like';
+  const likeImg = data.likedBy && data.likedBy.includes(userDetails.id) ? '/icons/fill-heart.svg' : '/icons/line-heart.svg';
+
   return `
     <div class="comment-items" id="${data.commentId}">
       <div class="comment-item">
         <img src="${data.postedBy.avatar}" alt="${data.postedBy.name}" class="avatar">
         <div class="comment-body">
           <h3 class="author">${data.postedBy.name} <span class="date">${formatRelativeTime(data.postedDate)}</span></h3>
-          <p>${data.commentText}</p>
+          <div class="comment-text">${data.commentText}</div>
           <div class="comment-actions">
-            <button>Like</button>
-            <button class="reply-button" data-comment-id="${data.commentId}">Reply</button>
+            <button class="like-button" data-comment-id="${data.commentId}">${likeText}</button>
+            ${replyBtn}
           </div>
           <div class="reply-form" id="reply-form-${data.commentId}">
             <textarea placeholder="Write a reply..."></textarea>
             <button class="post-comment submit-reply-button" data-comment-id="${data.commentId}">Reply</button>
           </div>
+          <div class="like"> <span class="icon icon-line-heart"><img data-icon-name="line-heart" src="${likeImg}" alt="" loading="lazy"></span> </div>
         </div>
       </div>
       <div class="comment-replies">
@@ -161,12 +178,12 @@ function createCommentHtml(data) {
 }
 
 function toggleReplyForm(commentId) {
-  const replyForm = document.getElementById(`reply-form-${commentId}`);
+  const replyForm = commentsSectionDiv.querySelector(`#reply-form-${commentId}`);
   if (currentOpenReplyForm && currentOpenReplyForm !== replyForm) {
     currentOpenReplyForm.style.display = 'none';
   }
   if (replyForm.style.display === 'none' || !replyForm.style.display) {
-    replyForm.style.display = 'block';
+    replyForm.style.display = 'flex';
     currentOpenReplyForm = replyForm;
   } else {
     replyForm.style.display = 'none';
@@ -176,14 +193,14 @@ function toggleReplyForm(commentId) {
 
 // Function to submit a reply
 function submitReply(commentId) {
-  const replyForm = document.getElementById(`reply-form-${commentId}`);
+  const replyForm = commentsSectionDiv.querySelector(`#reply-form-${commentId}`);
   const textarea = replyForm.querySelector('textarea');
   const replyText = textarea.value.trim();
   if (!replyText) return;
   parentId = commentId;
 
   const data = prepareComment(replyText, 1);
-  if (!data.storryId) return;
+  if (!data.storryId && !data.userDetails.id) return;
   triggerApiCall(data);
   updateElement();
   textarea.value = '';
@@ -191,11 +208,34 @@ function submitReply(commentId) {
   currentOpenReplyForm = null;
 }
 
+// Function to submit a reply
+function submitLike(commentId) {
+  parentId = commentId;
+  const newComment = getCommentById(comments, parentId);
+  if (newComment?.likedBy) {
+    const index = newComment.likedBy.indexOf(userDetails.id);
+    if (index !== -1) {
+      newComment.likedBy.splice(index, 1);
+    } else {
+      newComment.likedBy.push(userDetails.id);
+    }
+  } else {
+    newComment.likedBy = [userDetails.id];
+  }
+  replaceCommentById(comments, parentId, newComment);
+  if (!userDetails.userDetails.id) return;
+  triggerApiCall(comments);
+  updateElement();
+}
+
 // Function to handle event delegation
 function handleEventDelegation(event) {
   if (event.target && event.target.classList.contains('reply-button')) {
     const commentId = event.target.getAttribute('data-comment-id');
     toggleReplyForm(commentId);
+  } else if (event.target && event.target.classList.contains('like-button')) {
+    const commentId = event.target.getAttribute('data-comment-id');
+    submitLike(commentId);
   } else if (event.target && event.target.classList.contains('submit-reply-button')) {
     const commentId = event.target.getAttribute('data-comment-id');
     submitReply(commentId);
@@ -216,40 +256,64 @@ async function isSignedInUser() {
   }
 }
 
+function getAuthoredData(block) {
+  const authorData = {};
+  // iterate over children and get all authoring data
+  block.childNodes.forEach((child) => {
+    if (child.nodeType === 1) {
+      const objText = 'obj';
+      let firstDivText = child.children[0].textContent.trim();
+      let secondDivText = child.children[1]?.textContent.trim();
+
+      if (firstDivText.indexOf(objText) >= 0) {
+        firstDivText = firstDivText.replace(objText, '').trim();
+        secondDivText = secondDivText?.split(',');
+      }
+      authorData[firstDivText] = secondDivText;
+    }
+  });
+
+  return authorData;
+}
+
 export default async function decorate(block) {
+  config = getAuthoredData(block);
   isSignedIn = await isSignedInUser();
   await getUserData();
   comments = await getCommentData();
   const btnText = !isSignedIn ? 'Please login to comment' : 'Post a comment';
+  const disabled = !isSignedIn ? 'disabled' : '';
   const commentContainer = htmlToElement(`
         <div class="comment-area">
+          <div class="input-section">
             <div class="comment-input">
                 <img src="${userDetails.avatar}" alt="Avatar" class="avatar">
-                <textarea id="commentText" rows="5" placeholder="What are your thoughts?"></textarea>
+                <textarea  id="commentText" rows="5" placeholder="What are your thoughts?" ${disabled}></textarea>
             </div>
             <div class="comment-actions right">
-              <button class="post-comment" id="postComment">${btnText}</button>
+              <button class="post-comment main-comment">${btnText}</button>
             </div>
-            <div id="commentsSection"></div>
+          </div>
+          <div class="comments-section"></div>
         </div>`);
 
   block.innerHTML = '';
   block.appendChild(commentContainer);
-  commentsSectionDiv = block.querySelector('#commentsSection');
+  commentsSectionDiv = block.querySelector('.comments-section');
   updateElement();
 
-  block.querySelector('#postComment').addEventListener('click', (e) => {
-    const commentText = block.querySelector('#commentText').value.trim();
-    if (!commentText) return;
+  block.querySelector('.main-comment').addEventListener('click', (e) => {
     e.preventDefault();
     if (!isSignedIn) {
       window.adobeIMS.signIn();
     }
+    const commentText = block.querySelector('#commentText').value.trim();
+    if (!commentText) return;
     parentId = comments.length > 0
       ? Math.max(...comments.map((comment) => parseInt(comment.commentId, 10))) : 1;
 
     const data = prepareComment(commentText);
-    if (!data.storryId) return;
+    if (!data.storryId && !data.userDetails.id) return;
     triggerApiCall(data);
     updateElement();
     block.querySelector('#commentText').value = '';

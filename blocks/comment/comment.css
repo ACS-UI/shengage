@@ -1,5 +1,5 @@
 main .section.comment-container {
-  padding: 60px 0;
+  padding: 0;
   border: 1px solid #CCCCCD;
   border-radius: 10px;
   max-width: var(--gutter-width);
@@ -7,8 +7,9 @@ main .section.comment-container {
   margin-top: 45px;
 }
 
-.comment-area {
-  padding: 0 60px;
+.input-section{
+  padding: 60px 60px 40px;
+  border-bottom: 1px solid;
 }
 
 .comment-input {
@@ -31,10 +32,10 @@ textarea {
   background: #F7F7F7;
   color: #959595;
   resize: none;
-  width: calc(100% - 60px);
+  width: calc(100% - 86px);
 }
 
-.post-comment, #postComment {
+.post-comment, .comment-actions .main-comment {
   margin-left: 10px;
   padding: 10px 24px;
   background-color: #CACACA;
@@ -43,14 +44,21 @@ textarea {
   border-radius: 25px;
   cursor: pointer;
   font-size: 16px;
+  width: fit-content;
+  max-width: 300px;
 }
-.post-comment:hover, .post-comment:focus,
-#postComment:hover, #postComment:focus {
+
+.post-comment:hover, .post-comment:focus {
   background-color: #918d8d;
 }
+
+.comments-section {
+  padding: 0 60px;
+}
+
 .comment-items {
-  border-top: 1px solid #CCCCCD;
   border-bottom: 1px solid #CCCCCD;
+  padding: 20px 0;
 }
 
 .comment-items .comment-items {
@@ -60,15 +68,6 @@ textarea {
 .comment-item {
   display: flex;
   align-items: flex-start;
-  padding-top: 15px;
-  
-}
-
-.comment-item img {
-  width: 104px;
-  height: 104px;
-  border-radius: 50%;
-  margin-right: 40px;
 }
 
 .comment-body {
@@ -78,19 +77,25 @@ textarea {
   position: relative;
 }
 
-.comment-body h3 {
+.comment-body .author {
  position: relative;
  margin: 0;
+ font-size: 28px;
 }
 
-.comment-body h3 span {
+.comment-body .comment-text {
+  font-size: 28px;
+  margin: 10px 0;
+}
+
+.comment-body .author span {
   color: #959595;
   font-size: 20px;
   font-weight: 400;
   margin-left: 10px;
 }
 
-.comment-body h3 span::before {
+.comment-body .author span::before {
   content: '';
   width: 4px;
   height: 4px;
@@ -100,12 +105,19 @@ textarea {
   vertical-align: middle;
 }
 
+.comment-body .like {
+  position: absolute;
+  right: 0;
+  top: 56px;
+  cursor: pointer;
+}
+
 .right {
   text-align: right;
 }
 
 .comment-actions {
-  margin-top: 5px;
+  margin-top: 18px;
 }
 
 .comment-actions button {
@@ -116,8 +128,12 @@ textarea {
   font-size: 16px;
   cursor: pointer;
   padding: 0 5px;
+  margin: 0;
 }
 
 .reply-form {
   display: none;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 10px;
 }
