@@ -7,19 +7,20 @@ import { isSignedInUser, getUserData } from '../../scripts/profile.js';
 
 let userDetails = {};
 let isSignedIn = false;
-const config = {};
 
 /**
  * Submits or fetches the reaction based on the current state of `reaction`
  * @returns {Promise<void>}
  */
 async function handleReaction(reaction = null) {
+  const endpoint = reaction ? '/postReaction' : '/getReactions';
+  const storyId = document.querySelector('meta[name="storyid"]')?.content;
   const postData = {
-    story_id: config.storyId,
+    story_id: storyId,
     user_id: userDetails.id,
     ...(reaction && { reaction }),
   };
-  const endpoint = reaction ? '/postReaction' : '/getReactions';
+
   try {
     const { payload } = await apiRequest({
       method: 'POST',
@@ -27,8 +28,10 @@ async function handleReaction(reaction = null) {
       data: postData,
     });
     console.log(reaction ? 'Reaction submitted' : 'Reaction fetched:', reaction || payload);
+    return payload?.reaction_name ?? null;
   } catch (error) {
     console.error('Error handling reaction:', error);
+    return null; // Fallback value in case of an error
   }
 }
 
@@ -49,9 +52,10 @@ async function initReaction(block) {
     if (reaction === userReaction) {
       reactionIcon.classList.add('active');
     }
-
     // Set up a click event listener for each reaction icon
     reactionIcon.addEventListener('click', async () => {
+      // Remove 'active' class from all icons
+      reactionIcons.forEach((i) => i.classList.remove('active'));
       if (isSignedIn) {
         // Activate the clicked icon
         reactionIcon.classList.add('active');
@@ -77,7 +81,6 @@ async function initReaction(block) {
  * @param {Element} block - The reaction block element
  */
 export default async function decorate(block) {
-  config.storyId = document.querySelector('meta[name="storyid"]')?.content;
   isSignedIn = await isSignedInUser();
   initReaction(block);
 }
