@@ -199,7 +199,7 @@ function submitReply(commentId) {
   parentId = commentId;
 
   const data = prepareComment(replyText, 1);
-  if (!data.storryId && !data.userDetails.id) return;
+  if (!data.postedBy.id) return;
   postComment(data);
   updateElement();
   textarea.value = '';
