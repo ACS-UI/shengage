@@ -24,7 +24,6 @@ async function getUserData() {
 }
 
 async function getCommentData() {
-  config.apiEndpoint = 'http://localhost:8080';
   const apiUrl = `${config.apiEndpoint}/getComments?id=${config.storryId}`;
   try {
     const response = await fetch(apiUrl);
@@ -132,9 +131,8 @@ const formatRelativeTime = (timestamp) => {
   return 'just now';
 };
 
-function triggerApiCall() {
+function postComment() {
   // Example API call:
-  config.apiEndpoint = 'http://localhost:8080';
   fetch(`${config.apiEndpoint}/postComment`, {
     method: 'POST',
     headers: {
@@ -203,7 +201,7 @@ function submitReply(commentId) {
 
   const data = prepareComment(replyText, 1);
   if (!data.storryId && !data.userDetails.id) return;
-  triggerApiCall(data);
+  postComment(data);
   updateElement();
   textarea.value = '';
   replyForm.style.display = 'none';
@@ -226,7 +224,7 @@ function submitLike(commentId) {
     }
     comment.likedBy = likedBy;
     replaceCommentById(comments, parentId, comment);
-    triggerApiCall(comments);
+    postComment(comments);
     updateElement();
   }
 }
@@ -319,7 +317,7 @@ export default async function decorate(block) {
 
     const data = prepareComment(commentText);
     if (!data.storryId && !data.userDetails.id) return;
-    triggerApiCall(data);
+    postComment(data);
     updateElement();
     block.querySelector('#commentText').value = '';
   });
