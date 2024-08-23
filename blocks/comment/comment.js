@@ -315,7 +315,7 @@ export default async function decorate(block) {
       ? Math.max(...comments.map((comment) => parseInt(comment.commentId, 10))) : 1;
 
     const data = prepareComment(commentText);
-    if (!data.storryId && !data.userDetails.id) return;
+    if (!data.postedBy.id) return;
     postComment(data);
     updateElement();
     block.querySelector('#commentText').value = '';
