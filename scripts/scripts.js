@@ -12,7 +12,7 @@ import {
   loadBlocks,
   loadCSS,
 } from './aem.js';
-import { loadIms, getConfig } from './profile.js';
+import { loadIms } from './profile.js';
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
 
@@ -131,6 +131,26 @@ export function htmlToElement(html) {
 }
 
 /**
+ * get site config
+ */
+export function getConfig() {
+  if (window.shengage && window.shengage.config) {
+    return window.shengage.config;
+  }
+  const ims = {
+    client_id: 'shengage',
+    environment: 'stage',
+  };
+
+  window.shengage = window.shengage || {};
+  window.shengage.config = {
+    ims,
+    adobeIoEndpoint: 'https://51837-shengageapp-stage.adobeioruntime.net/api/v1/web/shengage',
+  };
+  return window.shengage.config;
+}
+
+/**
  * Makes an API request using the specified method, endpoint, and data.
  * @param {Object} params - The parameters for the API request.
  * @param {string} [params.method='GET'] - The HTTP method (GET or POST).
@@ -145,8 +165,8 @@ export async function apiRequest({
   data = {},
 }) {
   try {
-    const { apiEndpoint } = getConfig();
-    const url = `${apiEndpoint}${endpoint}`;
+    const { adobeIoEndpoint } = getConfig();
+    const url = `${adobeIoEndpoint}${endpoint}`;
     const options = {
       method,
       headers: {
@@ -171,7 +191,6 @@ export async function apiRequest({
     throw error;
   }
 }
-
 
 /**
  * Loads everything that happens a lot later,

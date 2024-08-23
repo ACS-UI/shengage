@@ -1,24 +1,6 @@
+// eslint-disable-next-line import/no-cycle, max-classes-per-file
+import { getConfig } from './scripts.js';
 import { loadScript } from './aem.js';
-
-/**
- * get site config
- */
-export function getConfig() {
-  if (window.shengage && window.shengage.config) {
-    return window.shengage.config;
-  }
-  const ims = {
-    client_id: 'shengage',
-    environment: 'stage',
-  };
-
-  window.shengage = window.shengage || {};
-  window.shengage.config = {
-    ims,
-    adobeIoEndpoint: 'https://51837-shengageapp-stage.adobeioruntime.net/api/v1/web/shengage ',
-  };
-  return window.shengage.config;
-}
 
 /**
  * load IMS
