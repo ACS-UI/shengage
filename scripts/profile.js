@@ -4,19 +4,20 @@ import { loadScript } from './aem.js';
  * get site config
  */
 export function getConfig() {
-  if (window.exlm && window.exlm.config) {
-    return window.exlm.config;
+  if (window.shengage && window.shengage.config) {
+    return window.shengage.config;
   }
   const ims = {
     client_id: 'shengage',
     environment: 'stage',
   };
 
-  window.exlm = window.exlm || {};
-  window.exlm.config = {
+  window.shengage = window.shengage || {};
+  window.shengage.config = {
     ims,
+    adobeIoEndpoint: 'https://51837-shengageapp-stage.adobeioruntime.net/api/v1/web/shengage ',
   };
-  return window.exlm.config;
+  return window.shengage.config;
 }
 
 /**

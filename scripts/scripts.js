@@ -12,7 +12,7 @@ import {
   loadBlocks,
   loadCSS,
 } from './aem.js';
-import { loadIms } from './profile.js';
+import { loadIms, getConfig } from './profile.js';
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
 
@@ -123,13 +123,55 @@ async function loadLazy(doc) {
  * @param {string} html
  * @returns {HTMLElement}
  */
-
 export function htmlToElement(html) {
   const template = document.createElement('template');
   const trimmedHtml = html.trim(); // Never return a text node of whitespace as the result
   template.innerHTML = trimmedHtml;
   return template.content.firstElementChild;
 }
+
+/**
+ * Makes an API request using the specified method, endpoint, and data.
+ * @param {Object} params - The parameters for the API request.
+ * @param {string} [params.method='GET'] - The HTTP method (GET or POST).
+ * @param {string} params.endpoint - The specific API endpoint to call.
+ * @param {Object} [params.data={}] - The data to be sent in the body for POST requests.
+ * @returns {Promise<*>} The parsed JSON response from the API.
+ * @throws {Error} If the request fails or the response is not ok.
+ */
+export async function apiRequest({
+  method = 'GET',
+  endpoint,
+  data = {},
+}) {
+  try {
+    const { apiEndpoint } = getConfig();
+    const url = `${apiEndpoint}${endpoint}`;
+    const options = {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    if (method === 'POST') {
+      options.body = JSON.stringify(data);
+    }
+
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log(`${method} request to ${endpoint} successful:`, result);
+    return result;
+  } catch (error) {
+    console.error(`${method} request to ${endpoint} failed:`, error);
+    throw error;
+  }
+}
+
 
 /**
  * Loads everything that happens a lot later,

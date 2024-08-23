@@ -2,101 +2,64 @@
  * Reaction Block
  * Handles user reactions, including fetching, submitting, and updating reactions
  */
-import { htmlToElement } from '../../scripts/scripts.js';
+import { htmlToElement, apiRequest } from '../../scripts/scripts.js';
 import { isSignedInUser, getUserData } from '../../scripts/profile.js';
 
 let reaction = {};
 let userDetails = {};
 let isSignedIn = false;
-const config = {
-  apiEndpoint: 'http://localhost:8080', // API endpoint for submitting and fetching reactions
-};
+const config = {};
 
 /**
- * Submits the user's reaction to the server
+ * Submits or fetches the reaction based on the current state of `reaction`
+ * @returns {Promise<void>}
  */
-async function submitReaction() {
+async function handleReaction() {
+  const postData = {
+    story_id: config.storyId,
+    user_id: userDetails.id,
+    ...(reaction && { reaction }),
+  };
+  const endpoint = reaction ? '/submitReaction' : '/getReactions';
   try {
-    const response = await fetch(`${config.apiEndpoint}/postReaction`, {
+    const { payload } = await apiRequest({
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id: config.storyId, data: reaction }),
+      endpoint,
+      data: postData,
     });
-    const data = await response.json();
-    console.log('Success:', data);
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
-
-/**
- * Fetches reactions from the server
- * @returns {Object|null} The fetched reaction data or null in case of an error
- */
-async function getReaction() {
-  try {
-    const response = await fetch(`${config.apiEndpoint}/getReactions`);
-    if (!response.ok) {
-      throw new Error(response.statusText);
+    if (!reaction) {
+      reaction = payload?.reaction_name || '';
     }
-    const data = await response.json();
-    return data.data || {};
+    console.log(reaction ? 'Reaction submitted' : 'Reaction fetched:', reaction || payload);
   } catch (error) {
-    console.error('Fetch error:', error);
-    return null;
+    console.error('Error handling reaction:', error);
   }
 }
 
 /**
- * Finds the category of a user's reaction
- * @param {Object} obj - The object containing reaction data
- * @param {string} userId - The ID of the user
- * @returns {string|null} The category the user reacted to or null if not found
+ * Initializes the reaction block by setting up event listeners and UI state
+ * @param {HTMLElement} block - The container element for the reaction icons
+ * @returns {Promise<void>}
  */
-const findUserCategory = (obj, userId) => {
-  const key = Object.keys(obj).find(
-    (k) => Array.isArray(obj[k]) && obj[k].includes(userId),
-  );
-  return key || null;
-};
-
 async function initReaction(block) {
-  isSignedIn = await isSignedInUser();
-  userDetails = await getUserData() || [];
-  const icons = block.querySelectorAll('.reaction-container div:nth-child(2) > div p');
-  const userCategory = findUserCategory(reaction, userDetails.id);
-  icons.forEach((icon) => {
-    const iconCategory = icon.querySelector('img').getAttribute('data-icon-name');
-
-    if (iconCategory === userCategory) {
-      icon.classList.add('active');
+  const reactionIcons = block.querySelectorAll('.reaction-container div:nth-child(2) > div p');
+  const userReaction = userDetails.id ? reaction.reaction_name : '';
+  reactionIcons.forEach((reactionIcon) => {
+    const selectedReaction = reactionIcon.querySelector('img').getAttribute('data-icon-name');
+    if (selectedReaction === userReaction) {
+      reactionIcon.classList.add('active');
     }
 
-    icon.addEventListener('click', async () => {
+    // Set up a click event listener for each reaction icon
+    reactionIcon.addEventListener('click', async () => {
       if (isSignedIn) {
-        // Remove 'active' class from all icons
-        icons.forEach((i) => i.classList.remove('active'));
-        // Update the reaction object
-        if (reaction[iconCategory]) {
-          reaction[iconCategory].push(userDetails.id);
-        } else {
-          reaction[iconCategory] = [userDetails.id];
-        }
-        // Remove user ID from other categories
-        Object.keys(reaction).forEach((category) => {
-          if (category !== iconCategory) {
-            reaction[category] = reaction[category].filter((id) => id !== userDetails.id);
-          }
-        });
         // Activate the clicked icon
-        icon.classList.add('active');
-        await submitReaction();
+        reactionIcon.classList.add('active');
+        await handleReaction(selectedReaction);
       } else {
         const reactionContainer = block.querySelector('.reaction-container div:nth-child(2)');
         if (!reactionContainer.querySelector('.info')) {
-          reactionContainer.appendChild(htmlToElement('<div class="info"> <span> Please Login to react ... <a href="/"> Login </a> </span> </div>'));
+          reactionContainer.appendChild(htmlToElement('<div class="info"> <span> Looks like youre trying to react 🧐 ... Please <a href="/"> Login </a> </span> </div>'));
           reactionContainer.querySelector('.info a').addEventListener('click', (e) => {
             e.preventDefault();
             if (!isSignedIn) {
@@ -114,7 +77,13 @@ async function initReaction(block) {
  * @param {Element} block - The reaction block element
  */
 export default async function decorate(block) {
-  reaction = await getReaction();
+  isSignedIn = await isSignedInUser();
+  if (!isSignedIn) {
+    initReaction(block);
+    return;
+  }
+  userDetails = await getUserData() || [];
+  reaction = await handleReaction();
   config.storyId = document.querySelector('meta[name="storyid"]')?.content;
   initReaction(block);
 }
