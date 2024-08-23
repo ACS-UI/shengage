@@ -27,6 +27,11 @@ main .section.black-bar-container {
 
 }
 
+header nav .nav-sections .nav-drop[aria-expanded="false"]::after {
+    content: url('../../assets/arrow.svg') !important;    
+   
+}
+
 header.header-wrapper nav,
 header.header-wrapper nav a:any-link {
     color: var(--black);
@@ -34,4 +39,10 @@ header.header-wrapper nav a:any-link {
 
 header.header-wrapper nav  ul > li > ul a:any-link{
     color : #fff
+}
+
+@media (width >= 900px) {
+    header nav .nav-sections li.nav-drop[aria-expanded="true"] {
+     color:white;
+    }
 }

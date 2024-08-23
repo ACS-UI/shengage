@@ -14,7 +14,7 @@ export default function decorate(block) {
           picWrapper.classList.add('columns-img-col');
           /* to add cube video */
           picWrapper.innerHTML = '';
-          picWrapper.innerHTML = `<video loop='true' controls autoplay>
+          picWrapper.innerHTML = `<video autoplay loop muted>
           <source src="assets/SHEngage-Cube-Video.mp4" type="video/mp4">
           </video>`;
         }
