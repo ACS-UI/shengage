@@ -1,3 +1,5 @@
+// eslint-disable-next-line import/no-cycle, max-classes-per-file
+import { loadIms } from './profile.js';
 import {
   sampleRUM,
   buildBlock,
@@ -12,7 +14,6 @@ import {
   loadBlocks,
   loadCSS,
 } from './aem.js';
-import { loadIms } from './profile.js';
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
 

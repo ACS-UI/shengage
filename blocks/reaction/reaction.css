@@ -6,6 +6,7 @@ main .section.reaction-container {
     margin: 0 auto;
 }
 
+/* Reaction Icons Container */
 .reaction-container p {
     font-size: 27px;
     margin: 0 0 23px;
@@ -28,7 +29,8 @@ main .section.reaction-container {
     justify-content: center;
     margin: 0 5px;
     cursor: pointer;
-    opacity: .3;
+    opacity: 0.3;
+    transition: background-color 0.3s, opacity 0.3s;
 }
 
 .reaction-container div:nth-child(2) div p:hover, 
@@ -42,6 +44,7 @@ main .section.reaction-container {
     width: 40px;
 }
 
+/* Info Message */
 .reaction-container .info {
     padding: 10px 0;
 }

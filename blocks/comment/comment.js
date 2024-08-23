@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /*
  * Reaction Block
  * Collects the user's reaction
