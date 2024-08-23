@@ -1,34 +1,113 @@
 /*
  * Reaction Block
- * collect the user reaction
+ * Handles user reactions, including fetching, submitting, and updating reactions
  */
 
-async function submitReaction() {
-  const payload = {
-    articleId: 'SR1', likedUser: 'UR1', strongUser: 'UR5', bulpUser: 'UR7', timestamp: new Date().toJSON(),
+let reaction = {}; // Stores the current reaction data
+let userDetails = {}; // Stores user information
+const config = {
+  apiEndpoint: 'http://localhost:8080', // API endpoint for submitting and fetching reactions
+};
+
+/**
+ * Fetches user data (e.g., avatar and ID)
+ */
+async function getUserData() {
+  userDetails = {
+    avatar: '../assets/profile.png',
+    id: 'UR001',
   };
-  const resp = await fetch('/stories/comment', {
-    method: 'POST',
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ data: payload }),
-  });
-  await resp.text();
 }
 
 /**
- * loads and decorates the footer
- * @param {Element} block The footer block element
+ * Submits the user's reaction to the server
+ */
+async function submitReaction() {
+  try {
+    const response = await fetch(`${config.apiEndpoint}/postReaction`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: config.storyId, data: reaction }),
+    });
+    const data = await response.json();
+    console.log('Success:', data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+/**
+ * Fetches reactions from the server
+ * @returns {Object|null} The fetched reaction data or null in case of an error
+ */
+async function getReaction() {
+  try {
+    const response = await fetch(`${config.apiEndpoint}/getReactions`);
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    const data = await response.json();
+    return data.data || {};
+  } catch (error) {
+    console.error('Fetch error:', error);
+    return null;
+  }
+}
+
+/**
+ * Finds the category of a user's reaction
+ * @param {Object} obj - The object containing reaction data
+ * @param {string} userId - The ID of the user
+ * @returns {string|null} The category the user reacted to or null if not found
+ */
+const findUserCategory = (obj, userId) => {
+  const key = Object.keys(obj).find(
+    (k) => Array.isArray(obj[k]) && obj[k].includes(userId),
+  );
+  return key || null;
+};
+
+/**
+ * Loads and decorates the reaction block with user-specific data
+ * @param {Element} block - The reaction block element
  */
 export default async function decorate(block) {
+  reaction = await getReaction();
+  await getUserData();
+
+  const userCategory = findUserCategory(reaction, userDetails.id);
+  config.storyId = document.querySelector('meta[name="storyid"]')?.content;
   const icons = block.querySelectorAll('.reaction-container div:nth-child(2) > div p');
+
   icons.forEach((icon) => {
-    icon.addEventListener('click', () => {
-      icons.forEach((i) => i.classList.remove('active'));
+    const iconCategory = icon.querySelector('img').getAttribute('data-icon-name');
+
+    if (iconCategory === userCategory) {
       icon.classList.add('active');
-      submitReaction();
+    }
+
+    icon.addEventListener('click', async () => {
+      // Remove 'active' class from all icons
+      icons.forEach((i) => i.classList.remove('active'));
+
+      // Update the reaction object
+      if (reaction[iconCategory]) {
+        reaction[iconCategory].push(userDetails.id);
+      } else {
+        reaction[iconCategory] = [userDetails.id];
+      }
+
+      // Remove user ID from other categories
+      Object.keys(reaction).forEach((category) => {
+        if (category !== iconCategory) {
+          reaction[category] = reaction[category].filter((id) => id !== userDetails.id);
+        }
+      });
+      // Activate the clicked icon
+      icon.classList.add('active');
+      await submitReaction();
     });
   });
 }

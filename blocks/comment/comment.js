@@ -24,7 +24,8 @@ async function getUserData() {
 }
 
 async function getCommentData() {
-  const apiUrl = `${config.apiEndpoint}/getComments`;
+  config.apiEndpoint = 'http://localhost:8080';
+  const apiUrl = `${config.apiEndpoint}/getComments?id=${config.storryId}`;
   try {
     const response = await fetch(apiUrl);
     if (!response.ok) {
@@ -133,6 +134,7 @@ const formatRelativeTime = (timestamp) => {
 
 function triggerApiCall() {
   // Example API call:
+  config.apiEndpoint = 'http://localhost:8080';
   fetch(`${config.apiEndpoint}/postComment`, {
     method: 'POST',
     headers: {
@@ -148,7 +150,7 @@ function triggerApiCall() {
 function createCommentHtml(data) {
   const repliesHtml = data.reply ? data.reply.map(createCommentHtml).join('') : '';
   const replyLength = data.commentId.split('.').length;
-  const replyBtn = (replyLength >= 2 || !isSignedIn) ? '' : `<button class="reply-button" data-comment-id="${data.commentId}">Reply</button>`;
+  const replyBtn = (replyLength >= config.replyLimit || !isSignedIn) ? '' : `<button class="reply-button" data-comment-id="${data.commentId}">Reply</button>`;
   const likeText = data.likedBy && data.likedBy.includes(userDetails.id) ? 'Dislike' : 'Like';
   const likeImg = data.likedBy && data.likedBy.includes(userDetails.id) ? '/icons/fill-heart.svg' : '/icons/line-heart.svg';
 
@@ -210,22 +212,23 @@ function submitReply(commentId) {
 
 // Function to submit a reply
 function submitLike(commentId) {
+  const userId = userDetails.id;
+  if (!userId) return;
   parentId = commentId;
-  const newComment = getCommentById(comments, parentId);
-  if (newComment?.likedBy) {
-    const index = newComment.likedBy.indexOf(userDetails.id);
+  const comment = getCommentById(comments, parentId);
+  if (comment) {
+    const likedBy = comment.likedBy || [];
+    const index = likedBy.indexOf(userId);
     if (index !== -1) {
-      newComment.likedBy.splice(index, 1);
+      likedBy.splice(index, 1);
     } else {
-      newComment.likedBy.push(userDetails.id);
+      likedBy.push(userId);
     }
-  } else {
-    newComment.likedBy = [userDetails.id];
+    comment.likedBy = likedBy;
+    replaceCommentById(comments, parentId, comment);
+    triggerApiCall(comments);
+    updateElement();
   }
-  replaceCommentById(comments, parentId, newComment);
-  if (!userDetails.id) return;
-  triggerApiCall(comments);
-  updateElement();
 }
 
 // Function to handle event delegation
@@ -278,6 +281,8 @@ function getAuthoredData(block) {
 
 export default async function decorate(block) {
   config = getAuthoredData(block);
+  config.storryId = document.querySelector('meta[name="storryid"]')?.content;
+  block.innerHTML = '<img src="/icons/loader.svg" class="loader" alt="loader" loading="lazy">';
   isSignedIn = await isSignedInUser();
   await getUserData();
   comments = await getCommentData();
@@ -300,7 +305,7 @@ export default async function decorate(block) {
   block.innerHTML = '';
   block.appendChild(commentContainer);
   commentsSectionDiv = block.querySelector('.comments-section');
-  updateElement();
+  if (comments) updateElement();
 
   block.querySelector('.main-comment').addEventListener('click', (e) => {
     e.preventDefault();

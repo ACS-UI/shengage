@@ -137,3 +137,9 @@ textarea {
   align-items: flex-end;
   margin-top: 10px;
 }
+
+.loader {
+  width: 80px;
+  margin: 0 auto;
+  display: block;
+}

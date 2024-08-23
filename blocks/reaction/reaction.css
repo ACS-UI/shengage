@@ -28,7 +28,7 @@ main .section.reaction-container {
     justify-content: center;
     margin: 0 5px;
     cursor: pointer;
-    opacity: .5;
+    opacity: .3;
 }
 
 .reaction-container div:nth-child(2) div p:hover, 
