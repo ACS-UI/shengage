@@ -11,29 +11,10 @@ import {
   waitForLCP,
   loadBlocks,
   loadCSS,
-  loadScript,
 } from './aem.js';
+import { loadIms } from './profile.js';
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
-
-/**
- * get site config
- */
-export function getConfig() {
-  if (window.exlm && window.exlm.config) {
-    return window.exlm.config;
-  }
-  const ims = {
-    client_id: 'shengage',
-    environment: 'stage',
-  };
-
-  window.exlm = window.exlm || {};
-  window.exlm.config = {
-    ims,
-  };
-  return window.exlm.config;
-}
 
 /**
  * Builds hero block and prepends to main in a new section.
@@ -111,28 +92,6 @@ async function loadEager(doc) {
   } catch (e) {
     // do nothing
   }
-}
-
-export async function loadIms() {
-  const { ims } = getConfig();
-  window.imsLoaded = window.imsLoaded || new Promise((resolve, reject) => {
-    const timeout = setTimeout(() => reject(new Error('IMS timeout')), 5000);
-    window.adobeid = {
-      scope:
-        'additional_info,AdobeID,openid,person',
-      locale: 'en_US',
-      ...ims,
-      onReady: () => {
-        // eslint-disable-next-line no-console
-        console.log('Adobe IMS Ready!');
-        resolve(); // resolve the promise, consumers can now use window.adobeIMS
-        clearTimeout(timeout);
-      },
-      onError: reject,
-    };
-    loadScript('https://auth.services.adobe.com/imslib/imslib.min.js');
-  });
-  return window.imsLoaded;
 }
 
 /**

@@ -2,26 +2,16 @@
  * Reaction Block
  * Collects the user's reaction
  */
-import { htmlToElement, loadIms } from '../../scripts/scripts.js';
+import { htmlToElement } from '../../scripts/scripts.js';
+import { isSignedInUser, getUserData } from '../../scripts/profile.js';
 
 let comments = [];
-let userDetails = {};
+let userDetails = [];
 let parentId;
 let commentsSectionDiv;
 let currentOpenReplyForm = null;
 let isSignedIn = false;
 let config = {};
-
-async function getUserData() {
-  userDetails = {
-    avatar: '../assets/profile.png',
-  };
-
-  if (isSignedIn) {
-    userDetails.id = (await window.adobeIMS.getProfile()).userId;
-    userDetails.name = (await window.adobeIMS.getProfile()).displayName;
-  }
-}
 
 async function getCommentData() {
   const apiUrl = `${config.apiEndpoint}/getComments?id=${config.storryId}`;
@@ -53,6 +43,7 @@ function getCommentById(data, parent) {
     .flatMap((comment) => comment.reply || [])
     .reduce((acc, replies) => acc || getCommentById([replies], parent), null);
 }
+
 function replaceCommentById(data, parent, newComment) {
   let updatedComment = null;
   data.some((comment) => {
@@ -247,15 +238,6 @@ function updateElement() {
   commentsSectionDiv.addEventListener('click', handleEventDelegation);
 }
 
-async function isSignedInUser() {
-  try {
-    await loadIms();
-    return window?.adobeIMS?.isSignedInUser() || false;
-  } catch (err) {
-    return false;
-  }
-}
-
 function getAuthoredData(block) {
   const authorData = {};
   // iterate over children and get all authoring data
@@ -276,15 +258,13 @@ function getAuthoredData(block) {
   return authorData;
 }
 
-export default async function decorate(block) {
-  config = getAuthoredData(block);
-  config.storryId = document.querySelector('meta[name="storryid"]')?.content;
-  block.innerHTML = '<img src="/icons/loader.svg" class="loader" alt="loader" loading="lazy">';
+async function initComments(block) {
   isSignedIn = await isSignedInUser();
-  await getUserData();
+  if (isSignedIn) userDetails = await getUserData() || [];
   comments = await getCommentData() || [];
   const btnText = !isSignedIn ? 'Please login to comment' : 'Post a comment';
   const disabled = !isSignedIn ? 'disabled' : '';
+  userDetails.avatar = isSignedIn ? userDetails.avatar : '../assets/profile.png';
   const commentContainer = htmlToElement(`
         <div class="comment-area">
           <div class="input-section">
@@ -320,4 +300,11 @@ export default async function decorate(block) {
     updateElement();
     block.querySelector('#commentText').value = '';
   });
+}
+
+export default async function decorate(block) {
+  config = getAuthoredData(block);
+  config.storryId = document.querySelector('meta[name="storryid"]')?.content;
+  block.innerHTML = '<img src="/icons/loader.svg" class="loader" alt="loader" loading="lazy">';
+  initComments(block);
 }

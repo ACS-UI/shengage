@@ -42,6 +42,10 @@ main .section.reaction-container {
     width: 40px;
 }
 
+.reaction-container .info {
+    padding: 10px 0;
+}
+
 @media (width >= 600px) {
     .reaction-container div:nth-child(2) div p {
         width: 96px;

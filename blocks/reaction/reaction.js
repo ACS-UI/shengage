@@ -2,22 +2,15 @@
  * Reaction Block
  * Handles user reactions, including fetching, submitting, and updating reactions
  */
+import { htmlToElement } from '../../scripts/scripts.js';
+import { isSignedInUser, getUserData } from '../../scripts/profile.js';
 
-let reaction = {}; // Stores the current reaction data
-let userDetails = {}; // Stores user information
+let reaction = {};
+let userDetails = {};
+let isSignedIn = false;
 const config = {
   apiEndpoint: 'http://localhost:8080', // API endpoint for submitting and fetching reactions
 };
-
-/**
- * Fetches user data (e.g., avatar and ID)
- */
-async function getUserData() {
-  userDetails = {
-    avatar: '../assets/profile.png',
-    id: 'UR001',
-  };
-}
 
 /**
  * Submits the user's reaction to the server
@@ -69,18 +62,9 @@ const findUserCategory = (obj, userId) => {
   return key || null;
 };
 
-/**
- * Loads and decorates the reaction block with user-specific data
- * @param {Element} block - The reaction block element
- */
-export default async function decorate(block) {
-  reaction = await getReaction();
-  await getUserData();
-
-  const userCategory = findUserCategory(reaction, userDetails.id);
-  config.storyId = document.querySelector('meta[name="storyid"]')?.content;
+async function initReaction(block) {
   const icons = block.querySelectorAll('.reaction-container div:nth-child(2) > div p');
-
+  const userCategory = findUserCategory(reaction, userDetails.id);
   icons.forEach((icon) => {
     const iconCategory = icon.querySelector('img').getAttribute('data-icon-name');
 
@@ -89,25 +73,48 @@ export default async function decorate(block) {
     }
 
     icon.addEventListener('click', async () => {
-      // Remove 'active' class from all icons
-      icons.forEach((i) => i.classList.remove('active'));
-
-      // Update the reaction object
-      if (reaction[iconCategory]) {
-        reaction[iconCategory].push(userDetails.id);
-      } else {
-        reaction[iconCategory] = [userDetails.id];
-      }
-
-      // Remove user ID from other categories
-      Object.keys(reaction).forEach((category) => {
-        if (category !== iconCategory) {
-          reaction[category] = reaction[category].filter((id) => id !== userDetails.id);
+      isSignedIn = await isSignedInUser();
+      if (isSignedIn) {
+        await getUserData();
+        // Remove 'active' class from all icons
+        icons.forEach((i) => i.classList.remove('active'));
+        // Update the reaction object
+        if (reaction[iconCategory]) {
+          reaction[iconCategory].push(userDetails.id);
+        } else {
+          reaction[iconCategory] = [userDetails.id];
         }
-      });
-      // Activate the clicked icon
-      icon.classList.add('active');
-      await submitReaction();
+        // Remove user ID from other categories
+        Object.keys(reaction).forEach((category) => {
+          if (category !== iconCategory) {
+            reaction[category] = reaction[category].filter((id) => id !== userDetails.id);
+          }
+        });
+        // Activate the clicked icon
+        icon.classList.add('active');
+        await submitReaction();
+      } else {
+        const reactionContainer = block.querySelector('.reaction-container div:nth-child(2)');
+        if (!reactionContainer.querySelector('.info')) {
+          reactionContainer.appendChild(htmlToElement('<div class="info"> <span> Please Login to react ... <a href="/"> Login </a> </span> </div>'));
+          reactionContainer.querySelector('.info a').addEventListener('click', (e) => {
+            e.preventDefault();
+            if (!isSignedIn) {
+              window.adobeIMS.signIn();
+            }
+          });
+        }
+      }
     });
   });
+}
+
+/**
+ * Loads and decorates the reaction block with user-specific data
+ * @param {Element} block - The reaction block element
+ */
+export default async function decorate(block) {
+  reaction = await getReaction();
+  config.storyId = document.querySelector('meta[name="storyid"]')?.content;
+  initReaction(block);
 }

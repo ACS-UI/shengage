@@ -22,6 +22,7 @@ main .section.comment-container {
   height: 84px;
   border-radius: 50%;
   margin-right: 40px;
+  background: #e8e1ef;
 }
 
 textarea {
