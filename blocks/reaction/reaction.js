@@ -75,7 +75,7 @@ async function initReaction(block) {
     icon.addEventListener('click', async () => {
       isSignedIn = await isSignedInUser();
       if (isSignedIn) {
-        await getUserData();
+        userDetails = await getUserData() || [];
         // Remove 'active' class from all icons
         icons.forEach((i) => i.classList.remove('active'));
         // Update the reaction object
