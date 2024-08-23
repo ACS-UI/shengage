@@ -63,6 +63,8 @@ const findUserCategory = (obj, userId) => {
 };
 
 async function initReaction(block) {
+  isSignedIn = await isSignedInUser();
+  userDetails = await getUserData() || [];
   const icons = block.querySelectorAll('.reaction-container div:nth-child(2) > div p');
   const userCategory = findUserCategory(reaction, userDetails.id);
   icons.forEach((icon) => {
@@ -73,9 +75,7 @@ async function initReaction(block) {
     }
 
     icon.addEventListener('click', async () => {
-      isSignedIn = await isSignedInUser();
       if (isSignedIn) {
-        userDetails = await getUserData() || [];
         // Remove 'active' class from all icons
         icons.forEach((i) => i.classList.remove('active'));
         // Update the reaction object
