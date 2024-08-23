@@ -31,7 +31,7 @@ async function getCommentData() {
       throw new Error(response.statusText);
     }
     const data = await response.json();
-    return data.data;
+    return data.payload;
   } catch (error) {
     console.error('Fetch error:', error);
     return null;
@@ -84,14 +84,12 @@ function getMaxCommentId(data) {
 }
 
 const prepareComment = (commentText, currentLevel = 0) => {
-  const storryId = document.querySelector('meta[name="storryid"]')?.content;
   const currentComment = getCommentById(comments, parentId);
   const maxId = currentComment?.reply ? getMaxCommentId(currentComment.reply) : 0;
   const newId = maxId ? `${parentId}.${parseInt(maxId.split('.').pop(), 10) + 1}` : `${parentId}.1`;
   const commentId = currentLevel === 0 ? `${parseInt(parentId, 10) + 1}` : newId;
 
   const newComment = {
-    storryId,
     commentId,
     commentText,
     postedBy: userDetails,
@@ -132,13 +130,14 @@ const formatRelativeTime = (timestamp) => {
 };
 
 function postComment() {
+  const storryId = document.querySelector('meta[name="storryid"]')?.content;
   // Example API call:
   fetch(`${config.apiEndpoint}/postComment`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ data: comments }),
+    body: JSON.stringify({ id: storryId, data: comments }),
   })
     .then((response) => response.json())
     .then((data) => console.log('Success:', data))
@@ -283,7 +282,7 @@ export default async function decorate(block) {
   block.innerHTML = '<img src="/icons/loader.svg" class="loader" alt="loader" loading="lazy">';
   isSignedIn = await isSignedInUser();
   await getUserData();
-  comments = await getCommentData();
+  comments = await getCommentData() || [];
   const btnText = !isSignedIn ? 'Please login to comment' : 'Post a comment';
   const disabled = !isSignedIn ? 'disabled' : '';
   const commentContainer = htmlToElement(`
