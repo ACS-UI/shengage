@@ -305,7 +305,7 @@ async function initComments(block) {
 
 export default async function decorate(block) {
   config = getAuthoredData(block);
-  config.storryId = document.querySelector('meta[name="storryid"]')?.content;
+  config.storryId = document.querySelector('meta[name="storyid"]')?.content;
   block.innerHTML = '<img src="/icons/loader.svg" class="loader" alt="loader" loading="lazy">';
   initComments(block);
 }
