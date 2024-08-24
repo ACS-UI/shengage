@@ -93,5 +93,5 @@ async function initReaction(block) {
  */
 export default async function decorate(block) {
   isSignedIn = await isSignedInUser();
-  await initReaction(block);
+  initReaction(block);
 }
