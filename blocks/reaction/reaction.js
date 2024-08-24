@@ -18,17 +18,17 @@ async function handleReaction(reaction = null) {
   const storyId = document.querySelector('meta[name="storyid"]')?.content;
 
   try {
-    const { payload } = await apiRequest({
+    const { data } = await apiRequest({
       method: 'POST',
       endpoint,
       data: {
-        story_id: storyId,
-        user_id: userDetails.id,
+        storyId,
+        userId: userDetails.id,
         ...(reaction && { reaction }),
       },
     });
-    console.log(`${reaction ? 'Reaction submitted' : 'Reaction fetched'}:`, reaction || payload);
-    return payload?.reaction_name ?? null;
+    // console.log(`${reaction ? 'Reaction submitted' : 'Reaction fetched'}:`, reaction );
+    return data?.reaction_name ?? null;
   } catch (error) {
     console.error('Error handling reaction:', error);
     return null; // Fallback value in case of an error

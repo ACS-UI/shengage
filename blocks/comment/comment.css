@@ -30,8 +30,8 @@ textarea {
   padding: 40px;
   border-radius: 5px;
   border: 1px solid #505050;
+  color: #505050;
   background: #F7F7F7;
-  color: #959595;
   resize: none;
   width: calc(100% - 86px);
 }

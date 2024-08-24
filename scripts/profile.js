@@ -32,7 +32,7 @@ export async function loadIms() {
  */
 export async function getUserData() {
   return {
-    avatar: '../assets/profile.png',
+    image: '../assets/profile.png',
     id: (await window.adobeIMS.getProfile()).userId,
     name: (await window.adobeIMS.getProfile()).displayName,
   };
