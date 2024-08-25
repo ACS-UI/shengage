@@ -36,7 +36,7 @@ textarea {
 .main-comment {
   padding: 20px;
 }
-.submit-comment, .comment-actions .main-comment {
+.comment-actions .submit-comment, .comment-actions .main-comment {
   margin-left: 10px;
   padding: 10px 24px;
   background-color: #CACACA;
@@ -49,7 +49,7 @@ textarea {
   max-width: 300px;
 }
 
-.submit-comment:hover, .submit-comment:focus {
+.comment-actions .submit-comment:hover, .submit-comment:focus {
   background-color: #918d8d;
 }
 
@@ -126,7 +126,7 @@ textarea {
   margin-left: 65px;
 }
 
-.comment-actions button {
+.comment-actions .interaction-button {
   background: none;
   border: none;
   border-radius: 5px;
@@ -138,7 +138,7 @@ textarea {
   margin: 0;
 }
 
-.comment-actions button:hover {
+.comment-actions .interaction-button:hover {
   background: #f2f2f2;
 }
 

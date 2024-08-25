@@ -300,7 +300,7 @@ function createCommentHtml(data) {
   const authClass = isSignedIn ? '' : 'auth';
   const canReply = replyDepth < config.replyLimit;
   const replyButtonHtml = canReply
-    ? `<button class="reply-button ${authClass}" data-comment-id="${commentId}">Reply</button>`
+    ? `<button class="reply-button interaction-button ${authClass}" data-comment-id="${commentId}">Reply</button>`
     : '';
 
   const isLiked = likedBy && likedBy.includes(userDetails.id);
@@ -323,7 +323,7 @@ function createCommentHtml(data) {
           </div>
         </div>
         <div class="comment-actions">
-          <button class="like-button ${authClass} ${likeClass}" data-comment-id="${commentId}">Like</button>
+          <button class="like-button interaction-button ${likeClass} ${authClass}" data-comment-id="${commentId}">Like</button>
           ${replyButtonHtml}
         </div>
         <div class="reply-form" id="reply-form-${commentId}">
