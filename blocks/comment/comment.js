@@ -3,100 +3,155 @@
  * Reaction Block
  * Collects the user's reaction
  */
-import { htmlToElement, apiRequest } from '../../scripts/scripts.js';
-import { isSignedInUser, getUserData } from '../../scripts/profile.js';
+import { htmlToElement, apiRequest, getAuthoredData } from '../../scripts/scripts.js';
+import { isSignedInUser, getUserData, addTooltips } from '../../scripts/auth.js';
 
-let userDetails = [];
+let userDetails;
 let commentsSectionDiv;
 let currentOpenReplyForm = null;
 let isSignedIn = false;
 let config = {};
 
-async function getCommentData() {
+/**
+ * Fetches comment data from the server.
+ * @returns {Promise<Object|null>} - The fetched comment data or null if an error occurs.
+ */
+const getCommentData = async () => {
   const endpoint = '/getComments';
   const storyId = document.querySelector('meta[name="storyid"]')?.content;
-
+  const requestData = { storyId };
+  // Include userId in request if available
+  if (userDetails?.id) {
+    requestData.userId = userDetails.id;
+  }
   try {
-    const { data } = await apiRequest({
+    const response = await apiRequest({
       method: 'POST',
       endpoint,
-      data: {
-        storyId,
-        ...(userDetails.id && { userId: userDetails.id }),
-      },
+      data: requestData,
     });
-    return data ?? null;
+
+    return response.data ?? null;
   } catch (error) {
-    console.error('Error Get Comments Data:', error);
+    console.error('Error fetching comment data:', error);
     return null;
   }
-}
+};
 
+/**
+ * Prepares a new comment object with an appropriate ID and timestamp.
+ * @param {Array} comments - The array of comments, including nested replies.
+ * @param {string} parentId - The ID of the parent comment.
+ * @param {string} commentText - The text of the new comment.
+ * @param {number} [currentLevel=0] - The current level of the comment (default is 0).
+ * @returns {Object} - The prepared new comment object.
+ */
 const prepareComment = (comments, parentId, commentText, currentLevel = 0) => {
-  const currentComment = getCommentById(comments, parentId);
-  const maxId = currentComment?.reply ? getMaxCommentId(currentComment.reply) : 0;
-  const newId = maxId ? `${parentId}.${parseInt(maxId.split('.').pop(), 10) + 1}` : `${parentId}.1`;
-  const commentId = currentLevel === 0 ? `${parseInt(parentId, 10) + 1}` : newId;
-  const newComment = {
+  const parentComment = getCommentById(comments, parentId);
+  const maxId = parentComment?.reply ? getMaxCommentId(parentComment.reply) : '0';
+
+  const newId = maxId !== '0'
+    ? `${parentId}.${parseInt(maxId.split('.').pop(), 10) + 1}`
+    : `${parentId}.1`;
+
+  const commentId = currentLevel === 0
+    ? (parseInt(parentId, 10) + 1).toString()
+    : newId;
+
+  return {
     storyId: config.storyId,
     commentId,
     commentText,
     postedBy: userDetails,
     postedDate: getIndianTimestamp(),
   };
-  return newComment;
 };
 
-async function postComment(comment) {
+/**
+ * Posts a comment to the server.
+ * @param {Object} comment - The comment object to be posted.
+ * @returns {Promise<Object|null>} - The response data from the server or null in case of an error.
+ */
+const postComment = async (comment) => {
   const endpoint = '/postComment';
+
   try {
-    const { data } = await apiRequest({
+    const response = await apiRequest({
       method: 'POST',
       endpoint,
       data: comment,
     });
-    return data ?? null;
+
+    return response.data ?? null;
   } catch (error) {
-    console.error('Error Post Comment:', error);
+    console.error('Error posting comment:', error);
     return null;
   }
-}
+};
 
-function getIndianTimestamp() {
+/**
+ * Gets the current timestamp adjusted to Indian Standard Time (IST).
+ * @returns {Date} - A Date object representing the current time in IST.
+ */
+const getIndianTimestamp = () => {
   const now = new Date();
-  const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
-  return new Date(now.getTime() + istOffset);
+  const IST_OFFSET = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30 in milliseconds
+  return new Date(now.getTime() + IST_OFFSET);
+};
+
+/**
+ * Recursively retrieves a comment by its ID from a nested array of comments.
+ * @param {Array} data - The array of comments, which may contain nested replies.
+ * @param {string} parentId - The ID of the comment to find.
+ * @returns {Object|null} - The comment with the specified ID, or null if not found.
+ */
+function getCommentById(data, parentId) {
+  // Recursive function to search for a comment
+  const findComment = (comments, id) => {
+    // Direct match check
+    const match = comments.find((comment) => comment.commentId === id);
+    if (match) return match;
+
+    // Recursively search in nested replies
+    return comments
+      .filter((comment) => comment.reply)
+      .map((comment) => findComment(comment.reply, id))
+      .find((result) => result !== null) || null;
+  };
+  return findComment(data, parentId);
 }
 
-function getCommentById(data, parent) {
-  const directMatch = data?.find((comment) => comment.commentId === parent);
-  if (directMatch) {
-    return directMatch;
-  }
-  return data
-    .flatMap((comment) => comment.reply || [])
-    .reduce((acc, replies) => acc || getCommentById([replies], parent), null);
-}
-
+/**
+ * Finds the maximum comment ID from an array of comments.
+ * @param {Array} data - The array of comments, each containing a `commentId` property.
+ * @returns {string} - The maximum comment ID as a string.
+ */
 function getMaxCommentId(data) {
-  return data.reduce((max, comment) => {
-    const compareIds = (id1, id2) => {
-      const arr1 = id1.split('.').map(Number);
-      const arr2 = id2.split('.').map(Number);
-      for (let i = 0; i < Math.max(arr1.length, arr2.length); i += 1) {
-        const segment1 = arr1[i] || 0;
-        const segment2 = arr2[i] || 0;
-        if (segment1 > segment2) return id1;
-        if (segment1 < segment2) return id2;
+  const compareIds = (id1, id2) => {
+    const arr1 = id1.split('.').map(Number);
+    const arr2 = id2.split('.').map(Number);
+    for (let i = 0; i < Math.max(arr1.length, arr2.length); i += 1) {
+      const segment1 = arr1[i] || 0;
+      const segment2 = arr2[i] || 0;
+      if (segment1 !== segment2) {
+        return segment1 > segment2 ? id1 : id2;
       }
-      return id1;
-    };
-    return compareIds(comment.commentId, max) === comment.commentId ? comment.commentId : max;
-  }, '0');
+    }
+    return id1;
+  };
+
+  return data.reduce((max, { commentId }) => compareIds(commentId, max), '0');
 }
 
+/**
+ * Formats a timestamp into a relative time string.
+ * @param {string|Date} timestamp - The timestamp to format. Can be a string or Date object.
+ * @returns {string} - A relative time string such as "2 days ago" or "just now".
+ */
 const formatRelativeTime = (timestamp) => {
-  const difference = getIndianTimestamp().getTime() - new Date(timestamp).getTime();
+  const now = getIndianTimestamp();
+  const then = new Date(timestamp);
+  const difference = now.getTime() - then.getTime();
 
   const timeUnits = [
     { unit: 'year', value: 365 * 24 * 60 * 60 * 1000 },
@@ -108,7 +163,8 @@ const formatRelativeTime = (timestamp) => {
     { unit: 'second', value: 1000 },
   ];
 
-  const timeUnit = timeUnits.find(({ value }) => Math.floor(difference / value) >= 1);
+  // Find the appropriate time unit
+  const timeUnit = timeUnits.find(({ value: unitValue }) => difference >= unitValue);
 
   if (timeUnit) {
     const time = Math.floor(difference / timeUnit.value);
@@ -118,131 +174,152 @@ const formatRelativeTime = (timestamp) => {
   return 'just now';
 };
 
+/**
+ * Toggles the visibility of the reply form for a specific comment.
+ * @param {string} commentId - The ID of the comment whose reply form is to be toggled.
+ */
 function toggleReplyForm(commentId) {
   const replyForm = commentsSectionDiv.querySelector(`#reply-form-${commentId}`);
   if (currentOpenReplyForm && currentOpenReplyForm !== replyForm) {
     currentOpenReplyForm.style.display = 'none';
   }
-  if (replyForm.style.display === 'none' || !replyForm.style.display) {
-    replyForm.style.display = 'flex';
-    currentOpenReplyForm = replyForm;
-  } else {
+  const isCurrentlyVisible = replyForm.style.display === 'flex';
+  replyForm.style.display = isCurrentlyVisible ? 'none' : 'flex';
+  currentOpenReplyForm = isCurrentlyVisible ? null : replyForm;
+}
+
+/**
+ * Submits a reply to a comment and updates the comments section.
+ * @param {string} commentId - The ID of the comment to reply to.
+ * @param {Array} comments - The array of comment data objects.
+ */
+async function submitReply(commentId, comments) {
+  const replyForm = commentsSectionDiv.querySelector(`#reply-form-${commentId}`);
+  const textarea = replyForm?.querySelector('textarea');
+  const replyText = textarea?.value.trim();
+  if (!replyText) return;
+  const newReply = prepareComment(comments, commentId, replyText, 1);
+  if (!newReply.postedBy.id) return;
+  try {
+    const updatedComments = await postComment(newReply);
+    updateElement(updatedComments);
+  } catch (error) {
+    console.error('Error submitting reply:', error);
+  } finally {
+    textarea.value = '';
     replyForm.style.display = 'none';
     currentOpenReplyForm = null;
   }
 }
 
-// Function to submit a reply
-async function submitReply(commentId, comments) {
-  const replyForm = commentsSectionDiv.querySelector(`#reply-form-${commentId}`);
-  const textarea = replyForm.querySelector('textarea');
-  const replyText = textarea.value.trim();
-  if (!replyText) return;
-
-  const newReply = prepareComment(comments, commentId, replyText, 1);
-  if (!newReply.postedBy.id) return;
-  const newComments = await postComment(newReply);
-  updateElement(newComments);
-  textarea.value = '';
-  replyForm.style.display = 'none';
-  currentOpenReplyForm = null;
-}
-
-// Function to submit a reply
+/**
+ * Submits a like or dislike for a comment.
+ * @param {string} commentId - The ID of the comment to like or dislike.
+ * @param {boolean} userHasLiked - Indicates if the user has liked the comment.
+ * @returns {Object|null} - The response data from the API or null in case of an error.
+ */
 async function submitLike(commentId, userHasLiked) {
-  const userId = userDetails.id;
+  const { id: userId } = userDetails;
+  const { storyId } = config;
   const likedData = {
-    storyId: config.storyId,
+    storyId,
     userId,
     commentId,
     userHasLiked,
   };
-
-  const endpoint = '/likeForComment';
   try {
     const { data } = await apiRequest({
       method: 'POST',
-      endpoint,
+      endpoint: '/likeForComment',
       data: likedData,
     });
+
     return data ?? null;
   } catch (error) {
-    console.error('Like For Comment:', error);
+    console.error('Like For Comment Error:', error);
     return null;
   }
 }
 
-// Function to handle event delegation
+/**
+ * Handles event delegation for comment interactions such as replying, liking, and submit.
+ * @param {Event} event - The event object from the event listener.
+ * @param {Array} comments - The array of comment data objects.
+ */
 async function handleEventDelegation(event, comments) {
-  if (event.target && event.target.classList.contains('reply-button')) {
-    const commentId = event.target.getAttribute('data-comment-id');
+  const { target } = event;
+  const { commentId } = target.dataset;
+
+  if (target.classList.contains('reply-button')) {
     toggleReplyForm(commentId);
-  } else if (event.target && event.target.classList.contains('like-button')) {
-    const commentId = event.target.getAttribute('data-comment-id');
-    const target = event.target;
-    const isLike = !target.classList.toggle('Like');
-    target.innerHTML = isLike ? 'Like' : 'Dislike';
-
-    const likeImgSrc = isLike ? '/icons/fill-heart.svg' : '/icons/line-heart.svg';
+  } else if (target.classList.contains('like-button')) {
+    const isLiked = target.classList.toggle('Like');
+    target.textContent = isLiked ? 'Dislike' : 'Like';
+    const likeIconSrc = isLiked ? '/icons/fill-heart.svg' : '/icons/line-heart.svg';
     const iconContainer = target.closest('.comment-body').querySelector('.icon-line-heart');
+    iconContainer.innerHTML = `<img data-icon-name="line-heart" src="${likeIconSrc}" alt="Heart Icon" loading="lazy">`;
 
-    iconContainer.innerHTML = `<img data-icon-name="line-heart" src="${likeImgSrc}" alt="" loading="lazy">`;
-    submitLike(commentId, isLike);
-    // updateElement(uodatedComments);
-  } else if (event.target && event.target.classList.contains('submit-reply-button')) {
-    const commentId = event.target.getAttribute('data-comment-id');
-    submitReply(commentId, comments);
+    await submitLike(commentId, isLiked);
+    // If necessary, update the comments or UI after liking
+    // updateElement(updatedComments);
+  } else if (target.classList.contains('submit-reply-button')) {
+    await submitReply(commentId, comments);
   }
 }
 
+/**
+ * Updates the comments section by rendering the provided comments
+ * and setting up event delegation for comment interactions.
+ * @param {Array} comments - The array of comment data objects to render.
+ */
 function updateElement(comments) {
-  commentsSectionDiv.innerHTML = comments?.map(createCommentHtml).join('');
-  commentsSectionDiv.addEventListener('click', (event) => { handleEventDelegation(event, comments); });
+  commentsSectionDiv.innerHTML = comments?.map(createCommentHtml).join('') || '';
+  commentsSectionDiv.addEventListener('click', (event) => handleEventDelegation(event, comments));
+  addTooltips(commentsSectionDiv);
 }
 
-function getAuthoredData(block) {
-  const authorData = {};
-  // iterate over children and get all authoring data
-  block.childNodes.forEach((child) => {
-    if (child.nodeType === 1) {
-      const objText = 'obj';
-      let firstDivText = child.children[0].textContent.trim();
-      let secondDivText = child.children[1]?.textContent.trim();
-
-      if (firstDivText.indexOf(objText) >= 0) {
-        firstDivText = firstDivText.replace(objText, '').trim();
-        secondDivText = secondDivText?.split(',');
-      }
-      authorData[firstDivText] = secondDivText;
-    }
-  });
-
-  return authorData;
-}
-
+/**
+ * Generates the HTML structure for a single comment, including its replies.
+ * @param {Object} data - The comment data object.
+ * @returns {string} - The HTML string for the comment and its replies.
+ */
 function createCommentHtml(data) {
-  const repliesHtml = data.reply ? data.reply.map(createCommentHtml).join('') : '';
-  const replyLength = data.commentId.split('.').length;
-  const replyBtn = (replyLength >= config.replyLimit || !isSignedIn) ? '' : `<button class="reply-button" data-comment-id="${data.commentId}">Reply</button>`;
-  const likeText = data.likedBy && data.likedBy.includes(userDetails.id) ? 'Dislike' : 'Like';
-  const likeImg = data.likedBy && data.likedBy.includes(userDetails.id) ? '/icons/fill-heart.svg' : '/icons/line-heart.svg';
+  const {
+    commentId, postedBy, commentText, postedDate, likedBy, reply,
+  } = data;
+  const repliesHtml = reply ? reply.map(createCommentHtml).join('') : '';
+
+  // Determine the reply button visibility and like status
+  const replyDepth = commentId.split('.').length;
+  const canReply = replyDepth < config.replyLimit && isSignedIn;
+  const replyButtonHtml = canReply
+    ? `<button class="reply-button" data-comment-id="${commentId}">Reply</button>`
+    : '';
+
+  const isLiked = likedBy && likedBy.includes(userDetails.id);
+  const likeText = isLiked ? 'Dislike' : 'Like';
+  const likeIcon = isLiked ? '/icons/fill-heart.svg' : '/icons/line-heart.svg';
 
   return `
-    <div class="comment-items" id="${data.commentId}">
+    <div class="comment-items" id="${commentId}">
       <div class="comment-item">
-        <img src="${data.postedBy.image}" alt="${data.postedBy.name}" class="avatar">
+        <img src="${postedBy.image}" alt="${postedBy.name}" class="avatar">
         <div class="comment-body">
-          <h3 class="author">${data.postedBy.name} <span class="date">${formatRelativeTime(data.postedDate)}</span></h3>
-          <div class="comment-text">${data.commentText}</div>
+          <h3 class="author">${postedBy.name} <span class="date">${formatRelativeTime(postedDate)}</span></h3>
+          <div class="comment-text">${commentText}</div>
           <div class="comment-actions">
-            <button class="like-button ${likeText}" data-comment-id="${data.commentId}">${likeText}</button>
-            ${replyBtn}
+            <button class="like-button" data-comment-id="${commentId}">${likeText}</button>
+            ${replyButtonHtml}
           </div>
-          <div class="reply-form" id="reply-form-${data.commentId}">
+          <div class="reply-form" id="reply-form-${commentId}">
             <textarea placeholder="Write a reply..."></textarea>
-            <button class="post-comment submit-reply-button" data-comment-id="${data.commentId}">Reply</button>
+            <button class="post-comment submit-reply-button" data-comment-id="${commentId}">Reply</button>
           </div>
-          <div class="like"> <span class="icon icon-line-heart"><img data-icon-name="line-heart" src="${likeImg}" alt="" loading="lazy"></span> </div>
+          <div class="like">
+            <span class="icon icon-line-heart">
+              <img src="${likeIcon}" alt="${likeText}" loading="lazy">
+            </span>
+          </div>
         </div>
       </div>
       <div class="comment-replies">
@@ -252,32 +329,42 @@ function createCommentHtml(data) {
   `;
 }
 
+/**
+ * Initializes the comment section within the specified block element.
+ * Handles user authentication, comment data fetching, and comment submission.
+ * @param {HTMLElement} block - The block element where the comment section will be rendered.
+ */
 async function initComments(block) {
   isSignedIn = await isSignedInUser();
-  if (isSignedIn) userDetails = await getUserData() || [];
+  userDetails = isSignedIn ? await getUserData() : {};
   let comments = await getCommentData() || [];
-  const btnText = !isSignedIn ? 'Please login to comment' : 'Post a comment';
-  const disabled = !isSignedIn ? 'disabled' : '';
-  userDetails.image = isSignedIn ? userDetails.image : '../assets/profile.png';
+  const btnText = isSignedIn ? 'Post a comment' : 'Please login to comment';
+  const btnMode = isSignedIn ? '' : 'disabled';
+  const userImage = isSignedIn ? userDetails.image : '../assets/profile.png';
+
   const commentContainer = htmlToElement(`
-        <div class="comment-area">
-          <div class="input-section">
-            <div class="comment-input">
-                <img src="${userDetails.image}" alt="Avatar" class="avatar">
-                <textarea  id="commentText" rows="5" placeholder="What are your thoughts?" ${disabled}></textarea>
-            </div>
-            <div class="comment-actions right">
-              <button class="post-comment main-comment">${btnText}</button>
-            </div>
-          </div>
-          <div class="comments-section"></div>
-        </div>`);
+    <div class="comment-area">
+      <div class="input-section">
+        <div class="comment-input">
+          <img src="${userImage}" alt="Avatar" class="avatar">
+          <textarea id="commentText" rows="5" placeholder="What are your thoughts?" ${btnMode}></textarea>
+        </div>
+        <div class="comment-actions right">
+          <button class="post-comment main-comment">${btnText}</button>
+        </div>
+      </div>
+      <div class="comments-section"></div>
+    </div>
+  `);
 
   block.innerHTML = '';
   block.appendChild(commentContainer);
   commentsSectionDiv = block.querySelector('.comments-section');
-  if (comments) updateElement(comments);
+  if (comments.length) {
+    updateElement(comments);
+  }
 
+  // Add event listener to handle comment posting
   block.querySelector('.main-comment').addEventListener('click', async (e) => {
     e.preventDefault();
     if (!isSignedIn) {
@@ -296,9 +383,17 @@ async function initComments(block) {
   });
 }
 
+/**
+ * Decorates the block element by configuring it with authored data,
+ * @param {HTMLElement} block - The block element to be decorated.
+ */
 export default async function decorate(block) {
-  config = getAuthoredData(block);
-  config.storyId = document.querySelector('meta[name="storyid"]')?.content;
+  config = {
+    ...getAuthoredData(block),
+    storyId: document.querySelector('meta[name="storyid"]')?.content || '',
+  };
+
+  // Update the block's inner HTML to show a loading spinner
   block.innerHTML = '<img src="/icons/loader.svg" class="loader" alt="loader" loading="lazy">';
-  initComments(block);
+  initComments(block, config);
 }

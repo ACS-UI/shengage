@@ -3,7 +3,7 @@
  * Handles user reactions, including fetching, submitting, and updating reactions
  */
 import { htmlToElement, apiRequest } from '../../scripts/scripts.js';
-import { isSignedInUser, getUserData } from '../../scripts/profile.js';
+import { isSignedInUser, getUserData } from '../../scripts/auth.js';
 
 let userDetails = {};
 let isSignedIn = false;

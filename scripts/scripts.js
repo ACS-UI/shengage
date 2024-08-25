@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-cycle, max-classes-per-file
-import { loadIms } from './profile.js';
+import { loadIms } from './auth.js';
 import {
   sampleRUM,
   buildBlock,
@@ -130,6 +130,32 @@ export function htmlToElement(html) {
   template.innerHTML = trimmedHtml;
   return template.content.firstElementChild;
 }
+
+/**
+ * Extracts authored data from the child nodes of a block element.
+ * @param {HTMLElement} block - The parent block element containing child nodes with authoring data.
+ * @returns {Object} authorData - An object containing the extracted data
+ */
+export const getAuthoredData = (block) => {
+  const authorData = {};
+
+  block.childNodes.forEach((child) => {
+    if (child.nodeType === Node.ELEMENT_NODE) {
+      const [firstChild, secondChild] = child.children;
+      let key = firstChild.textContent.trim();
+      let value = secondChild?.textContent.trim();
+
+      // Check if key contains 'obj', then modify key and split value by comma
+      if (key.includes('obj')) {
+        key = key.replace('obj', '').trim();
+        value = value ? value.split(',').map((item) => item.trim()) : [];
+      }
+      authorData[key] = value;
+    }
+  });
+
+  return authorData;
+};
 
 /**
  * get site config
