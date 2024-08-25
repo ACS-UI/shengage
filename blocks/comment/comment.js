@@ -261,7 +261,7 @@ async function handleEventDelegation(event, comments) {
     const updatedComments = await submitLike(commentId, isLiked);
     // If necessary, update the comments or UI after liking
     updateElement(updatedComments);
-  } else if (target.classList.contains('submit-reply-button')) {
+  } else if (target.classList.contains('submit-reply')) {
     await submitReply(commentId, comments);
   }
 }
@@ -328,7 +328,7 @@ function createCommentHtml(data) {
         </div>
         <div class="reply-form" id="reply-form-${commentId}">
           <textarea placeholder="Write a reply..."></textarea>
-          <button class="post-comment submit-reply-button" data-comment-id="${commentId}">Reply</button>
+          <button class="submit-comment submit-reply" data-comment-id="${commentId}">Reply</button>
         </div>
       </div>
       <div class="comment-replies">
@@ -359,7 +359,7 @@ async function initComments(block) {
           <textarea class="main-comment" rows="5" placeholder="What are your thoughts?" ${btnMode}></textarea>
         </div>
         <div class="comment-actions right">
-          <button class="post-comment main-comment">${btnText}</button>
+          <button class="submit-comment submit-main-comment">${btnText}</button>
         </div>
       </div>
       <div class="comments-section"></div>
@@ -374,7 +374,7 @@ async function initComments(block) {
   }
 
   // Add event listener to handle comment posting
-  block.querySelector('.main-comment').addEventListener('click', async (e) => {
+  block.querySelector('.submit-main-comment').addEventListener('click', async (e) => {
     e.preventDefault();
     if (!isSignedIn) {
       window.adobeIMS.signIn();
