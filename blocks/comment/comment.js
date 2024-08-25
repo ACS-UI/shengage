@@ -274,8 +274,12 @@ async function handleEventDelegation(event, comments) {
  */
 function updateElement(comments) {
   commentsSectionDiv.innerHTML = comments?.map(createCommentHtml).join('') || '';
-  commentsSectionDiv.addEventListener('click', (event) => handleEventDelegation(event, comments));
   addTooltips(commentsSectionDiv);
+  commentsSectionDiv.addEventListener('click', (event) => {
+    if (isSignedIn) {
+      handleEventDelegation(event, comments);
+    }
+  });
 }
 
 /**
@@ -291,9 +295,10 @@ function createCommentHtml(data) {
 
   // Determine the reply button visibility and like status
   const replyDepth = commentId.split('.').length;
-  const canReply = replyDepth < config.replyLimit && isSignedIn;
+  const authClass = isSignedIn ? '' : 'auth';
+  const canReply = replyDepth < config.replyLimit;
   const replyButtonHtml = canReply
-    ? `<button class="reply-button" data-comment-id="${commentId}">Reply</button>`
+    ? `<button class="reply-button ${authClass}" data-comment-id="${commentId}">Reply</button>`
     : '';
 
   const isLiked = likedBy && likedBy.includes(userDetails.id);
@@ -308,7 +313,7 @@ function createCommentHtml(data) {
           <h3 class="author">${postedBy.name} <span class="date">${formatRelativeTime(postedDate)}</span></h3>
           <div class="comment-text">${commentText}</div>
           <div class="comment-actions">
-            <button class="like-button" data-comment-id="${commentId}">${likeText}</button>
+            <button class="like-button ${authClass}" data-comment-id="${commentId}">${likeText}</button>
             ${replyButtonHtml}
           </div>
           <div class="reply-form" id="reply-form-${commentId}">
