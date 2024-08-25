@@ -289,11 +289,11 @@ function updateElement(comments) {
  */
 function createCommentHtml(data) {
   const {
-    commentId, postedBy, commentText, postedDate, likedBy, reply,
+    commentId, postedBy, commentText, postedDate, likedBy, replies,
   } = data;
-  const repliesHtml = reply ? reply.map(createCommentHtml).join('') : '';
+  const repliesHtml = replies ? replies.map(createCommentHtml).join('') : '';
 
-  // Determine the reply button visibility and like status
+  // Determine the replies button visibility and like status
   const replyDepth = commentId.split('.').length;
   const authClass = isSignedIn ? '' : 'auth';
   const canReply = replyDepth < config.replyLimit;
