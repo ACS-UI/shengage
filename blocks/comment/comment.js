@@ -48,7 +48,7 @@ const getCommentData = async () => {
  */
 const prepareComment = (comments, parentId, commentText, currentLevel = 0) => {
   const parentComment = getCommentById(comments, parentId);
-  const maxId = parentComment?.reply ? getMaxCommentId(parentComment.reply) : '0';
+  const maxId = parentComment?.replies ? getMaxCommentId(parentComment.replies) : '0';
 
   const newId = maxId !== '0'
     ? `${parentId}.${parseInt(maxId.split('.').pop(), 10) + 1}`
@@ -114,8 +114,8 @@ function getCommentById(data, parentId) {
 
     // Recursively search in nested replies
     return comments
-      .filter((comment) => comment.reply)
-      .map((comment) => findComment(comment.reply, id))
+      .filter((comment) => comment.replies)
+      .map((comment) => findComment(comment.replies, id))
       .find((result) => result !== null) || null;
   };
   return findComment(data, parentId);
@@ -179,7 +179,7 @@ const formatRelativeTime = (timestamp) => {
  * @param {string} commentId - The ID of the comment whose reply form is to be toggled.
  */
 function toggleReplyForm(commentId) {
-  const replyForm = commentsSectionDiv.querySelector(`#reply-form-${commentId}`);
+  const replyForm = commentsSectionDiv.querySelector(`#reply-form-${commentId.replace('.', '\\.')}`);
   if (currentOpenReplyForm && currentOpenReplyForm !== replyForm) {
     currentOpenReplyForm.style.display = 'none';
   }
@@ -194,7 +194,7 @@ function toggleReplyForm(commentId) {
  * @param {Array} comments - The array of comment data objects.
  */
 async function submitReply(commentId, comments) {
-  const replyForm = commentsSectionDiv.querySelector(`#reply-form-${commentId}`);
+  const replyForm = commentsSectionDiv.querySelector(`#reply-form-${commentId.replace('.', '\\.')}`);
   const textarea = replyForm?.querySelector('textarea');
   const replyText = textarea?.value.trim();
   if (!replyText) return;
@@ -259,9 +259,9 @@ async function handleEventDelegation(event, comments) {
     const iconContainer = target.closest('.comment-body').querySelector('.icon-line-heart');
     iconContainer.innerHTML = `<img data-icon-name="line-heart" src="${likeIconSrc}" alt="Heart Icon" loading="lazy">`;
 
-    await submitLike(commentId, isLiked);
+    const updatedComments = await submitLike(commentId, isLiked);
     // If necessary, update the comments or UI after liking
-    // updateElement(updatedComments);
+    updateElement(updatedComments);
   } else if (target.classList.contains('submit-reply-button')) {
     await submitReply(commentId, comments);
   }
