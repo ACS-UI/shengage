@@ -253,7 +253,7 @@ async function handleEventDelegation(event, comments) {
   if (target.classList.contains('reply-button')) {
     toggleReplyForm(commentId);
   } else if (target.classList.contains('like-button')) {
-    const isLiked = target.classList.toggle('Like');
+    const isLiked = target.classList.toggle('liked');
     target.textContent = isLiked ? 'Dislike' : 'Like';
     const likeIconSrc = isLiked ? '/icons/fill-heart.svg' : '/icons/line-heart.svg';
     const iconContainer = target.closest('.comment-body').querySelector('.icon-line-heart');
@@ -273,9 +273,12 @@ async function handleEventDelegation(event, comments) {
  * @param {Array} comments - The array of comment data objects to render.
  */
 function updateElement(comments) {
-  commentsSectionDiv.innerHTML = comments?.map(createCommentHtml).join('') || '';
-  addTooltips(commentsSectionDiv);
-  commentsSectionDiv.addEventListener('click', (event) => {
+  commentsSectionDiv.innerHTML = '';
+  const subContainer = document.createElement('div');
+  subContainer.innerHTML = comments?.map(createCommentHtml).join('') || '';
+  addTooltips(subContainer);
+  commentsSectionDiv.appendChild(subContainer);
+  subContainer.addEventListener('click', (event) => {
     if (isSignedIn) {
       handleEventDelegation(event, comments);
     }
@@ -302,6 +305,7 @@ function createCommentHtml(data) {
     : '';
 
   const isLiked = likedBy && likedBy.includes(userDetails.id);
+  const likeClass = isLiked ? 'liked' : '';
   const likeText = isLiked ? 'Dislike' : 'Like';
   const likeIcon = isLiked ? '/icons/fill-heart.svg' : '/icons/line-heart.svg';
 
@@ -313,7 +317,7 @@ function createCommentHtml(data) {
           <h3 class="author">${postedBy.name} <span class="date">${formatRelativeTime(postedDate)}</span></h3>
           <div class="comment-text">${commentText}</div>
           <div class="comment-actions">
-            <button class="like-button ${authClass}" data-comment-id="${commentId}">${likeText}</button>
+            <button class="like-button ${authClass} ${likeClass}" data-comment-id="${commentId}">${likeText}</button>
             ${replyButtonHtml}
           </div>
           <div class="reply-form" id="reply-form-${commentId}">
