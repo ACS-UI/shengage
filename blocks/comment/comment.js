@@ -388,7 +388,7 @@ async function initComments(block) {
     if (!newComment.postedBy.id) return;
     comments = await postComment(newComment);
     updateElement(comments);
-    block.querySelector('.main-commen').value = '';
+    block.querySelector('.main-comment').value = '';
   });
 }
 
