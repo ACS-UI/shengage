@@ -213,8 +213,8 @@ async function submitReply(commentId, comments) {
 }
 
 /**
- * Submits a like or dislike for a comment.
- * @param {string} commentId - The ID of the comment to like or dislike.
+ * Submits a like for a comment.
+ * @param {string} commentId - The ID of the comment to like.
  * @param {boolean} userHasLiked - Indicates if the user has liked the comment.
  * @returns {Object|null} - The response data from the API or null in case of an error.
  */
@@ -254,9 +254,8 @@ async function handleEventDelegation(event, comments) {
     toggleReplyForm(commentId);
   } else if (target.classList.contains('like-button')) {
     const isLiked = target.classList.toggle('liked');
-    target.textContent = isLiked ? 'Dislike' : 'Like';
     const likeIconSrc = isLiked ? '/icons/fill-heart.svg' : '/icons/line-heart.svg';
-    const iconContainer = target.closest('.comment-body').querySelector('.icon-line-heart');
+    const iconContainer = target.closest('.comment-item').querySelector('.icon-line-heart');
     iconContainer.innerHTML = `<img data-icon-name="line-heart" src="${likeIconSrc}" alt="Heart Icon" loading="lazy">`;
 
     const updatedComments = await submitLike(commentId, isLiked);
@@ -306,29 +305,30 @@ function createCommentHtml(data) {
 
   const isLiked = likedBy && likedBy.includes(userDetails.id);
   const likeClass = isLiked ? 'liked' : '';
-  const likeText = isLiked ? 'Dislike' : 'Like';
   const likeIcon = isLiked ? '/icons/fill-heart.svg' : '/icons/line-heart.svg';
 
   return `
     <div class="comment-items" id="${commentId}">
-      <div class="comment-item">
-        <img src="${postedBy.image}" alt="${postedBy.name}" class="avatar">
-        <div class="comment-body">
-          <h3 class="author">${postedBy.name} <span class="date">${formatRelativeTime(postedDate)}</span></h3>
-          <div class="comment-text">${commentText}</div>
-          <div class="comment-actions">
-            <button class="like-button ${authClass} ${likeClass}" data-comment-id="${commentId}">${likeText}</button>
-            ${replyButtonHtml}
+    <div class="comment-item">
+        <div class="comment-details">
+          <img src="${postedBy.image}" alt="${postedBy.name}" class="avatar">
+          <div class="comment-body">
+            <h3 class="author">${postedBy.name} <span class="date">${formatRelativeTime(postedDate)}</span></h3>
+            <div class="comment-text">${commentText}</div>
+            <div class="like">
+              <span class="icon icon-line-heart">
+                <img src="${likeIcon}" alt="Like" loading="lazy">
+              </span>
+            </div>
           </div>
-          <div class="reply-form" id="reply-form-${commentId}">
-            <textarea placeholder="Write a reply..."></textarea>
-            <button class="post-comment submit-reply-button" data-comment-id="${commentId}">Reply</button>
-          </div>
-          <div class="like">
-            <span class="icon icon-line-heart">
-              <img src="${likeIcon}" alt="${likeText}" loading="lazy">
-            </span>
-          </div>
+        </div>
+        <div class="comment-actions">
+          <button class="like-button ${authClass} ${likeClass}" data-comment-id="${commentId}">Like</button>
+          ${replyButtonHtml}
+        </div>
+        <div class="reply-form" id="reply-form-${commentId}">
+          <textarea placeholder="Write a reply..."></textarea>
+          <button class="post-comment submit-reply-button" data-comment-id="${commentId}">Reply</button>
         </div>
       </div>
       <div class="comment-replies">
@@ -356,7 +356,7 @@ async function initComments(block) {
       <div class="input-section">
         <div class="comment-input">
           <img src="${userImage}" alt="Avatar" class="avatar">
-          <textarea id="commentText" rows="5" placeholder="What are your thoughts?" ${btnMode}></textarea>
+          <textarea class="main-comment" rows="5" placeholder="What are your thoughts?" ${btnMode}></textarea>
         </div>
         <div class="comment-actions right">
           <button class="post-comment main-comment">${btnText}</button>
@@ -379,7 +379,7 @@ async function initComments(block) {
     if (!isSignedIn) {
       window.adobeIMS.signIn();
     }
-    const commentText = block.querySelector('#commentText').value.trim();
+    const commentText = block.querySelector('.main-comment').value.trim();
     if (!commentText) return;
     const parentId = comments.length > 0
       ? Math.max(...comments.map((comment) => parseInt(comment.commentId, 10))) : 0;
@@ -388,7 +388,7 @@ async function initComments(block) {
     if (!newComment.postedBy.id) return;
     comments = await postComment(newComment);
     updateElement(comments);
-    block.querySelector('#commentText').value = '';
+    block.querySelector('.main-commen').value = '';
   });
 }
 

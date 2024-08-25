@@ -8,8 +8,7 @@ main .section.comment-container {
 }
 
 .input-section{
-  padding: 60px 60px 40px;
-  border-bottom: 1px solid;
+  padding: 30px 40px;
 }
 
 .comment-input {
@@ -18,24 +17,25 @@ main .section.comment-container {
 }
 
 .avatar {
-  width: 84px;
-  height: 84px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  margin-right: 40px;
+  margin-right: 15px;
   background: #e8e1ef;
 }
 
 textarea {
   flex: 1;
-  padding: 40px;
-  border-radius: 5px;
+  padding: 15px 15px 10px;
+  border-radius: 15px;
   border: 1px solid #505050;
   color: #505050;
-  background: #F7F7F7;
   resize: none;
-  width: calc(100% - 86px);
+  width: calc(100% - 100px);
 }
-
+.main-comment {
+  padding: 20px;
+}
 .post-comment, .comment-actions .main-comment {
   margin-left: 10px;
   padding: 10px 24px;
@@ -54,12 +54,13 @@ textarea {
 }
 
 .comments-section {
-  padding: 0 60px;
+  padding: 0 40px;
+  border-top: 1px solid #CCCCCD;
 }
 
 .comment-items {
   border-bottom: 1px solid #CCCCCD;
-  padding: 20px 0;
+  padding: 15px 0;
 }
 
 .comment-items .comment-items {
@@ -67,27 +68,30 @@ textarea {
   border: unset;
 }
 
-.comment-item {
+.comment-details {
   display: flex;
   align-items: flex-start;
 }
 
 .comment-body {
-  border-radius: 5px;
+  border-radius: 15px;
   flex: 1;
-  min-height: 130px;
   position: relative;
+  background: #f2f2f2;
+  padding: 15px;
 }
 
 .comment-body .author {
  position: relative;
  margin: 0;
- font-size: 28px;
+ font-size: 18px;
+ font-weight: 600;
 }
 
 .comment-body .comment-text {
-  font-size: 28px;
-  margin: 10px 0;
+  font-size: 18px;
+  margin-top: 10px;
+  font-weight: 400;
 }
 
 .comment-body .author span {
@@ -109,9 +113,8 @@ textarea {
 
 .comment-body .like {
   position: absolute;
-  right: 0;
-  top: 56px;
-  cursor: pointer;
+  right: 15px;
+  top: 15px;
 }
 
 .right {
@@ -119,7 +122,8 @@ textarea {
 }
 
 .comment-actions {
-  margin-top: 18px;
+  margin-top: 15px;
+  margin-left: 65px;
 }
 
 .comment-actions button {
@@ -132,6 +136,10 @@ textarea {
   padding: 0 5px;
   margin: 0;
 }
+
+.comment-actions .liked {
+  color: #0a66c2;
+ }
 
 .reply-form {
   display: none;
