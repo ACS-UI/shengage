@@ -38,7 +38,7 @@ textarea {
   padding: 20px;
 }
 
-.comment-actions .submit-comment, .comment-actions .main-comment {
+.submit-comment {
   margin-left: 10px;
   padding: 10px 24px;
   background-color: #CACACA;
@@ -51,7 +51,7 @@ textarea {
   max-width: 300px;
 }
 
-.comment-actions .submit-comment:hover, .submit-comment:focus {
+.submit-comment:hover, .submit-comment:focus {
   background-color: #918d8d;
 }
 
