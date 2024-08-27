@@ -65,6 +65,10 @@ textarea {
   padding: 15px 0;
 }
 
+.comment-items:last-child {
+  border-bottom: none;
+}
+
 .comment-items .comment-items {
   padding-left: 24px;
   border: unset;
