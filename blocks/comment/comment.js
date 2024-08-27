@@ -288,7 +288,7 @@ function updateElement(comments) {
   commentTexts.forEach((commentText) => {
     commentText.addEventListener('input', () => {
       commentText.style.height = 'auto';
-      commentText.style.height = `${commentText.scrollHeight}px`;
+      commentText.style.height = `${commentText.scrollHeight - 25}px`;
     });
   });
 }
@@ -387,7 +387,7 @@ async function initComments(block) {
   commentText.addEventListener('input', () => {
     submitBtn.disabled = !commentText.value.trim();
     commentText.style.height = 'auto';
-    commentText.style.height = `${commentText.scrollHeight}px`;
+    commentText.style.height = `${commentText.scrollHeight - 40}px`;
   });
 
   // Add event listener to handle comment posting
