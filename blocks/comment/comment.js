@@ -48,7 +48,7 @@ const getCommentData = async () => {
  * @returns {Object} - The prepared new comment object.
  */
 const prepareComment = (comments, parentId, commentText, currentLevel = 0) => {
-  const parentComment = getCommentById(parentId);
+  const parentComment = getCommentById(comments, parentId);
   const maxId = parentComment?.replies ? getMaxCommentId(parentComment.replies) : '0';
 
   const newId = maxId !== '0'
@@ -106,8 +106,7 @@ const getIndianTimestamp = () => {
  * @param {string} parentId - The ID of the comment to find.
  * @returns {Object|null} - The comment with the specified ID, or null if not found.
  */
-async function getCommentById(parentId) {
-  const data = await getCommentData();
+async function getCommentById(data, parentId) {
   // Recursive function to search for a comment
   const findComment = (comments, id) => {
     // Direct match check
@@ -391,6 +390,7 @@ async function initComments(block) {
     submitBtn.disabled = true;
     block.querySelector('.main-comment').value = '';
     commentText.placeholder = 'Please wait, we are posting your comment...';
+    comments = await getCommentData();
     const parentId = comments.length > 0
       ? Math.max(...comments.map((comment) => parseInt(comment.commentId, 10))) : 0;
 
