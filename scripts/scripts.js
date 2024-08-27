@@ -80,7 +80,7 @@ export function getConfig() {
   }
   const ims = {
     client_id: 'shengage',
-    environment: 'stage',
+    environment: 'prod',
   };
 
   window.shengage = window.shengage || {};
@@ -97,25 +97,19 @@ export function getConfig() {
  */
 export async function loadIms() {
   const { ims } = getConfig();
-  if (window.imsLoaded) {
-    return window.imsLoaded;
-  }
-  window.imsLoaded = new Promise((resolve, reject) => {
+  window.imsLoaded = window.imsLoaded || new Promise((resolve, reject) => {
     const timeout = setTimeout(() => reject(new Error('IMS timeout')), 5000);
     window.adobeid = {
       scope: 'AdobeID,additional_info.company,additional_info.ownerOrg,avatar,openid,read_organizations,read_pc,session,account_cluster.read',
-      locale: 'en_US',
+      locale: 'en',
       ...ims,
       onReady: () => {
         // eslint-disable-next-line no-console
         console.log('Adobe IMS Ready!');
+        resolve(); // resolve the promise, consumers can now use window.adobeIMS
         clearTimeout(timeout);
-        resolve(); // Resolve the promise; consumers can now use window.adobeIMS
       },
-      onError: (error) => {
-        clearTimeout(timeout);
-        reject(error);
-      },
+      onError: reject,
     };
     loadScript('https://auth.services.adobe.com/imslib/imslib.min.js');
   });
