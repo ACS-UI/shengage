@@ -283,6 +283,14 @@ function updateElement(comments) {
       handleEventDelegation(event, comments);
     }
   });
+
+  const commentTexts = subContainer.querySelectorAll('.reply-comment');
+  commentTexts.forEach((commentText) => {
+    commentText.addEventListener('input', () => {
+      commentText.style.height = 'auto';
+      commentText.style.height = `${commentText.scrollHeight}px`;
+    });
+  });
 }
 
 /**
@@ -328,7 +336,7 @@ function createCommentHtml(data) {
           ${replyButtonHtml}
         </div>
         <div class="reply-form" id="reply-form-${commentId}">
-          <textarea placeholder="Write a reply..."></textarea>
+          <textarea rows="1" class="reply-comment" placeholder="Write a reply..."></textarea>
           <button class="submit-comment submit-reply" data-comment-id="${commentId}">Reply</button>
         </div>
       </div>
@@ -357,7 +365,7 @@ async function initComments(block) {
       <div class="input-section">
         <div class="comment-input">
           <img src="${userImage}" alt="Avatar" class="avatar">
-          <textarea class="main-comment" rows="5" placeholder="What are your thoughts?" ${btnMode}></textarea>
+          <textarea class="main-comment" rows="1" placeholder="What are your thoughts?" ${btnMode}></textarea>
         </div>
         <div class="comment-actions align-right">
           <button class="submit-comment submit-main-comment">${btnText}</button>
@@ -378,7 +386,10 @@ async function initComments(block) {
 
   commentText.addEventListener('input', () => {
     submitBtn.disabled = !commentText.value.trim();
+    commentText.style.height = 'auto';
+    commentText.style.height = `${commentText.scrollHeight}px`;
   });
+
   // Add event listener to handle comment posting
   submitBtn.addEventListener('click', async (e) => {
     e.preventDefault();
