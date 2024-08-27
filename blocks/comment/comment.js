@@ -260,7 +260,7 @@ async function handleEventDelegation(event, comments) {
     const iconContainer = target.closest('.comment-item').querySelector('.icon-line-heart');
     iconContainer.innerHTML = `<img data-icon-name="line-heart" src="${likeIconSrc}" alt="Heart Icon" loading="lazy">`;
 
-    const updatedComments = await submitLike(commentId, isLiked);
+    await submitLike(commentId, isLiked);
     // If necessary, update the comments or UI after liking
     // updateElement(updatedComments);
   } else if (target.classList.contains('submit-reply')) {
