@@ -40,13 +40,13 @@ textarea {
 
 .submit-comment {
   margin: 0;
-  padding: 10px 24px;
+  padding: 5px 15px;
   background-color: #CACACA;
   color: white;
   border: none;
   border-radius: 25px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 12px;
   width: fit-content;
   max-width: 300px;
 }
@@ -189,6 +189,8 @@ textarea {
   
   .submit-comment {
     margin: 16px 0;
+    padding: 10px 24px;
+    font-size: 16px;
   }
 
   .comments-section {
@@ -213,7 +215,7 @@ textarea {
   .comment-body .author span {
     display: inline;
     margin-left: 10px;
-    font-size: 20px;
+    font-size: 16px;
   }
   
   .comment-body .author span::before {
