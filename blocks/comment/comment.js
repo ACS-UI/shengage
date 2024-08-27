@@ -11,6 +11,7 @@ let commentsSectionDiv;
 let currentOpenReplyForm = null;
 let isSignedIn = false;
 let config = {};
+const isMobile = window.matchMedia('(max-width: 600px)').matches;
 
 /**
  * Fetches comment data from the server.
@@ -358,7 +359,7 @@ async function initComments(block) {
           <img src="${userImage}" alt="Avatar" class="avatar">
           <textarea class="main-comment" rows="5" placeholder="What are your thoughts?" ${btnMode}></textarea>
         </div>
-        <div class="comment-actions right">
+        <div class="comment-actions align-right">
           <button class="submit-comment submit-main-comment">${btnText}</button>
         </div>
       </div>
@@ -372,23 +373,32 @@ async function initComments(block) {
   if (comments.length) {
     updateElement(comments);
   }
+  const commentText = block.querySelector('.main-comment');
+  const submitBtn = block.querySelector('.submit-main-comment');
 
+  commentText.addEventListener('input', () => {
+    submitBtn.disabled = !commentText.value.trim();
+  });
   // Add event listener to handle comment posting
-  block.querySelector('.submit-main-comment').addEventListener('click', async (e) => {
+  submitBtn.addEventListener('click', async (e) => {
     e.preventDefault();
     if (!isSignedIn) {
       window.adobeIMS.signIn();
     }
-    const commentText = block.querySelector('.main-comment').value.trim();
-    if (!commentText) return;
+    const commentTextValue = block.querySelector('.main-comment').value.trim();
+    if (!commentTextValue) return;
+    submitBtn.disabled = true;
+    block.querySelector('.main-comment').value = '';
+    commentText.placeholder = 'Please wait, we are posting your comment...';
     const parentId = comments.length > 0
       ? Math.max(...comments.map((comment) => parseInt(comment.commentId, 10))) : 0;
 
-    const newComment = prepareComment(comments, parentId, commentText);
+    const newComment = prepareComment(comments, parentId, commentTextValue);
     if (!newComment.postedBy.id) return;
     comments = await postComment(newComment);
     updateElement(comments);
-    block.querySelector('.main-comment').value = '';
+    submitBtn.disabled = false;
+    commentText.placeholder = 'What are your thoughts?';
   });
 }
 
@@ -401,6 +411,8 @@ export default async function decorate(block) {
     ...getAuthoredData(block),
     storyId: document.querySelector('meta[name="storyid"]')?.content || '',
   };
+
+  config.replyLimit = isMobile ? 2 : config.replyLimit;
 
   // Update the block's inner HTML to show a loading spinner
   block.innerHTML = '<img src="/icons/loader.svg" class="loader" alt="loader" loading="lazy">';

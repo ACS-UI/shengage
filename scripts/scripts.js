@@ -1,5 +1,4 @@
 // eslint-disable-next-line import/no-cycle, max-classes-per-file
-import { loadIms } from './auth.js';
 import {
   sampleRUM,
   buildBlock,
@@ -13,6 +12,7 @@ import {
   waitForLCP,
   loadBlocks,
   loadCSS,
+  loadScript,
 } from './aem.js';
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
@@ -69,6 +69,57 @@ export function decorateMain(main) {
   buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
+}
+
+/**
+ * get site config
+ */
+export function getConfig() {
+  if (window.shengage && window.shengage.config) {
+    return window.shengage.config;
+  }
+  const ims = {
+    client_id: 'shengage',
+    environment: 'stage',
+  };
+
+  window.shengage = window.shengage || {};
+  window.shengage.config = {
+    ims,
+    adobeIoEndpoint: 'https://51837-shengageapp-stage.adobeioruntime.net/api/v1/web/shengage',
+  };
+  return window.shengage.config;
+}
+
+/**
+ * Loads Adobe IMS library and initializes the IMS object.
+ * @returns {Promise<void>} - Resolves when IMS is ready or rejects on timeout/error.
+ */
+export async function loadIms() {
+  const { ims } = getConfig();
+  if (window.imsLoaded) {
+    return window.imsLoaded;
+  }
+  window.imsLoaded = new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => reject(new Error('IMS timeout')), 5000);
+    window.adobeid = {
+      scope: 'AdobeID,additional_info.company,additional_info.ownerOrg,avatar,openid,read_organizations,read_pc,session,account_cluster.read',
+      locale: 'en_US',
+      ...ims,
+      onReady: () => {
+        // eslint-disable-next-line no-console
+        console.log('Adobe IMS Ready!');
+        clearTimeout(timeout);
+        resolve(); // Resolve the promise; consumers can now use window.adobeIMS
+      },
+      onError: (error) => {
+        clearTimeout(timeout);
+        reject(error);
+      },
+    };
+    loadScript('https://auth.services.adobe.com/imslib/imslib.min.js');
+  });
+  return window.imsLoaded;
 }
 
 /**
@@ -156,26 +207,6 @@ export const getAuthoredData = (block) => {
 
   return authorData;
 };
-
-/**
- * get site config
- */
-export function getConfig() {
-  if (window.shengage && window.shengage.config) {
-    return window.shengage.config;
-  }
-  const ims = {
-    client_id: 'shengage',
-    environment: 'stage',
-  };
-
-  window.shengage = window.shengage || {};
-  window.shengage.config = {
-    ims,
-    adobeIoEndpoint: 'https://51837-shengageapp-stage.adobeioruntime.net/api/v1/web/shengage',
-  };
-  return window.shengage.config;
-}
 
 /**
  * Makes an API request using the specified method, endpoint, and data.

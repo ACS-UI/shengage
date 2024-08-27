@@ -3,17 +3,17 @@ main .section.comment-container {
   border: 1px solid #CCCCCD;
   border-radius: 10px;
   max-width: var(--gutter-width);
-  margin: 0 auto;
-  margin-top: 45px;
+  margin: 25px 10px 0;
 }
 
-.input-section{
-  padding: 30px 40px;
+.input-section {
+  padding: 15px 20px;
 }
 
 .comment-input {
   display: flex;
   align-items: flex-start;
+  flex-wrap: wrap;
 }
 
 .avatar {
@@ -39,7 +39,7 @@ textarea {
 }
 
 .submit-comment {
-  margin-left: 10px;
+  margin: 0;
   padding: 10px 24px;
   background-color: #CACACA;
   color: white;
@@ -51,12 +51,17 @@ textarea {
   max-width: 300px;
 }
 
+.submit-reply {
+  margin-top: 5px;
+  padding: 4px 10px;
+}
+
 .submit-comment:hover, .submit-comment:focus {
   background-color: #918d8d;
 }
 
 .comments-section {
-  padding: 0 40px;
+  padding: 0 15px;
   border-top: 1px solid #CCCCCD;
 }
 
@@ -66,7 +71,7 @@ textarea {
 }
 
 .comment-items .comment-items {
-  padding-left: 140px;
+  padding-left: 24px;
   border: unset;
 }
 
@@ -80,7 +85,7 @@ textarea {
   flex: 1;
   position: relative;
   background: #f2f2f2;
-  padding: 15px;
+  padding: 15px 25px 15px 15px;
 }
 
 .comment-body .author {
@@ -98,13 +103,14 @@ textarea {
 
 .comment-body .author span {
   color: #959595;
-  font-size: 20px;
+  margin-left: 0;
+  font-size: 14px;
   font-weight: 400;
-  margin-left: 10px;
+  display: block;
 }
 
 .comment-body .author span::before {
-  content: '';
+  content: none;
   width: 4px;
   height: 4px;
   background-color:#959595;
@@ -115,16 +121,21 @@ textarea {
 
 .comment-body .like {
   position: absolute;
-  right: 15px;
-  top: 15px;
+  right: 5px;
+  top: 18px;
 }
 
-.right {
+.comment-body .like .icon {
+  height: 20px;
+  width: 20px;
+}
+
+.align-right {
   text-align: right;
 }
 
 .comment-actions {
-  margin-top: 15px;
+  margin-top: 5px;
   margin-left: 65px;
 }
 
@@ -159,4 +170,54 @@ textarea {
   width: 80px;
   margin: 0 auto;
   display: block;
+}
+
+.comment-info {
+  margin: 5px 0 0 65px;
+  width: 100%;
+  color: #585858;
+}
+
+@media (width >= 600px) {
+  main .section.comment-container {
+    margin: 45px auto; 
+  }
+
+  .input-section {
+    padding: 30px 40px;
+  }
+  
+  .submit-comment {
+    margin: 16px 0;
+  }
+
+  .comments-section {
+    padding: 0 40px;
+  }
+
+  .comment-items .comment-items {
+    padding-left: 65px;
+    border: unset;
+  }
+  
+  .comment-body .like {
+    right: 15px;
+    top: 15px;
+  }
+
+  .comment-body .like .icon {
+    height: 24px;
+    width: 24px;
+  }
+
+  .comment-body .author span {
+    display: inline;
+    margin-left: 10px;
+    font-size: 20px;
+  }
+  
+  .comment-body .author span::before {
+    content: '';
+  }
+
 }

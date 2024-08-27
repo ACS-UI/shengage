@@ -1,25 +1,25 @@
 main .section.reaction-container {
-    padding: 40px 0;
+    padding: 20px 0;
     border-top: 1px solid #CCCCCD;
     border-bottom: 1px solid #CCCCCD;
     max-width: var(--gutter-width);
     margin: 0 auto;
-}
-
-/* Reaction Icons Container */
-.reaction-container p {
-    font-size: 27px;
-    margin: 0 0 23px;
+  }
+  
+  /* Reaction Icons Container */
+  .reaction-container p {
+    font-size: 18px;
+    margin: 0 0 15px;
     text-align: center;
-}
-
-.reaction-container div:nth-child(2)>div {
+  }
+  
+  .reaction-container div:nth-child(2)>div {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.reaction-container div:nth-child(2) div p {
+  }
+  
+  .reaction-container div:nth-child(2) div p {
     width: 60px;
     height: 60px;
     border: 1px solid #CCCCCD;
@@ -31,27 +31,42 @@ main .section.reaction-container {
     cursor: pointer;
     opacity: 0.3;
     transition: background-color 0.3s, opacity 0.3s;
-}
-
-.reaction-container div:nth-child(2) div p:hover, 
-.reaction-container div:nth-child(2) div p.active {
+  }
+  
+  .reaction-container div:nth-child(2) div p:hover, 
+  .reaction-container div:nth-child(2) div p.active {
     background-color: #EB1000;
     opacity: 1;
-}
-
-.reaction-container div:nth-child(2) div p .icon {
-    height: 40px;
-    width: 40px;
-}
-
-/* Info Message */
-.reaction-container .info {
-    padding: 10px 0;
-}
-
-@media (width >= 600px) {
-    .reaction-container div:nth-child(2) div p {
-        width: 96px;
-        height: 96px;
-    }
   }
+  
+  .reaction-container div:nth-child(2) div p .icon {
+    height: 30px;
+    width: 30px;
+  }
+  
+  /* Info Message */
+  .reaction-container .info {
+    padding: 10px 0;
+  }
+  
+  @media (width >= 600px) {
+    .main .section.reaction-container {
+      padding: 40px 0;
+    }
+  
+    .reaction-container p {
+      font-size: 27px;
+      margin: 0 0 23px;
+    }
+  
+    .reaction-container div:nth-child(2) div p {
+      width: 96px;
+      height: 96px;
+    }
+    
+    .reaction-container div:nth-child(2) div p .icon {
+      height: 40px;
+      width: 40px;
+    }
+  
+    }

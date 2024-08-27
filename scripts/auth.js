@@ -1,37 +1,5 @@
 // eslint-disable-next-line import/no-cycle, max-classes-per-file
-import { getConfig } from './scripts.js';
-import { loadScript } from './aem.js';
-
-/**
- * Loads Adobe IMS library and initializes the IMS object.
- * @returns {Promise<void>} - Resolves when IMS is ready or rejects on timeout/error.
- */
-export async function loadIms() {
-  const { ims } = getConfig();
-  if (window.imsLoaded) {
-    return window.imsLoaded;
-  }
-  window.imsLoaded = new Promise((resolve, reject) => {
-    const timeout = setTimeout(() => reject(new Error('IMS timeout')), 5000);
-    window.adobeid = {
-      scope: 'AdobeID,additional_info.company,additional_info.ownerOrg,avatar,openid,read_organizations,read_pc,session,account_cluster.read',
-      locale: 'en_US',
-      ...ims,
-      onReady: () => {
-        // eslint-disable-next-line no-console
-        console.log('Adobe IMS Ready!');
-        clearTimeout(timeout);
-        resolve(); // Resolve the promise; consumers can now use window.adobeIMS
-      },
-      onError: (error) => {
-        clearTimeout(timeout);
-        reject(error);
-      },
-    };
-    loadScript('https://auth.services.adobe.com/imslib/imslib.min.js');
-  });
-  return window.imsLoaded;
-}
+import { loadIms } from './scripts.js';
 
 /**
  * Fetches user data from Adobe IMS.
