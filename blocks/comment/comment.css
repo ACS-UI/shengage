@@ -1,0 +1,230 @@
+main .section.comment-container {
+  padding: 0;
+  border: 1px solid #CCCCCD;
+  border-radius: 10px;
+  max-width: var(--gutter-width);
+  margin: 25px 10px 0;
+}
+
+.comment-area .input-section {
+  padding: 15px 20px;
+}
+
+.comment-area .comment-input {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.comment-area .avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+  background: #e8e1ef;
+}
+
+.comment-area .main-comment {
+  padding: 20px;
+}
+
+.comment-area .submit-comment {
+  margin: 0;
+  padding: 5px 15px;
+  background-color: #CACACA;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 12px;
+  width: fit-content;
+  max-width: 300px;
+}
+
+.comment-area .submit-comment:hover, .comment-area .submit-comment:focus {
+  background-color: #918d8d;
+}
+
+.comment-area .comments-section {
+  padding: 0 15px;
+  border-top: 1px solid #CCCCCD;
+}
+
+.comment-area .comment-items {
+  border-bottom: 1px solid #CCCCCD;
+  padding: 15px 0;
+}
+
+.comment-area .comment-items:last-child {
+  border-bottom: none;
+}
+
+.comment-area .comment-items .comment-items {
+  padding-left: 24px;
+  border: unset;
+}
+
+.comment-area .comment-details {
+  display: flex;
+  align-items: flex-start;
+}
+
+.comment-area .comment-body {
+  border-radius: 15px;
+  flex: 1;
+  position: relative;
+  background: #f2f2f2;
+  padding: 15px 25px 15px 15px;
+}
+
+.comment-area .comment-body .author {
+ position: relative;
+ margin: 0;
+ font-size: 18px;
+ font-weight: 600;
+}
+
+.comment-area .comment-body .comment-text {
+  font-size: 18px;
+  margin-top: 10px;
+  font-weight: 400;
+}
+
+.comment-area .comment-body .author span {
+  color: #959595;
+  margin-left: 0;
+  font-size: 14px;
+  font-weight: 400;
+  display: block;
+}
+
+.comment-area .comment-body .author span::before {
+  content: none;
+  width: 4px;
+  height: 4px;
+  background-color:#959595;
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.comment-area .comment-body .like {
+  position: absolute;
+  right: 5px;
+  top: 18px;
+}
+
+.comment-area .comment-body .like .icon {
+  height: 20px;
+  width: 20px;
+}
+
+.comment-area .comment-actions {
+  margin-top: 10px;
+  margin-left: 65px;
+}
+
+.comment-area .comments-section .comment-actions {
+  margin-top: 5px;
+}
+
+.comment-area .comment-actions .interaction-button {
+  background: none;
+  border: none;
+  border-radius: 5px;
+  color: #959595;
+  font-weight: 400;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 10px;
+  margin: 0;
+}
+
+.comment-area .comment-actions .interaction-button:hover {
+  background: #f2f2f2;
+}
+
+.comment-area .comment-actions .liked {
+  color: #0a66c2;
+ }
+
+ .comment-area .reply-form {
+  display: none;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 10px;
+}
+
+.comment-area .reply-form textarea {
+  flex: unset;
+}
+
+.comment-area .reply-form .submit-reply {
+  margin: 5px 0 0;
+  padding: 4px 10px;
+}
+
+.comment-area .comment-info {
+  margin: 5px 0 0 65px;
+  width: 100%;
+  color: #585858;
+}
+
+@media (width >= 600px) {
+  main .section.comment-container {
+    margin: 45px auto; 
+  }
+
+  .comment-area .input-section {
+    padding: 30px 40px 15px;
+  }
+  
+  .comment-area .submit-comment {
+    margin: 0;
+    padding: 10px 24px;
+    font-size: 16px;
+  }
+
+  .comment-area .comments-section {
+    padding: 0 40px;
+  }
+
+  .comment-area .comment-items .comment-items {
+    padding-left: 65px;
+    border: unset;
+  }
+  
+  .comment-area .comment-body .like {
+    right: 15px;
+    top: 15px;
+  }
+
+  .comment-area .comment-body .like .icon {
+    height: 24px;
+    width: 24px;
+  }
+
+  .comment-area .comment-body .author span {
+    display: inline;
+    margin-left: 10px;
+    font-size: 16px;
+  }
+  
+  .comment-area .comment-body .author span::before {
+    content: '';
+  }
+
+  .comment-area .comment-actions {
+    margin-top: 15px;
+  }
+
+  .comment-area .reply-form .submit-reply {
+    margin: 15px 0 0;
+    padding: 10px 24px;
+  }
+
+  .comment-area .comment-actions .interaction-button {
+    font-size: 16px;
+  }
+
+}
