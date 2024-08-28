@@ -46,3 +46,15 @@ header.header-wrapper nav  ul > li > ul a:any-link{
      color:white;
     }
 }
+
+@media (width < 900px) {
+    header.header-wrapper nav  ul > li > ul a:any-link{
+        color : black;
+    }
+
+    header nav .nav-sections li.nav-drop[aria-expanded="true"] {
+     color:black;
+    }
+
+ 
+}
