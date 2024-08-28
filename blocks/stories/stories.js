@@ -38,38 +38,36 @@ export default function decorate(block) {
   const dotContainer = document.createElement('div');
   dotContainer.classList.add('dot-container');
 
-  if (ul.children.length < 4) {
+  const liCount = ul.children.length;
+
+  if (liCount > 3) {
+    const dotCount = Math.ceil(liCount / 3);
+    for (let i = 0; i < dotCount; i++) {
+      const div = document.createElement('div');
+      div.classList.add('dot');
+      if (i === 0) {
+        div.classList.add('active');
+      }
+      dotContainer.append(div);
+    }
+
+    block.append(dotContainer);
+
+    const dots = dotContainer.querySelectorAll('.dot');
+    const carousel = document.querySelector('.story-container');
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        const offset = -(index * 101);
+        dots.forEach((d) => d.classList.remove('active'));
+        dot.classList.add('active');
+        carousel.style.transform = `translateX(${offset}%)`;
+      });
+    });
+
+    carousel.style.transform = 'translateX(0%)';
+  } else {
+    // Hide the dot container if less than 4 li elements
     dotContainer.classList.add('d-none');
   }
-
-  const dots = ['dot dot1 active', 'dot dot2', 'dot dot3'];
-  dots.forEach((className) => {
-    const div = document.createElement('div');
-    className.split(' ').forEach((cls) => {
-      div.classList.add(cls);
-    });
-    dotContainer.append(div);
-  });
-  block.append(dotContainer);
-
-  const dotts = document.querySelectorAll('.dot');
-  const carousel = document.querySelector('.story-container');
-
-  dotts.forEach((dot, index) => {
-    dot.addEventListener('click', () => {
-      let offset = 0.5;
-      dotts.forEach((d) => d.classList.remove('active'));
-      dot.classList.add('active');
-      if (index === 1) {
-        offset = -67;
-      } else if (index === 2) {
-        offset = -101;
-      }
-      carousel.style.transform = `translateX(${offset}%)`;
-    });
-  });
-
-  dotts[0].classList.add('active');
-  carousel.style.transform = 'translateX(0.5%)';
-  // carousal code end
 }
