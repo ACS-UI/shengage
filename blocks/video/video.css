@@ -42,7 +42,7 @@
     object-position: 0 15%;
 }
 
-@media (width <= 900px) {
+@media (width < 900px) {
     .video .video-background video {
     height: 450px;
     }
