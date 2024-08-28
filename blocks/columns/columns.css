@@ -23,6 +23,7 @@
 
 .columns>div>.columns-img-col video {
  background: transparent;
+ width: 100%;
 }
 
 .columns #shengage {

@@ -42,6 +42,12 @@
     object-position: 0 15%;
 }
 
+@media (width < 900px) {
+    .video .video-background video {
+    height: 450px;
+    }
+}
+
 .video.podcast .video-background video {
     object-position: 0 85%;
 }
