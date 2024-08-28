@@ -142,7 +142,7 @@ header nav[aria-expanded='true'] .nav-hamburger-icon::after {
   width: 24px;
   height: 2px;
   border-radius: 2px;
-  color: black
+  color: var(--black);
 }
 
 header nav[aria-expanded='true'] .nav-hamburger-icon::after {
