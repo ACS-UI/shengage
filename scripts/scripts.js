@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-cycle, max-classes-per-file
 import {
   sampleRUM,
   buildBlock,
@@ -11,6 +12,7 @@ import {
   waitForLCP,
   loadBlocks,
   loadCSS,
+  loadScript,
 } from './aem.js';
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
@@ -70,6 +72,51 @@ export function decorateMain(main) {
 }
 
 /**
+ * get site config
+ */
+export function getConfig() {
+  if (window.shengage && window.shengage.config) {
+    return window.shengage.config;
+  }
+  const ims = {
+    client_id: 'shengage',
+    environment: 'prod',
+  };
+
+  window.shengage = window.shengage || {};
+  window.shengage.config = {
+    ims,
+    adobeIoEndpoint: 'https://51837-shengageapp-stage.adobeioruntime.net/api/v1/web/shengage',
+  };
+  return window.shengage.config;
+}
+
+/**
+ * Loads Adobe IMS library and initializes the IMS object.
+ * @returns {Promise<void>} - Resolves when IMS is ready or rejects on timeout/error.
+ */
+export async function loadIms() {
+  const { ims } = getConfig();
+  window.imsLoaded = window.imsLoaded || new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => reject(new Error('IMS timeout')), 5000);
+    window.adobeid = {
+      scope: 'AdobeID,additional_info.company,additional_info.ownerOrg,avatar,openid,read_organizations,read_pc,session,account_cluster.read',
+      locale: 'en',
+      ...ims,
+      onReady: () => {
+        // eslint-disable-next-line no-console
+        console.log('Adobe IMS Ready!');
+        resolve(); // resolve the promise, consumers can now use window.adobeIMS
+        clearTimeout(timeout);
+      },
+      onError: reject,
+    };
+    loadScript('https://auth.services.adobe.com/imslib/imslib.min.js');
+  });
+  return window.imsLoaded;
+}
+
+/**
  * Loads everything needed to get to LCP.
  * @param {Element} doc The container element
  */
@@ -99,6 +146,7 @@ async function loadEager(doc) {
  */
 async function loadLazy(doc) {
   const main = doc.querySelector('main');
+  loadIms(); // start it early, asyncronously
   await loadBlocks(main);
 
   const { hash } = window.location;
@@ -114,6 +162,86 @@ async function loadLazy(doc) {
   sampleRUM('lazy');
   sampleRUM.observe(main.querySelectorAll('div[data-block-name]'));
   sampleRUM.observe(main.querySelectorAll('picture > img'));
+}
+
+/**
+ * creates an element from html string
+ * @param {string} html
+ * @returns {HTMLElement}
+ */
+export function htmlToElement(html) {
+  const template = document.createElement('template');
+  const trimmedHtml = html.trim(); // Never return a text node of whitespace as the result
+  template.innerHTML = trimmedHtml;
+  return template.content.firstElementChild;
+}
+
+/**
+ * Extracts authored data from the child nodes of a block element.
+ * @param {HTMLElement} block - The parent block element containing child nodes with authoring data.
+ * @returns {Object} authorData - An object containing the extracted data
+ */
+export const getAuthoredData = (block) => {
+  const authorData = {};
+
+  block.childNodes.forEach((child) => {
+    if (child.nodeType === Node.ELEMENT_NODE) {
+      const [firstChild, secondChild] = child.children;
+      let key = firstChild.textContent.trim();
+      let value = secondChild?.textContent.trim();
+
+      // Check if key contains 'obj', then modify key and split value by comma
+      if (key.includes('obj')) {
+        key = key.replace('obj', '').trim();
+        value = value ? value.split(',').map((item) => item.trim()) : [];
+      }
+      authorData[key] = value;
+    }
+  });
+
+  return authorData;
+};
+
+/**
+ * Makes an API request using the specified method, endpoint, and data.
+ * @param {Object} params - The parameters for the API request.
+ * @param {string} [params.method='GET'] - The HTTP method (GET or POST).
+ * @param {string} params.endpoint - The specific API endpoint to call.
+ * @param {Object} [params.data={}] - The data to be sent in the body for POST requests.
+ * @returns {Promise<*>} The parsed JSON response from the API.
+ * @throws {Error} If the request fails or the response is not ok.
+ */
+export async function apiRequest({
+  method = 'GET',
+  endpoint,
+  data = {},
+}) {
+  try {
+    const { adobeIoEndpoint } = getConfig();
+    const url = `${adobeIoEndpoint}${endpoint}`;
+    const options = {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    if (method === 'POST') {
+      options.body = JSON.stringify(data);
+    }
+
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log(`${method} request to ${endpoint} successful:`, result);
+    return result;
+  } catch (error) {
+    console.error(`${method} request to ${endpoint} failed:`, error);
+    throw error;
+  }
 }
 
 /**
