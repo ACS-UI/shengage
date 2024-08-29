@@ -276,7 +276,7 @@ function updateElement(comments) {
   commentsSectionDiv.innerHTML = '';
   const subContainer = document.createElement('div');
   subContainer.innerHTML = comments?.map(createCommentHtml).join('') || '';
-  addTooltips(subContainer);
+  addTooltips(subContainer, 'Please login .....');
   commentsSectionDiv.appendChild(subContainer);
   subContainer.addEventListener('click', (event) => {
     if (isSignedIn) {
@@ -307,12 +307,9 @@ function createCommentHtml(data) {
   // Determine the replies button visibility and like status
   const replyDepth = commentId.split('.').length;
   const authClass = isSignedIn ? '' : 'auth';
-  const canReply = replyDepth < config.replyLimit;
-  const replyButtonHtml = canReply
-    ? `<button class="reply-button interaction-button ${authClass}" data-comment-id="${commentId}">Reply</button>`
-    : '';
-
   const isLiked = likedBy && likedBy.includes(userDetails.id);
+  const likeCount = likedBy.length;
+  const replyCount = replies.length;
   const likeClass = isLiked ? 'liked' : '';
   const likeIcon = isLiked ? '/icons/fill-heart.svg' : '/icons/line-heart.svg';
 
@@ -332,8 +329,14 @@ function createCommentHtml(data) {
           </div>
         </div>
         <div class="comment-actions">
-          <button class="like-button interaction-button ${likeClass} ${authClass}" data-comment-id="${commentId}">Like</button>
-          ${replyButtonHtml}
+          <div class="comment-action-item">
+            <button class="like-button interaction-button ${likeClass} ${authClass}" data-comment-id="${commentId}">Like</button>
+            ${likeCount ? `<div class="comment-action-count"><img src="/icons/liked.svg" alt="liked" loading="lazy">${likeCount}</div>` : ''}
+          </div>
+            ${replyDepth < config.replyLimit ? `<div class="comment-action-item">
+              <button class="reply-button interaction-button ${authClass}" data-comment-id="${commentId}">Reply</button>
+              ${replyCount ? `<div class="comment-action-count">${replyCount} Reply</div>` : ''} 
+            </div>` : ''}
         </div>
         <div class="reply-form" id="reply-form-${commentId}">
           <textarea rows="1" class="reply-comment" placeholder="Write a reply..."></textarea>

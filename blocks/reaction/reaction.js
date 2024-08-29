@@ -73,6 +73,10 @@ async function initReaction(block) {
     if (reaction === userReaction) {
       reactionIcon.classList.add('active');
     }
+    const reactionCount = document.createElement('span');
+    reactionCount.className = 'reaction-count';
+    reactionCount.innerHTML = '23';
+    reactionIcon.appendChild(reactionCount);
 
     reactionIcon.addEventListener('click', async () => {
       if (!isSignedIn) {

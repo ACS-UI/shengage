@@ -124,25 +124,68 @@ main .section.comment-container {
   margin-left: 65px;
 }
 
+.comment-area .comment-action-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #959595;
+  margin-top: 5px;
+}
+
+.comment-area .comment-action-item:last-child {
+  border-right: 1px solid transparent;
+}
+
+.comment-area .comment-action-count {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  padding: 0;
+  padding-right: 10px;
+  color: #959595;
+}
+
+.comment-area .comment-action-count img {
+  width: 18px;
+  margin-right: 5px;
+}
+
+.comment-area .comment-action-count::before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  background-color:#959595;
+  display: inline-block;
+  margin-right: 10px;
+  vertical-align: middle;
+  border-radius: 5px;
+}
+
 .comment-area .comments-section .comment-actions {
   margin-top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .comment-area .comment-actions .interaction-button {
   background: none;
   border: none;
-  border-radius: 5px;
-  color: #959595;
-  font-weight: 400;
+  color: #000000;
+  font-weight: 600;
   font-size: 14px;
   cursor: pointer;
   padding: 2px 10px;
   margin: 0;
+  border-radius: unset;
 }
 
 .comment-area .comment-actions .interaction-button:hover {
   background: #f2f2f2;
+  border-radius: 5px;
 }
+
+
 
 .comment-area .comment-actions .liked {
   color: #0a66c2;

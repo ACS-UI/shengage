@@ -29,24 +29,44 @@ main .section.reaction-container {
     justify-content: center;
     margin: 0 5px;
     cursor: pointer;
-    opacity: 0.3;
     transition: background-color 0.3s, opacity 0.3s;
+    flex-direction: column;
   }
   
   .reaction-container div:nth-child(2) div p:hover, 
   .reaction-container div:nth-child(2) div p.active {
     background-color: #EB1000;
-    opacity: 1;
   }
   
   .reaction-container div:nth-child(2) div p .icon {
+    opacity: 0.3;
     height: 30px;
     width: 30px;
+  }
+
+  .reaction-container div:nth-child(2) div p:hover .icon, 
+  .reaction-container div:nth-child(2) div p.active .icon {
+    opacity: 1;
+  }
+
+  .reaction-container div:nth-child(2) div p:hover .reaction-count, 
+  .reaction-container div:nth-child(2) div p.active .reaction-count {
+    color: #FCE100;
+
   }
   
   /* Info Message */
   .reaction-container .info {
     padding: 10px 0;
+  }
+
+  .reaction-container .reaction-count {
+    font-size: 24px;
+    color: #B1B1B1;
+  }
+
+  .reaction-container div:nth-child(2) div p:hover {
+    color: #fff;
   }
   
   @media (width >= 600px) {
