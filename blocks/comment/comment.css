@@ -57,11 +57,20 @@ main .section.comment-container {
 
 .comment-area .comment-items:last-child {
   border-bottom: none;
+  padding-bottom: 0;
 }
 
 .comment-area .comment-items .comment-items {
   padding-left: 24px;
   border: unset;
+}
+
+.comment-replies {
+  padding-bottom: 15px;
+}
+
+.comment-replies:last-child {
+  padding-bottom: 0;
 }
 
 .comment-area .comment-details {
@@ -129,7 +138,6 @@ main .section.comment-container {
   align-items: center;
   justify-content: center;
   border-right: 1px solid #959595;
-  margin-top: 5px;
 }
 
 .comment-area .comment-action-item:last-child {
@@ -219,7 +227,7 @@ main .section.comment-container {
   }
 
   .comment-area .input-section {
-    padding: 30px 40px 15px;
+    padding: 30px 40px;
   }
   
   .comment-area .submit-comment {
@@ -229,12 +237,13 @@ main .section.comment-container {
   }
 
   .comment-area .comments-section {
-    padding: 0 40px;
+    padding: 0 40px 15px;
   }
 
   .comment-area .comment-items .comment-items {
     padding-left: 65px;
     border: unset;
+    padding-bottom: 0;
   }
   
   .comment-area .comment-body .like {
