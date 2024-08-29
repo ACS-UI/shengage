@@ -47,8 +47,8 @@ const getCommentData = async () => {
  * @param {number} [currentLevel=0] - The current level of the comment (default is 0).
  * @returns {Object} - The prepared new comment object.
  */
-const prepareComment = (comments, parentId, commentText, currentLevel = 0) => {
-  const parentComment = getCommentById(comments, parentId);
+const prepareComment = async (comments, parentId, commentText, currentLevel = 0) => {
+  const parentComment = await getCommentById(comments, parentId);
   const maxId = parentComment?.replies ? getMaxCommentId(parentComment.replies) : '0';
 
   const newId = maxId !== '0'
@@ -199,7 +199,7 @@ async function submitReply(commentId, comments) {
   const textarea = replyForm?.querySelector('textarea');
   const replyText = textarea?.value.trim();
   if (!replyText) return;
-  const newReply = prepareComment(comments, commentId, replyText, 1);
+  const newReply = await prepareComment(comments, commentId, replyText, 1);
   if (!newReply.postedBy.id) return;
   try {
     const updatedComments = await postComment(newReply);
@@ -335,8 +335,8 @@ function createCommentHtml(data) {
           </div>
             ${replyDepth < config.replyLimit ? `<div class="comment-action-item">
               <button class="reply-button interaction-button ${authClass}" data-comment-id="${commentId}">Reply</button>
-              ${replyCount ? `<div class="comment-action-count">${replyCount} Reply</div>` : ''} 
-            </div>` : ''}
+              ${replyCount ? `<div class="comment-action-count">${replyCount} ${replyCount > 1 ? 'replies' : 'Reply'}</div>` : ''}
+              </div>` : ''}
         </div>
         <div class="reply-form" id="reply-form-${commentId}">
           <textarea rows="1" class="reply-comment" placeholder="Write a reply..."></textarea>
