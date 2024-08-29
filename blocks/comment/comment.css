@@ -171,7 +171,7 @@ main .section.comment-container {
 .comment-area .comment-actions .interaction-button {
   background: none;
   border: none;
-  color: #000000;
+  color: #000;
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
