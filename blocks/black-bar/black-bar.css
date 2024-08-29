@@ -1,4 +1,8 @@
 main .section.black-bar-container {
+    @media (width < 900px) {
+        margin-top: 12px;
+    }
+
     padding: 0;
     margin: 0;
     margin-top: 64px;

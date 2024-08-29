@@ -7,6 +7,11 @@
 }
 
 .date-calendar-blue-box h2 {
+    @media (width < 900px) {
+        left: 0;
+        top: 110px;
+    }
+
     color: #fff;
     position: absolute;
     top: 80px;
