@@ -40,6 +40,24 @@ const getCommentData = async () => {
 };
 
 /**
+ * Updates the main comments array with the modified comment.
+ * @param {Array} comments - The array of comments, potentially with nested replies.
+ * @param {Object} updatedComment - The comment object that has been modified.
+ */
+function updateCommentInArray(comments, updatedComment) {
+  for (let i = 0; i < comments.length; i += 1) {
+    if (comments[i].commentId === updatedComment.commentId) {
+      comments[i] = updatedComment;
+      return;
+    }
+    // If the comment has nested replies, attempt to update within them
+    if (comments[i].replies && comments[i].replies.length > 0) {
+      updateCommentInArray(comments[i].replies, updatedComment);
+    }
+  }
+}
+
+/**
  * Prepares a new comment object with an appropriate ID and timestamp.
  * @param {Array} comments - The array of comments, including nested replies.
  * @param {string} parentId - The ID of the parent comment.
@@ -255,10 +273,15 @@ async function handleEventDelegation(event, comments) {
     toggleReplyForm(commentId);
   } else if (target.classList.contains('like-button')) {
     const isLiked = target.classList.toggle('liked');
-    const likeIconSrc = isLiked ? '/icons/fill-heart.svg' : '/icons/line-heart.svg';
-    const iconContainer = target.closest('.comment-item').querySelector('.icon-line-heart');
-    iconContainer.innerHTML = `<img data-icon-name="line-heart" src="${likeIconSrc}" alt="Heart Icon" loading="lazy">`;
-
+    const currentComment = await getCommentById(comments, commentId);
+    const index = currentComment.likedBy.indexOf(userDetails.id);
+    if (index === -1) {
+      currentComment.likedBy.push(userDetails.id);
+    } else {
+      currentComment.likedBy.splice(index, 1);
+    }
+    updateCommentInArray(comments, currentComment);
+    updateElement(comments);
     await submitLike(commentId, isLiked);
     // If necessary, update the comments or UI after liking
     // updateElement(updatedComments);
@@ -323,7 +346,7 @@ function createCommentHtml(data) {
             <div class="comment-text">${commentText}</div>
             <div class="like">
               <span class="icon icon-line-heart">
-                <img src="${likeIcon}" alt="Like" loading="lazy">
+                <img src="${likeIcon}" alt="Like"  class="like-button" data-comment-id="${commentId}" loading="lazy">
               </span>
             </div>
           </div>

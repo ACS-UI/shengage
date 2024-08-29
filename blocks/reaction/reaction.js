@@ -28,7 +28,7 @@ async function handleReaction(reaction = null) {
       },
     });
     // console.log(`${reaction ? 'Reaction submitted' : 'Reaction fetched'}:`, reaction );
-    return data?.reaction_name ?? null;
+    return data;
   } catch (error) {
     console.error('Error handling reaction:', error);
     return null; // Fallback value in case of an error
@@ -57,38 +57,66 @@ function promptUserSignIn(block) {
 }
 
 /**
- * Initializes the reaction block by setting up event listeners and UI state
+ * Renders the reaction elements with the appropriate data
+ * @param {HTMLElement} block - The container element for the reaction icons
+ * @param {Array} reactionData - The data for the reactions
+ */
+function renderReactionElements(block, reactionData) {
+  const reactions = block.querySelectorAll('.reaction-container div:nth-child(2) > div p');
+
+  reactions.forEach((reaction) => {
+    const reactionIcon = reaction.querySelector('img').dataset.iconName;
+    const matchedData = reactionData.find((data) => data.name === reactionIcon);
+    if (matchedData.isReactedByCurrentUser) {
+      reaction.classList.add('active');
+    }
+    let reactionCount = reaction.querySelector('.reaction-count');
+    if (!reactionCount) {
+      reactionCount = document.createElement('span');
+      reactionCount.className = 'reaction-count';
+      reaction.appendChild(reactionCount);
+    }
+    reactionCount.innerHTML = matchedData.count;
+  });
+}
+
+/**
+ * Binds event listeners to the reaction elements
+ * @param {HTMLElement} block - The container element for the reaction icons
+ */
+function bindReactionEvents(block) {
+  const reactions = block.querySelectorAll('.reaction-container div:nth-child(2) > div p');
+
+  reactions.forEach((reaction) => {
+    const reactionIcon = reaction.querySelector('img').dataset.iconName;
+
+    reaction.addEventListener('click', async () => {
+      if (!isSignedIn) {
+        return promptUserSignIn(block);
+      }
+
+      reactions.forEach((icon) => icon.classList.remove('active'));
+      reaction.classList.add('active');
+      await handleReaction(reactionIcon);
+      const reactionData = await handleReaction();
+      renderReactionElements(block, reactionData);
+      return true;
+    });
+  });
+}
+
+/**
+ * Initializes the reaction block by setting up UI state and event listeners
  * @param {HTMLElement} block - The container element for the reaction icons
  */
 async function initReaction(block) {
   if (isSignedIn) {
     userDetails = await getUserData();
   }
+  const reactionData = await handleReaction();
 
-  const reactionIcons = block.querySelectorAll('.reaction-container div:nth-child(2) > div p');
-  const userReaction = await handleReaction();
-
-  reactionIcons.forEach((reactionIcon) => {
-    const reaction = reactionIcon.querySelector('img').dataset.iconName;
-    if (reaction === userReaction) {
-      reactionIcon.classList.add('active');
-    }
-    const reactionCount = document.createElement('span');
-    reactionCount.className = 'reaction-count';
-    reactionCount.innerHTML = '23';
-    reactionIcon.appendChild(reactionCount);
-
-    reactionIcon.addEventListener('click', async () => {
-      if (!isSignedIn) {
-        return promptUserSignIn(block);
-      }
-
-      reactionIcons.forEach((icon) => icon.classList.remove('active'));
-      reactionIcon.classList.add('active');
-      await handleReaction(reaction);
-      return true;
-    });
-  });
+  renderReactionElements(block, reactionData);
+  bindReactionEvents(block);
 }
 
 /**
