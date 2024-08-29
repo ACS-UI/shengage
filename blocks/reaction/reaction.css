@@ -50,8 +50,9 @@ main .section.reaction-container {
   }
 
   .reaction-container .reaction-count {
-    font-size: 24px;
+    font-size: 18px;
     color: #B1B1B1;
+    line-height: normal;
   }
 
   .reaction-container div:nth-child(2) div p:hover .reaction-count, 
@@ -87,6 +88,10 @@ main .section.reaction-container {
     .reaction-container div:nth-child(2) div p .icon {
       height: 40px;
       width: 40px;
+    }
+
+    .reaction-container .reaction-count {
+      font-size: 24px;
     }
   
     }

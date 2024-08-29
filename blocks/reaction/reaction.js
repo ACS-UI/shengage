@@ -66,7 +66,7 @@ async function initReaction(block) {
   }
 
   const reactionIcons = block.querySelectorAll('.reaction-container div:nth-child(2) > div p');
-  const userReaction = userDetails.id ? await handleReaction() : '';
+  const userReaction = await handleReaction();
 
   reactionIcons.forEach((reactionIcon) => {
     const reaction = reactionIcon.querySelector('img').dataset.iconName;
