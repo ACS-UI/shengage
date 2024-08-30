@@ -94,6 +94,9 @@ function bindReactionEvents(block) {
       if (!isSignedIn) {
         return promptUserSignIn(block);
       }
+      if (reactionIcon === block.querySelector('.active .icon img').dataset.iconName) {
+        return true;
+      }
 
       reactions.forEach((icon) => icon.classList.remove('active'));
       reaction.classList.add('active');
