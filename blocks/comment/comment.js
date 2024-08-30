@@ -260,7 +260,7 @@ async function handleEventDelegation(event, comments) {
     if (likeCount) {
       likeCount = isLiked ? likeCount : likeCount - 1;
     } else {
-      likeCount = 1;
+      likeCount = isLiked ? 1 : 0;
     }
     const likeIconSrc = isLiked ? '/icons/fill-heart.svg' : '/icons/line-heart.svg';
     const iconContainer = target.closest('.comment-item').querySelector('.icon-line-heart');
