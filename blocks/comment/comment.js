@@ -431,7 +431,7 @@ async function initComments(block) {
     const parentId = comments.length > 0
       ? Math.max(...comments.map((comment) => parseInt(comment.commentId, 10))) : 0;
 
-    const newComment = prepareComment(comments, parentId, commentTextValue);
+    const newComment = await prepareComment(comments, parentId, commentTextValue);
     if (!newComment.postedBy.id) return;
     comments = await postComment(newComment);
     updateElement(comments);
