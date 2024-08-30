@@ -42,7 +42,7 @@ export default function decorate(block) {
 
   if (liCount > 3) {
     const dotCount = Math.ceil(liCount / 3);
-    for (let i = 0; i < dotCount; i++) {
+    for (let i = 0; i < dotCount; i += 1) {
       const div = document.createElement('div');
       div.classList.add('dot');
       if (i === 0) {
