@@ -66,7 +66,7 @@ function renderReactionElements(block, reactionData) {
 
   reactions.forEach((reaction) => {
     const reactionIcon = reaction.querySelector('img').dataset.iconName;
-    const matchedData = reactionData.find((data) => data.name === reactionIcon);
+    const matchedData = reactionData?.find((data) => data.name === reactionIcon);
     if (matchedData?.isReactedByCurrentUser) {
       reaction.classList.add('active');
     }
@@ -76,7 +76,7 @@ function renderReactionElements(block, reactionData) {
       reactionCount.className = 'reaction-count';
       reaction.appendChild(reactionCount);
     }
-    reactionCount.innerHTML = matchedData ? matchedData.count : 0;
+    reactionCount.innerHTML = matchedData ? matchedData.count : '';
   });
 }
 
@@ -93,11 +93,13 @@ function bindReactionEvents(block) {
     reaction.addEventListener('click', async () => {
       if (!isSignedIn) return promptUserSignIn(block);
       const activeReaction = block.querySelector('.reaction-container .active');
-      const activeIcon = activeReaction.querySelector('img').dataset.iconName;
-      if (reactionIcon === activeIcon) return true;
-      activeReaction.querySelector('.reaction-count').textContent = -1;
-      reaction.querySelector('.reaction-count').textContent += 1;
-      activeReaction.classList.remove('active');
+      if (activeReaction) {
+        activeReaction.querySelector('.reaction-count').textContent = parseInt(activeReaction.querySelector('.reaction-count').textContent, 10) - 1;
+        const activeIcon = activeReaction.querySelector('img').dataset.iconName;
+        if (reactionIcon === activeIcon) return true;
+        reaction.querySelector('.reaction-count').textContent = parseInt(activeReaction.querySelector('.reaction-count').textContent, 10) + 1;
+        activeReaction.classList.remove('active');
+      }
       reaction.classList.add('active');
       await handleReaction(reactionIcon);
       return true;
