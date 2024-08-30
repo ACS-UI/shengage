@@ -28,7 +28,7 @@ header nav[aria-expanded='true'] {
   min-height: 100vh;
 
   /* custom style below */
-  z-index: 2;
+  z-index: 20;
   position: absolute;
   background: #fff;
   width: 70%;
