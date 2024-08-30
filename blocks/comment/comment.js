@@ -40,6 +40,24 @@ const getCommentData = async () => {
 };
 
 /**
+ * Updates the main comments array with the modified comment.
+ * @param {Array} comments - The array of comments, potentially with nested replies.
+ * @param {Object} updatedComment - The comment object that has been modified.
+ */
+function updateCommentInArray(comments, updatedComment) {
+  for (let i = 0; i < comments.length; i += 1) {
+    if (comments[i].commentId === updatedComment.commentId) {
+      comments[i] = updatedComment;
+      return;
+    }
+    // If the comment has nested replies, attempt to update within them
+    if (comments[i].replies && comments[i].replies.length > 0) {
+      updateCommentInArray(comments[i].replies, updatedComment);
+    }
+  }
+}
+
+/**
  * Prepares a new comment object with an appropriate ID and timestamp.
  * @param {Array} comments - The array of comments, including nested replies.
  * @param {string} parentId - The ID of the parent comment.
@@ -256,24 +274,14 @@ async function handleEventDelegation(event, comments) {
   } else if (target.classList.contains('like-button')) {
     const isLiked = target.classList.toggle('liked');
     const currentComment = await getCommentById(comments, commentId);
-    let likeCount = currentComment.likedBy.length;
-    if (likeCount) {
-      likeCount = isLiked ? likeCount : likeCount - 1;
+    const index = currentComment.likedBy.indexOf(userDetails.id);
+    if (index === -1) {
+      currentComment.likedBy.push(userDetails.id);
     } else {
-      likeCount = isLiked ? 1 : 0;
+      currentComment.likedBy.splice(index, 1);
     }
-    const likeIconSrc = isLiked ? '/icons/fill-heart.svg' : '/icons/line-heart.svg';
-    const iconContainer = target.closest('.comment-item').querySelector('.icon-line-heart');
-    iconContainer.innerHTML = `<img data-icon-name="line-heart" src="${likeIconSrc}" alt="Heart Icon" loading="lazy">`;
-    target.nextElementSibling?.remove();
-    if (likeCount) {
-      const likeElement = htmlToElement(`
-          <div class="comment-action-count">
-              <img src="/icons/liked.svg" alt="liked" loading="lazy">${likeCount}
-          </div>
-      `);
-      target.insertAdjacentElement('afterend', likeElement);
-    }
+    updateCommentInArray(comments, currentComment);
+    updateElement(comments);
     await submitLike(commentId, isLiked);
     // If necessary, update the comments or UI after liking
     // updateElement(updatedComments);
@@ -423,7 +431,7 @@ async function initComments(block) {
     const parentId = comments.length > 0
       ? Math.max(...comments.map((comment) => parseInt(comment.commentId, 10))) : 0;
 
-    const newComment = await prepareComment(comments, parentId, commentTextValue);
+    const newComment = prepareComment(comments, parentId, commentTextValue);
     if (!newComment.postedBy.id) return;
     comments = await postComment(newComment);
     updateElement(comments);
