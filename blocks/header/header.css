@@ -382,7 +382,7 @@ header .breadcrumbs ol li:last-of-type {
 
 @media screen and (width < 900px) {
   .nav-drop{
-    color: #000;
+    color: var(--black);
   }
 
 
