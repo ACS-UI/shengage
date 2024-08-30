@@ -91,16 +91,25 @@ function bindReactionEvents(block) {
     const reactionIcon = reaction.querySelector('img').dataset.iconName;
 
     reaction.addEventListener('click', async () => {
-      if (!isSignedIn) return promptUserSignIn(block);
+      if (!isSignedIn) {
+        return promptUserSignIn(block);
+      }
       const activeReaction = block.querySelector('.reaction-container .active');
       if (activeReaction) {
-        activeReaction.querySelector('.reaction-count').textContent = parseInt(activeReaction.querySelector('.reaction-count').textContent, 10) - 1;
-        const activeIcon = activeReaction.querySelector('img').dataset.iconName;
-        if (reactionIcon === activeIcon) return true;
-        reaction.querySelector('.reaction-count').textContent = parseInt(activeReaction.querySelector('.reaction-count').textContent, 10) + 1;
-        activeReaction.classList.remove('active');
+        const activeReactionIcon = activeReaction.querySelector('img').dataset.iconName;
+        const activeCount = parseInt(activeReaction.querySelector('.reaction-count').textContent, 10);
+        const newCount = parseInt(reaction.querySelector('.reaction-count').textContent, 10);
+        if (reactionIcon === activeReactionIcon) {
+          return true;
+        }
+        // Update counts
+        activeReaction.querySelector('.reaction-count').textContent = activeCount - 1;
+        reaction.querySelector('.reaction-count').textContent = newCount + 1;
       }
+      // Update active state
+      reactions.forEach((icon) => icon.classList.remove('active'));
       reaction.classList.add('active');
+      // Handle the reaction
       await handleReaction(reactionIcon);
       return true;
     });
