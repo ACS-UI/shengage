@@ -40,6 +40,24 @@ const getCommentData = async () => {
 };
 
 /**
+ * Updates the main comments array with the modified comment.
+ * @param {Array} comments - The array of comments, potentially with nested replies.
+ * @param {Object} updatedComment - The comment object that has been modified.
+ */
+function updateCommentInArray(comments, updatedComment) {
+  for (let i = 0; i < comments.length; i += 1) {
+    if (comments[i].commentId === updatedComment.commentId) {
+      comments[i] = updatedComment;
+      return;
+    }
+    // If the comment has nested replies, attempt to update within them
+    if (comments[i].replies && comments[i].replies.length > 0) {
+      updateCommentInArray(comments[i].replies, updatedComment);
+    }
+  }
+}
+
+/**
  * Prepares a new comment object with an appropriate ID and timestamp.
  * @param {Array} comments - The array of comments, including nested replies.
  * @param {string} parentId - The ID of the parent comment.
@@ -47,8 +65,8 @@ const getCommentData = async () => {
  * @param {number} [currentLevel=0] - The current level of the comment (default is 0).
  * @returns {Object} - The prepared new comment object.
  */
-const prepareComment = (comments, parentId, commentText, currentLevel = 0) => {
-  const parentComment = getCommentById(comments, parentId);
+const prepareComment = async (comments, parentId, commentText, currentLevel = 0) => {
+  const parentComment = await getCommentById(comments, parentId);
   const maxId = parentComment?.replies ? getMaxCommentId(parentComment.replies) : '0';
 
   const newId = maxId !== '0'
@@ -199,7 +217,7 @@ async function submitReply(commentId, comments) {
   const textarea = replyForm?.querySelector('textarea');
   const replyText = textarea?.value.trim();
   if (!replyText) return;
-  const newReply = prepareComment(comments, commentId, replyText, 1);
+  const newReply = await prepareComment(comments, commentId, replyText, 1);
   if (!newReply.postedBy.id) return;
   try {
     const updatedComments = await postComment(newReply);
@@ -255,10 +273,15 @@ async function handleEventDelegation(event, comments) {
     toggleReplyForm(commentId);
   } else if (target.classList.contains('like-button')) {
     const isLiked = target.classList.toggle('liked');
-    const likeIconSrc = isLiked ? '/icons/fill-heart.svg' : '/icons/line-heart.svg';
-    const iconContainer = target.closest('.comment-item').querySelector('.icon-line-heart');
-    iconContainer.innerHTML = `<img data-icon-name="line-heart" src="${likeIconSrc}" alt="Heart Icon" loading="lazy">`;
-
+    const currentComment = await getCommentById(comments, commentId);
+    const index = currentComment.likedBy.indexOf(userDetails.id);
+    if (index === -1) {
+      currentComment.likedBy.push(userDetails.id);
+    } else {
+      currentComment.likedBy.splice(index, 1);
+    }
+    updateCommentInArray(comments, currentComment);
+    updateElement(comments);
     await submitLike(commentId, isLiked);
     // If necessary, update the comments or UI after liking
     // updateElement(updatedComments);
@@ -276,7 +299,7 @@ function updateElement(comments) {
   commentsSectionDiv.innerHTML = '';
   const subContainer = document.createElement('div');
   subContainer.innerHTML = comments?.map(createCommentHtml).join('') || '';
-  addTooltips(subContainer);
+  addTooltips(subContainer, 'Please login .....');
   commentsSectionDiv.appendChild(subContainer);
   subContainer.addEventListener('click', (event) => {
     if (isSignedIn) {
@@ -307,12 +330,9 @@ function createCommentHtml(data) {
   // Determine the replies button visibility and like status
   const replyDepth = commentId.split('.').length;
   const authClass = isSignedIn ? '' : 'auth';
-  const canReply = replyDepth < config.replyLimit;
-  const replyButtonHtml = canReply
-    ? `<button class="reply-button interaction-button ${authClass}" data-comment-id="${commentId}">Reply</button>`
-    : '';
-
   const isLiked = likedBy && likedBy.includes(userDetails.id);
+  const likeCount = likedBy.length;
+  const replyCount = replies.length;
   const likeClass = isLiked ? 'liked' : '';
   const likeIcon = isLiked ? '/icons/fill-heart.svg' : '/icons/line-heart.svg';
 
@@ -326,14 +346,20 @@ function createCommentHtml(data) {
             <div class="comment-text">${commentText}</div>
             <div class="like">
               <span class="icon icon-line-heart">
-                <img src="${likeIcon}" alt="Like" loading="lazy">
+                <img src="${likeIcon}" alt="Like"  class="like-button" data-comment-id="${commentId}" loading="lazy">
               </span>
             </div>
           </div>
         </div>
         <div class="comment-actions">
-          <button class="like-button interaction-button ${likeClass} ${authClass}" data-comment-id="${commentId}">Like</button>
-          ${replyButtonHtml}
+          <div class="comment-action-item">
+            <button class="like-button interaction-button ${likeClass} ${authClass}" data-comment-id="${commentId}">Like</button>
+            ${likeCount ? `<div class="comment-action-count"><img src="/icons/liked.svg" alt="liked" loading="lazy">${likeCount}</div>` : ''}
+          </div>
+            ${replyDepth < config.replyLimit ? `<div class="comment-action-item">
+              <button class="reply-button interaction-button ${authClass}" data-comment-id="${commentId}">Reply</button>
+              ${replyCount ? `<div class="comment-action-count">${replyCount} ${replyCount > 1 ? 'replies' : 'Reply'}</div>` : ''}
+              </div>` : ''}
         </div>
         <div class="reply-form" id="reply-form-${commentId}">
           <textarea rows="1" class="reply-comment" placeholder="Write a reply..."></textarea>

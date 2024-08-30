@@ -86,7 +86,7 @@ export function getConfig() {
   window.shengage = window.shengage || {};
   window.shengage.config = {
     ims,
-    adobeIoEndpoint: 'https://51837-shengageapp-stage.adobeioruntime.net/api/v1/web/shengage',
+    adobeIoEndpoint: 'https://51837-shengageapp-dev.adobeioruntime.net/api/v1/web/shengage',
   };
   return window.shengage.config;
 }

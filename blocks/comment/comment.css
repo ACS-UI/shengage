@@ -57,11 +57,20 @@ main .section.comment-container {
 
 .comment-area .comment-items:last-child {
   border-bottom: none;
+  padding-bottom: 0;
 }
 
 .comment-area .comment-items .comment-items {
   padding-left: 24px;
   border: unset;
+}
+
+.comment-replies {
+  padding-bottom: 15px;
+}
+
+.comment-replies:last-child {
+  padding-bottom: 0;
 }
 
 .comment-area .comment-details {
@@ -124,25 +133,67 @@ main .section.comment-container {
   margin-left: 65px;
 }
 
+.comment-area .comment-action-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #959595;
+}
+
+.comment-area .comment-action-item:last-child {
+  border-right: 1px solid transparent;
+}
+
+.comment-area .comment-action-count {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  padding: 0;
+  padding-right: 10px;
+  color: #959595;
+}
+
+.comment-area .comment-action-count img {
+  width: 18px;
+  margin-right: 5px;
+}
+
+.comment-area .comment-action-count::before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  background-color:#959595;
+  display: inline-block;
+  margin-right: 10px;
+  vertical-align: middle;
+  border-radius: 5px;
+}
+
 .comment-area .comments-section .comment-actions {
   margin-top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .comment-area .comment-actions .interaction-button {
   background: none;
   border: none;
-  border-radius: 5px;
-  color: #959595;
-  font-weight: 400;
+  color: #000;
+  font-weight: 600;
   font-size: 14px;
   cursor: pointer;
-  padding: 2px 10px;
-  margin: 0;
+  margin: 2px 10px;
+  padding: 2px;
+  border-radius: unset;
 }
 
 .comment-area .comment-actions .interaction-button:hover {
   background: #f2f2f2;
+  border-radius: 5px;
 }
+
+
 
 .comment-area .comment-actions .liked {
   color: #0a66c2;
@@ -176,7 +227,7 @@ main .section.comment-container {
   }
 
   .comment-area .input-section {
-    padding: 30px 40px 15px;
+    padding: 30px 40px;
   }
   
   .comment-area .submit-comment {
@@ -186,12 +237,13 @@ main .section.comment-container {
   }
 
   .comment-area .comments-section {
-    padding: 0 40px;
+    padding: 0 40px 15px;
   }
 
   .comment-area .comment-items .comment-items {
     padding-left: 65px;
     border: unset;
+    padding-bottom: 0;
   }
   
   .comment-area .comment-body .like {
@@ -202,6 +254,7 @@ main .section.comment-container {
   .comment-area .comment-body .like .icon {
     height: 24px;
     width: 24px;
+    cursor: pointer;
   }
 
   .comment-area .comment-body .author span {

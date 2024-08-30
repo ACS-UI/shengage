@@ -42,7 +42,7 @@ export async function isSignedInUser() {
  * Adds tooltips to all elements with the 'auth' class.
  * Tooltips prompt users to log in when hovering over these elements.
  */
-export async function addTooltips(block) {
+export async function addTooltips(block, msg) {
   const isSignedIn = await isSignedInUser();
   const authElements = block.querySelectorAll('.auth');
   authElements.forEach((element) => {
@@ -55,7 +55,7 @@ export async function addTooltips(block) {
     // Create and configure tooltip text
     const tooltip = document.createElement('div');
     tooltip.classList.add('tooltip');
-    tooltip.textContent = 'Please login .....';
+    tooltip.textContent = msg;
     tooltipContainer.appendChild(tooltip);
     element.addEventListener('click', (e) => {
       e.preventDefault();
