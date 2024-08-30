@@ -76,7 +76,8 @@ function renderReactionElements(block, reactionData) {
       reactionCount.className = 'reaction-count';
       reaction.appendChild(reactionCount);
     }
-    reactionCount.innerHTML = matchedData ? matchedData.count : '';
+    reaction.setAttribute('data-action-count', matchedData ? matchedData.count : 0);
+    reactionCount.innerHTML = matchedData ? matchedData.count : 0;
   });
 }
 
@@ -90,21 +91,23 @@ function bindReactionEvents(block) {
   reactions.forEach((reaction) => {
     const reactionIcon = reaction.querySelector('img').dataset.iconName;
 
-    reaction.addEventListener('click', async () => {
+    reaction.addEventListener('click', async (e) => {
       if (!isSignedIn) {
         return promptUserSignIn(block);
       }
-      const activeReaction = block.querySelector('.reaction-container .active');
-      if (activeReaction) {
-        const activeReactionIcon = activeReaction.querySelector('img').dataset.iconName;
-        const activeCount = parseInt(activeReaction.querySelector('.reaction-count').textContent, 10);
-        const newCount = parseInt(reaction.querySelector('.reaction-count').textContent, 10);
-        if (reactionIcon === activeReactionIcon) {
-          return true;
-        }
-        // Update counts
-        activeReaction.querySelector('.reaction-count').textContent = activeCount - 1;
-        reaction.querySelector('.reaction-count').textContent = newCount + 1;
+      const element = e.target.tagName === 'P' ? e.target : e.target.closest('p');
+      const count = element.dataset.actionCount;
+      const activeElement = block.querySelector('.reaction-container .active');
+      const activeCount = activeElement?.dataset.actionCount;
+      const activeReactionIcon = activeElement?.querySelector('img').dataset.iconName;
+      if (reactionIcon === activeReactionIcon) {
+        return true;
+      }
+      if (activeCount) {
+        activeElement.querySelector('.reaction-count').textContent = parseInt(activeCount, 10) - 1;
+        element.querySelector('.reaction-count').textContent = parseInt(count, 10) + 1;
+      } else {
+        element.querySelector('.reaction-count').textContent = parseInt(count, 10) + 1;
       }
       // Update active state
       reactions.forEach((icon) => icon.classList.remove('active'));
