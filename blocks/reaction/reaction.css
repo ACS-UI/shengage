@@ -29,7 +29,7 @@ main .section.reaction-container {
     justify-content: center;
     margin: 0 5px;
     cursor: pointer;
-    transition: background-color 0.3s, opacity 0.3s;
+    transition: background-color 0.2s, opacity 0.3s;
     flex-direction: column;
   }
   
