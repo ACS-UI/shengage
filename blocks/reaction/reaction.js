@@ -104,9 +104,12 @@ function bindReactionEvents(block) {
         return true;
       }
       if (activeCount) {
+        activeElement.setAttribute('data-action-count', parseInt(activeCount, 10) - 1);
         activeElement.querySelector('.reaction-count').textContent = parseInt(activeCount, 10) - 1;
+        element.setAttribute('data-action-count', parseInt(count, 10) + 1);
         element.querySelector('.reaction-count').textContent = parseInt(count, 10) + 1;
       } else {
+        element.setAttribute('data-action-count', parseInt(count, 10) + 1);
         element.querySelector('.reaction-count').textContent = parseInt(count, 10) + 1;
       }
       // Update active state
