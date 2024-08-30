@@ -379,3 +379,11 @@ header .breadcrumbs ol li:last-of-type {
     display: block;
   }
 }
+
+@media screen and (width < 900px) {
+  .nav-drop{
+    color: var(--black);
+  }
+
+
+}

@@ -13,3 +13,10 @@
     top : 50px;    
 }
 
+@media screen and (width < 900px) {
+    .shengage-header h2{
+        padding-left: 10px;
+        line-height: 35px;
+        font-size: 36px;     
+    }
+}

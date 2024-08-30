@@ -22,6 +22,10 @@
             font-size: 16px;
             z-index: 10;
             border-radius: 5px;
+
+            @media screen and (width < 900px){
+                top: 25%;
+            }
         }
 
         #unmute:hover {
@@ -36,15 +40,14 @@
 }
 
 .video .video-background video {
-    width: 100%;
-    height: 690px;    
+    width: 100%;     
     object-fit: cover;
     object-position: 0 15%;
 }
 
 @media (width < 900px) {
     .video .video-background video {
-    height: 450px;
+    height: 100%;
     }
 }
 
