@@ -257,7 +257,7 @@ async function handleEventDelegation(event, comments) {
     const isLiked = target.classList.toggle('liked');
     const currentComment = await getCommentById(comments, commentId);
     let likeCount = currentComment.likedBy.length;
-    if (likeCount) {
+    if (likeCount > 1) {
       likeCount = isLiked ? likeCount : likeCount - 1;
     } else {
       likeCount = 1;
