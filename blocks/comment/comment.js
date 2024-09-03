@@ -5,6 +5,7 @@
  */
 import { htmlToElement, apiRequest, getAuthoredData } from '../../scripts/scripts.js';
 import { isSignedInUser, getUserData, addTooltips } from '../../scripts/auth.js';
+import loadReactionWidget from './commentsReaction.js';
 
 let userDetails;
 let commentsSectionDiv;
@@ -391,13 +392,14 @@ async function initComments(block) {
       <div class="input-section">
         <div class="comment-input">
           <img src="${userImage}" alt="Avatar" class="avatar">
-          <textarea class="main-comment" rows="1" placeholder="What are your thoughts?" ${btnMode}></textarea>
+          <div class="main-comment" ${btnMode} contenteditable="true" placeholder="What are your thoughts...?"></div>
         </div>
         <div class="comment-actions align-right">
+          ${config.replyLimit ? '<div class="comments-reaction"></div>' : ''}
           <button class="submit-comment submit-main-comment">${btnText}</button>
         </div>
       </div>
-      <div class="comments-section"></div>
+      ${comments.length > 0 ? '<div class="comments-section"></div>' : ''}
     </div>
   `);
 
@@ -406,12 +408,13 @@ async function initComments(block) {
   commentsSectionDiv = block.querySelector('.comments-section');
   if (comments.length) {
     updateElement(comments);
+    loadReactionWidget(commentContainer.querySelector('.comments-reaction'));
   }
   const commentText = block.querySelector('.main-comment');
   const submitBtn = block.querySelector('.submit-main-comment');
 
   commentText.addEventListener('input', () => {
-    submitBtn.disabled = !commentText.value.trim();
+    submitBtn.disabled = !commentText.innerHTML;
     commentText.style.height = 'auto';
     commentText.style.height = `${commentText.scrollHeight - 40}px`;
   });
@@ -422,10 +425,10 @@ async function initComments(block) {
     if (!isSignedIn) {
       window.adobeIMS.signIn();
     }
-    const commentTextValue = block.querySelector('.main-comment').value.trim();
+    const commentTextValue = block.querySelector('.main-comment').innerHTML;
     if (!commentTextValue) return;
     submitBtn.disabled = true;
-    block.querySelector('.main-comment').value = '';
+    block.querySelector('.main-comment').innerHTML = '';
     commentText.placeholder = 'Please wait, we are posting your comment...';
     comments = await getCommentData();
     const parentId = comments.length > 0

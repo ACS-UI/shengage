@@ -26,6 +26,17 @@ main .section.comment-container {
 
 .comment-area .main-comment {
   padding: 20px;
+  width: calc(100% - 110px);
+  border-radius: 15px;
+  border: 1px solid #505050;
+  color: #505050;
+  overflow-y: auto;
+  outline: none;
+}
+
+.comment-area .main-comment[placeholder]:empty::before {
+  content: attr(placeholder);
+  color: #aaa;
 }
 
 .comment-area .submit-comment {
@@ -280,4 +291,123 @@ main .section.comment-container {
     font-size: 16px;
   }
 
+}
+
+
+/* Reactions */
+
+.comments-reaction {
+  display: inline-block;
+  position: relative;
+}
+
+.reaction-button {
+  background: none;
+  padding: 0 4px;
+  margin: 0;
+  font-size: 24px;
+  line-height: normal;
+}
+
+.reaction-button:hover, .reaction-button:focus {
+  background-color: #f2f2f2;
+}
+
+.reaction-panel {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  min-width: 160px;
+  box-shadow: 0 8px 16px 0 rgba(0 0 0 / 20%);
+  z-index: -1;
+  bottom: 200px;
+  right: 0;
+  border-radius: 5px;
+  transition: all .3s ease;
+  opacity: 0;
+  visibility: hidden;
+  background: #f2f2f2;
+}
+
+.reaction-panel.show {
+  opacity: 1;
+  bottom: 40px;
+  z-index: 1;
+  visibility: visible;
+}
+
+.reaction-tab-header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.reaction-tab-link {
+  margin: 0;
+  background: none;
+  color: black;
+  font-size: 16px;
+  border-bottom: 2px solid #f2f2f2;
+  border-radius: unset;
+}
+
+.reaction-tab-link:hover, .reaction-tab-link:focus {
+  background: none;
+  border-bottom: 2px solid #abafb4;
+}
+
+.reaction-tab-link.active {
+  border-bottom: 2px solid #0a66c2;
+}
+
+.reaction-tab-item {
+  box-shadow: 0 8px 16px 0 rgba(0 0 0 / 20%);
+  z-index: -1;
+  border-radius: 5px;
+  transition: all .3s ease;
+  opacity: 0;
+  visibility: hidden;
+  background: #f2f2f2;
+  min-height: 400px;
+  min-width: 344px;
+  display: none;
+}
+
+.reaction-tab-item.active {
+  opacity: 1;
+  z-index: 1;
+  visibility: visible;
+  display: block;
+}
+
+.gif-picker-container {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.gif-search {
+  margin: 8px 0;
+  width: calc(100% - 60px);
+  padding: 8px 10px;
+  border-radius: 7px;
+  border: 1px solid #abafb4;
+}
+
+.gif-search:focus, .gif-search:focus-visible {
+  border: 1px solid #abafb4;
+}
+
+.gif-results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.comment-area .gif-results img {
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
 }

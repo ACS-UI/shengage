@@ -245,6 +245,20 @@ export async function apiRequest({
 }
 
 /**
+ * Creates a debounce function that delays the execution of the callback function.
+ * @param {Function} callback - The function to be debounced.
+ * @param {number} delay - The debounce delay in milliseconds.
+ * @returns {Function} A debounced function that delays the callback execution.
+ */
+export function debounce(callback, delay) {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => callback.apply(this, args), delay);
+  };
+}
+
+/**
  * Loads everything that happens a lot later,
  * without impacting the user experience.
  */
