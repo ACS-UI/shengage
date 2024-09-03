@@ -24,7 +24,8 @@ main .section.comment-container {
   background: #e8e1ef;
 }
 
-.comment-area .main-comment {
+.comment-area .main-comment,
+.comment-area .reply-comment {
   padding: 20px;
   width: calc(100% - 110px);
   border-radius: 15px;
@@ -34,7 +35,8 @@ main .section.comment-container {
   outline: none;
 }
 
-.comment-area .main-comment[placeholder]:empty::before {
+.comment-area .main-comment[placeholder]:empty::before,
+.comment-area .reply-comment[placeholder]:empty::before {
   content: attr(placeholder);
   color: #aaa;
 }

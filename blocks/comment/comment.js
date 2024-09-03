@@ -215,8 +215,8 @@ function toggleReplyForm(commentId) {
  */
 async function submitReply(commentId, comments) {
   const replyForm = commentsSectionDiv.querySelector(`#reply-form-${commentId.replace('.', '\\.')}`);
-  const textarea = replyForm?.querySelector('textarea');
-  const replyText = textarea?.value.trim();
+  const textarea = replyForm?.querySelector('.reply-comment');
+  const replyText = textarea?.innerHTML.trim();
   if (!replyText) return;
   const newReply = await prepareComment(comments, commentId, replyText, 1);
   if (!newReply.postedBy.id) return;
@@ -226,7 +226,7 @@ async function submitReply(commentId, comments) {
   } catch (error) {
     console.error('Error submitting reply:', error);
   } finally {
-    textarea.value = '';
+    textarea.innerHTML = '';
     replyForm.style.display = 'none';
     currentOpenReplyForm = null;
   }
@@ -310,6 +310,8 @@ function updateElement(comments) {
 
   const commentTexts = subContainer.querySelectorAll('.reply-comment');
   commentTexts.forEach((commentText) => {
+    const reactionPanel = commentText.parentElement.querySelector('.comments-reaction');
+    loadReactionWidget(reactionPanel, commentText);
     commentText.addEventListener('input', () => {
       commentText.style.height = `${commentText.scrollHeight - 25}px`;
     });
@@ -362,8 +364,11 @@ function createCommentHtml(data) {
               </div>` : ''}
         </div>
         <div class="reply-form" id="reply-form-${commentId}">
-          <textarea rows="1" class="reply-comment" placeholder="Write a reply..."></textarea>
-          <button class="submit-comment submit-reply" data-comment-id="${commentId}">Reply</button>
+          <div class="reply-comment" contenteditable="true" placeholder="Write a reply..."></div>
+          <div>
+            ${isSignedIn ? '<div class="comments-reaction"></div>' : ''}
+            <button class="submit-comment submit-reply" data-comment-id="${commentId}">Reply</button>
+          </div>
         </div>
       </div>
       <div class="comment-replies">
