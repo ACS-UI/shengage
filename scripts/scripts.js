@@ -87,6 +87,7 @@ export function getConfig() {
   window.shengage.config = {
     ims,
     adobeIoEndpoint: 'https://51837-shengageapp-dev.adobeioruntime.net/api/v1/web/shengage',
+    giphyApiKey: 'vcXGLBipjtwyEqhVQgBf8yfU6wAegwA3',
   };
   return window.shengage.config;
 }

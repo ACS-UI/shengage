@@ -311,7 +311,6 @@ function updateElement(comments) {
   const commentTexts = subContainer.querySelectorAll('.reply-comment');
   commentTexts.forEach((commentText) => {
     commentText.addEventListener('input', () => {
-      commentText.style.height = 'auto';
       commentText.style.height = `${commentText.scrollHeight - 25}px`;
     });
   });
@@ -395,7 +394,7 @@ async function initComments(block) {
           <div class="main-comment" ${btnMode} contenteditable="true" placeholder="What are your thoughts...?"></div>
         </div>
         <div class="comment-actions align-right">
-          ${config.replyLimit ? '<div class="comments-reaction"></div>' : ''}
+          ${isSignedIn ? '<div class="comments-reaction"></div>' : ''}
           <button class="submit-comment submit-main-comment">${btnText}</button>
         </div>
       </div>
@@ -406,14 +405,16 @@ async function initComments(block) {
   block.innerHTML = '';
   block.appendChild(commentContainer);
   commentsSectionDiv = block.querySelector('.comments-section');
-  if (comments.length) {
-    updateElement(comments);
-    loadReactionWidget(commentContainer.querySelector('.comments-reaction'));
-  }
   const commentText = block.querySelector('.main-comment');
   const submitBtn = block.querySelector('.submit-main-comment');
-
-  commentText.addEventListener('input', () => {
+  if (comments.length) {
+    updateElement(comments);
+  }
+  if (isSignedIn) {
+    const reactionPanel = commentContainer.querySelector('.comments-reaction');
+    loadReactionWidget(reactionPanel, commentText);
+  }
+  commentText.addEventListener('input change', () => {
     submitBtn.disabled = !commentText.innerHTML;
     commentText.style.height = 'auto';
     commentText.style.height = `${commentText.scrollHeight - 40}px`;
