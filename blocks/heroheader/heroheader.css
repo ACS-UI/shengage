@@ -2,15 +2,16 @@
     margin-top: 64px;
     background-image: url("../../assets/progdetheader.webp");
     background-repeat: no-repeat;
-    padding-top: 40px;
+
     background-size: contain;
 
 
-    .heroheader {
+    .heroheader.black {
+        padding-top: 40px;
         position: relative;
 
         h3 {
-            position: absolute;           
+            position: absolute;
             left: 50px;
             top: 20%;
             color: var(--white);
@@ -22,9 +23,19 @@
             z-index: 2;
             border-radius: 10px;
             box-shadow: 20px 20px var(--link-color);
-            
+
         }
-        
+
+    }
+
+    /* no banner variation styles */
+
+    .heroheader.no-banner {
+        h3 {
+            color: var(--white);
+            font-size: 48px;
+        }
+
     }
 
 }
