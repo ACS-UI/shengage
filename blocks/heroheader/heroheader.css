@@ -1,0 +1,62 @@
+.section.heroheader-container {
+    margin-top: 64px;
+    background-image: url("../../assets/progdetheader.webp");
+    background-repeat: no-repeat;
+    padding-top: 40px;
+    background-size: contain;
+
+
+    .heroheader {
+        position: relative;
+
+        h3 {
+            position: absolute;           
+            left: 50px;
+            top: 20%;
+            color: var(--white);
+            z-index: 3;
+            font-size: 48px;
+        }
+
+        img {
+            z-index: 2;
+            border-radius: 10px;
+            box-shadow: 20px 20px var(--link-color);
+            
+        }
+        
+    }
+
+}
+
+header nav .nav-sections .nav-drop[aria-expanded="false"]::after {
+    content: url('../../assets/arrow.svg') !important;
+
+}
+
+header.header-wrapper nav,
+header.header-wrapper nav a:any-link {
+    color: var(--black);
+}
+
+header.header-wrapper nav ul>li>ul a:any-link {
+    color: #fff
+}
+
+@media (width >=900px) {
+    header nav .nav-sections li.nav-drop[aria-expanded="true"] {
+        color: white;
+    }
+}
+
+@media (width < 900px) {
+    header.header-wrapper nav ul>li>ul a:any-link {
+        color: black;
+    }
+
+    header nav .nav-sections li.nav-drop[aria-expanded="true"] {
+        color: black;
+    }
+
+
+}
