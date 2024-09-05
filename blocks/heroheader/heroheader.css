@@ -30,9 +30,42 @@
     /* no banner variation styles */
 
     .heroheader.no-banner {
-        h3 {
-            color: var(--white);
-            font-size: 48px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+       
+
+        .row-0 {
+            h3 {
+                color: var(--white);
+                font-size: 48px;
+                margin: 0;
+            }
+        }
+
+        .row-1 {
+            h3 {
+                font-size: 18px;
+                color: white;
+                background-color: #2680EB;
+                border-radius: 10px;
+                padding-right: 18px;
+                width: 150px;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 100px;
+              
+            }
+
+            h3::before {
+                content: url("../../assets/calendar.svg");
+                display: inline-block;
+                padding-right: 10px;
+            }
+
+
         }
 
     }
