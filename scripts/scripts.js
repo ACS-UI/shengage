@@ -1,4 +1,5 @@
 // eslint-disable-next-line import/no-cycle, max-classes-per-file
+import addLaunchScript from '../utils/common.js';
 import {
   sampleRUM,
   buildBlock,
@@ -145,6 +146,7 @@ async function loadEager(doc) {
  * @param {Element} doc The container element
  */
 async function loadLazy(doc) {
+  addLaunchScript();
   const main = doc.querySelector('main');
   loadIms(); // start it early, asyncronously
   await loadBlocks(main);
