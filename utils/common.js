@@ -9,7 +9,7 @@ const addLaunchScript = () => {
   }
   const script = document.createElement('script');
   script.src = source;
-  script.async = false;
+  script.async = true;
   document.head.appendChild(script);
 };
 
