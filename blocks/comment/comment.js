@@ -321,7 +321,10 @@ function updateElement(comments) {
   const commentTexts = subContainer.querySelectorAll('.reply-comment');
   commentTexts.forEach((commentText) => {
     const reactionPanel = commentText.parentElement.querySelector('.comments-reaction');
-    loadReactionWidget(reactionPanel, commentText);
+    if (isSignedIn) {
+      loadReactionWidget(reactionPanel, commentText);
+    }
+
     commentText.addEventListener('input', () => {
       commentText.style.height = `${commentText.scrollHeight - 25}px`;
     });
