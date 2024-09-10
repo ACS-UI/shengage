@@ -234,68 +234,6 @@ main .section.comment-container {
   color: #585858;
 }
 
-@media (width >= 600px) {
-  main .section.comment-container {
-    margin: 45px auto; 
-  }
-
-  .comment-area .input-section {
-    padding: 30px 40px;
-  }
-  
-  .comment-area .submit-comment {
-    margin: 0;
-    padding: 10px 24px;
-    font-size: 16px;
-  }
-
-  .comment-area .comments-section {
-    padding: 0 40px 15px;
-  }
-
-  .comment-area .comment-items .comment-items {
-    padding-left: 65px;
-    border: unset;
-    padding-bottom: 0;
-  }
-  
-  .comment-area .comment-body .like {
-    right: 15px;
-    top: 15px;
-  }
-
-  .comment-area .comment-body .like .icon {
-    height: 24px;
-    width: 24px;
-    cursor: pointer;
-  }
-
-  .comment-area .comment-body .author span {
-    display: inline;
-    margin-left: 10px;
-    font-size: 16px;
-  }
-  
-  .comment-area .comment-body .author span::before {
-    content: '';
-  }
-
-  .comment-area .comment-actions {
-    margin-top: 15px;
-  }
-
-  .comment-area .reply-form .submit-reply {
-    margin: 15px 0 0;
-    padding: 10px 24px;
-  }
-
-  .comment-area .comment-actions .interaction-button {
-    font-size: 16px;
-  }
-
-}
-
-
 /* Reactions */
 
 .comments-reaction {
@@ -323,12 +261,14 @@ main .section.comment-container {
   box-shadow: 0 8px 16px 0 rgba(0 0 0 / 20%);
   z-index: -1;
   bottom: 200px;
-  right: 0;
+  right: unset;
   border-radius: 5px;
   transition: all .3s ease;
   opacity: 0;
   visibility: hidden;
   background: #f2f2f2;
+  left: -50%;
+  transform: translate(-50%, -5px);
 }
 
 .reaction-panel.show {
@@ -413,3 +353,73 @@ main .section.comment-container {
   height: 100px;
   cursor: pointer;
 }
+
+
+@media (width >= 600px) {
+  main .section.comment-container {
+    margin: 45px auto; 
+  }
+
+  .comment-area .input-section {
+    padding: 30px 40px;
+  }
+  
+  .comment-area .submit-comment {
+    margin: 0;
+    padding: 10px 24px;
+    font-size: 16px;
+  }
+
+  .comment-area .comments-section {
+    padding: 0 40px 15px;
+  }
+
+  .comment-area .comment-items .comment-items {
+    padding-left: 65px;
+    border: unset;
+    padding-bottom: 0;
+  }
+  
+  .comment-area .comment-body .like {
+    right: 15px;
+    top: 15px;
+  }
+
+  .comment-area .comment-body .like .icon {
+    height: 24px;
+    width: 24px;
+    cursor: pointer;
+  }
+
+  .comment-area .comment-body .author span {
+    display: inline;
+    margin-left: 10px;
+    font-size: 16px;
+  }
+  
+  .comment-area .comment-body .author span::before {
+    content: '';
+  }
+
+  .comment-area .comment-actions {
+    margin-top: 15px;
+  }
+
+  .comment-area .reply-form .submit-reply {
+    margin: 15px 0 0;
+    padding: 10px 24px;
+  }
+
+  .comment-area .comment-actions .interaction-button {
+    font-size: 16px;
+  }
+
+  .reaction-panel {
+    right: 0;
+    left: unset;
+    transform: none;
+  }
+
+}
+
+

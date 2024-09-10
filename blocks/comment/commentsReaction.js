@@ -15,6 +15,8 @@ function createReactionHandler(inputElement, parent) {
    */
   const selectGIF = (gifUrl) => {
     inputElement.innerHTML += `<br><img src="${gifUrl}" alt="Selected GIF">`;
+    const reactionPanel = parent.querySelector('.reaction-panel');
+    reactionPanel.classList.remove('show');
   };
 
   /**
@@ -32,19 +34,18 @@ function createReactionHandler(inputElement, parent) {
 
   /**
    * Displays a list of GIFs inside the specified container.
-   * @param {Array} gifs - The array of GIF objects.
-   * @param {HTMLElement} gifResults - The container to display the GIFs.
+   * @param {HTMLElement} gifElement - The container to display the GIFs.
    */
-  const displayGIFs = (gifs, gifResults) => {
-    if (gifResults instanceof HTMLElement) {
-      gifResults.innerHTML = ''; // Clear existing GIFs
-
+  const displayGIFs = (gifElement) => {
+    if (gifElement instanceof HTMLElement) {
+      gifElement.innerHTML = ''; // Clear existing GIFs
+      const gifs = window.trendingGifs;
       gifs.forEach((gif) => {
         const img = createGIFElement(gif);
-        gifResults.appendChild(img);
+        gifElement.appendChild(img);
       });
     } else {
-      console.error('gifResults is not a valid DOM element.');
+      console.error('gifElement is not a valid DOM element.');
     }
   };
 
@@ -69,15 +70,21 @@ function createReactionHandler(inputElement, parent) {
 
   /**
    * Searches for GIFs based on a query and displays them.
-   * @param {HTMLElement} gifResults - The container to display the GIFs.
+   * @param {HTMLElement} gifElement - The container to display the GIFs.
    * @param {string} [query='trending'] - The search query.
    */
-  const searchGIFs = (gifResults, query = 'trending') => {
-    const API_KEY = getConfig().giphyApiKey;
-    const url = `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${encodeURIComponent(query)}&limit=9&rating=g`;
-    fetchGIFs(url)
-      .then((gifs) => displayGIFs(gifs, gifResults))
-      .catch((error) => console.error('Error fetching GIFs:', error));
+  const searchGIFs = (gifElement, query = 'trending') => {
+    if (!window.gifPickerLoaded || query !== 'trending') {
+      window.gifPickerLoaded = true;
+      const API_KEY = getConfig().giphyApiKey;
+      const url = `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${encodeURIComponent(query)}&limit=9&rating=g`;
+      fetchGIFs(url)
+        .then((gifs) => {
+          window.trendingGifs = gifs;
+          displayGIFs(gifElement);
+        })
+        .catch((error) => console.error('Error fetching GIFs:', error));
+    }
   };
 
   /**
@@ -85,11 +92,11 @@ function createReactionHandler(inputElement, parent) {
    * @param {string} tabType - The type of tab ('emoji' or 'gif').
    * @param {HTMLElement} tabContent - The container to hold the tab content.
    */
-  const loadReactions = async (tabType, tabContent) => {
+  const loadReactions = async (tabType, tabContent, reactionPanel) => {
     if (tabType === 'emoji') {
       if (!window.emojiPickerLoaded) {
-        await loadScript('https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js', { type: 'module' });
         window.emojiPickerLoaded = true;
+        await loadScript('https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js', { type: 'module' });
       }
       const emojiPicker = document.createElement('emoji-picker');
       tabContent.appendChild(emojiPicker);
@@ -97,6 +104,7 @@ function createReactionHandler(inputElement, parent) {
         const emoji = event.detail.unicode;
         inputElement.innerHTML += emoji;
         console.log('Selected emoji:', emoji);
+        reactionPanel.classList.remove('show');
       });
     } else if (tabType === 'gif') {
       const gifContainer = htmlToElement(`
@@ -107,14 +115,15 @@ function createReactionHandler(inputElement, parent) {
         <div class="selected-gif-container"></div>`);
       tabContent.appendChild(gifContainer);
       const gifSearch = gifContainer.querySelector('.gif-search');
-      const gifResults = gifContainer.querySelector('.gif-results');
-      searchGIFs(gifResults);
-      gifSearch.addEventListener('input', (event) => {
+      const gifElement = gifContainer.querySelector('.gif-results');
+      await searchGIFs();
+
+      gifSearch.addEventListener('input', debounce((event) => {
         const query = event.target.value.trim();
         if (query) {
-          debounce(() => searchGIFs(gifResults, query), 3000)();
+          searchGIFs(gifElement, query);
         }
-      });
+      }, 1000));
     }
   };
 
@@ -131,6 +140,10 @@ function createReactionHandler(inputElement, parent) {
     const clickedTab = e.target;
     clickedTab.classList.add('active');
     const tabType = clickedTab.getAttribute('data-tab');
+    if (tabType === 'gif') {
+      const gifElement = reactionWrapper.querySelector('.gif-results');
+      displayGIFs(gifElement);
+    }
     const reactionTabContent = reactionWrapper.querySelector(`.reaction-tab-item.${tabType}`);
     reactionTabContent.classList.add('active');
   };
@@ -150,7 +163,7 @@ function createReactionHandler(inputElement, parent) {
     tabLinks.forEach((tab) => {
       const tabVal = tab.getAttribute('data-tab');
       const tabItem = reactionWrapper.querySelector(`.reaction-tab-item.${tabVal}`);
-      loadReactions(tabVal, tabItem);
+      loadReactions(tabVal, tabItem, reactionPanel);
 
       tab.addEventListener('click', (e) => {
         handleTabClick(e, tabLinks, reactionWrapper);

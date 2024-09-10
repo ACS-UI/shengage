@@ -14,6 +14,16 @@ let isSignedIn = false;
 let config = {};
 const isMobile = window.matchMedia('(max-width: 600px)').matches;
 
+function sortCommentsDescending(comments) {
+  comments.sort((a, b) => parseFloat(b.commentId) - parseFloat(a.commentId));
+  comments.forEach((comment) => {
+    if (comment.replies && comment.replies.length > 0) {
+      sortCommentsDescending(comment.replies);
+    }
+  });
+  return comments;
+}
+
 /**
  * Fetches comment data from the server.
  * @returns {Promise<Object|null>} - The fetched comment data or null if an error occurs.
@@ -33,7 +43,7 @@ const getCommentData = async () => {
       data: requestData,
     });
 
-    return response.data ?? null;
+    return await sortCommentsDescending(response.data) ?? null;
   } catch (error) {
     console.error('Error fetching comment data:', error);
     return null;
