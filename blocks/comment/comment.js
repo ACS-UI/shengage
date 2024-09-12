@@ -336,7 +336,8 @@ function updateElement(comments, commentContainer = null) {
     }
 
     commentText.addEventListener('input', () => {
-      commentText.style.height = `${commentText.scrollHeight - 25}px`;
+      commentText.style.height = 'auto';
+      commentText.style.height = `${commentText.scrollHeight - 40}px`;
     });
   });
 }
