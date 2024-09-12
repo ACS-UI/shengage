@@ -97,14 +97,16 @@ function createReactionHandler(inputElement, parent, config) {
       window.emojiPickerLoaded = true;
       await loadScript('https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js', { type: 'module' });
     }
-    const emojiPicker = document.createElement('emoji-picker');
-    parentElement.appendChild(emojiPicker);
-    emojiPicker.addEventListener('emoji-click', (event) => {
-      const emoji = event.detail.unicode;
-      inputElement.innerHTML += emoji;
-      console.log('Selected emoji:', emoji);
-      reactionPanel.classList.remove('show');
-    });
+    if (parentElement.querySelector('emoji-picker') !== null) {
+      const emojiPicker = document.createElement('emoji-picker');
+      parentElement.appendChild(emojiPicker);
+      emojiPicker.addEventListener('emoji-click', (event) => {
+        const emoji = event.detail.unicode;
+        inputElement.innerHTML += emoji;
+        console.log('Selected emoji:', emoji);
+        reactionPanel.classList.remove('show');
+      });
+    }
   };
 
   /**
