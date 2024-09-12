@@ -1,5 +1,5 @@
 const DEV_LAUNCH_SCRIPT = 'https://assets.adobedtm.com/4861475e0aeb/0d0ceb0ee381/launch-66ff90804336-development.min.js';
-const PROD_LAUNCH_SCRIPT = '';
+const PROD_LAUNCH_SCRIPT = 'https://assets.adobedtm.com/4861475e0aeb/0d0ceb0ee381/launch-12868fd25acc.min.js';
 
 export default {
   DEV_LAUNCH_SCRIPT,
