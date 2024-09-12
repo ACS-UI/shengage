@@ -331,7 +331,7 @@ function updateElement(comments, commentContainer = null) {
   const commentTexts = subContainer.querySelectorAll('.reply-comment');
   commentTexts.forEach((commentText) => {
     const reactionPanel = commentText.parentElement.querySelector('.comments-reaction');
-    if (isSignedIn && (config.enableEmoji || config.enableGify)) {
+    if (isSignedIn && (config.enableEmoji || config.enableGif)) {
       renderReactionWidget(reactionPanel, commentText, config);
     }
 
@@ -438,7 +438,7 @@ async function initComments(block) {
   if (comments.length) {
     updateElement(comments, commentContainer);
   }
-  if (isSignedIn && (config.enableEmoji || config.enableGify)) {
+  if (isSignedIn && (config.enableEmoji || config.enableGif)) {
     const reactionPanel = commentContainer.querySelector('.comments-reaction');
     renderReactionWidget(reactionPanel, commentText, config);
   }
@@ -482,7 +482,7 @@ export default async function decorate(block) {
     storyId: document.querySelector('meta[name="storyid"]')?.content || '',
   };
   config.enableEmoji = config.enableEmoji !== 'false';
-  config.enableGify = config.enableGify !== 'false';
+  config.enableGif = config.enableGif !== 'false';
   config.replyLimit = isMobile ? 2 : config.replyLimit;
 
   // Update the block's inner HTML to show a loading spinner

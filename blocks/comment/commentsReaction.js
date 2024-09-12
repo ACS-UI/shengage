@@ -169,16 +169,16 @@ function createReactionHandler(inputElement, parent, config) {
         const tabItem = reactionWrapper.querySelector('.reaction-tab-item.emoji');
         await loadEmojiPicker(tabItem, reactionPanel);
       }
-      if (config.enableGify) {
+      if (config.enableGif) {
         const tabItem = reactionWrapper.querySelector('.reaction-tab-item.gif');
         await loadGIFPicker(tabItem);
       }
-      // if (config.enableGify) {
+      // if (config.enableGif) {
       //   const gifElement = reactionWrapper.querySelector('.gif-results');
       //   displayGIFs(gifElement);
       // }
     });
-    if (config.enableEmoji && config.enableGify) {
+    if (config.enableEmoji && config.enableGif) {
       tabLinks.forEach(async (tab) => {
         // const tabVal = tab.getAttribute('data-tab');
         // const tabItem = reactionWrapper.querySelector(`.reaction-tab-item.${tabVal}`);
@@ -205,16 +205,16 @@ function createReactionHandler(inputElement, parent, config) {
   const createReactionWidget = () => {
     const widget = htmlToElement(`
       <div class="reaction-widget">
-        <button class="reaction-button emoji-button" title="React with Emoji">😁</button>
+        <button class="reaction-button emoji-button" title="React with Emoji">🙂</button>
         <div class="reaction-panel">
           <div class="reaction-tab-container">
-            ${config.enableEmoji && config.enableGify ? `<div class="reaction-tab-header">
+            ${config.enableEmoji && config.enableGif ? `<div class="reaction-tab-header">
               <button class="reaction-tab-link active" data-tab="emoji">Emoji</button>
               <button class="reaction-tab-link" data-tab="gif">GIFs</button>
             </div>` : ''}
             <div class="reaction-tab-content">
             ${config.enableEmoji ? `<div class="reaction-tab-item emoji ${config.enableEmoji ? 'active' : ''}"></div>` : ''}
-            ${config.enableGify ? `<div class="reaction-tab-item gif ${config.enableGify && !config.enableEmoji ? 'active' : ''}"></div>` : ''}
+            ${config.enableGif ? `<div class="reaction-tab-item gif ${config.enableGif && !config.enableEmoji ? 'active' : ''}"></div>` : ''}
             </div>
           </div>
         </div>
