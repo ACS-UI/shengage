@@ -5,7 +5,7 @@
  */
 import { htmlToElement, apiRequest, getAuthoredData } from '../../scripts/scripts.js';
 import { isSignedInUser, getUserData, addTooltips } from '../../scripts/auth.js';
-import loadReactionWidget from './commentsReaction.js';
+import renderReactionWidget from './commentsReaction.js';
 
 let userDetails;
 let commentsSectionDiv;
@@ -112,7 +112,7 @@ const postComment = async (comment) => {
       data: comment,
     });
 
-    return response.data ?? null;
+    return sortCommentsDescending(response.data) ?? null;
   } catch (error) {
     console.error('Error posting comment:', error);
     return null;
@@ -218,6 +218,10 @@ function toggleReplyForm(commentId) {
   currentOpenReplyForm = isCurrentlyVisible ? null : replyForm;
 }
 
+function isEmptyString(string) {
+  return string.trim() === '' || /^(&nbsp;)+$/.test(string.trim());
+}
+
 /**
  * Submits a reply to a comment and updates the comments section.
  * @param {string} commentId - The ID of the comment to reply to.
@@ -226,8 +230,10 @@ function toggleReplyForm(commentId) {
 async function submitReply(commentId, comments) {
   const replyForm = commentsSectionDiv.querySelector(`#reply-form-${commentId.replace('.', '\\.')}`);
   const textarea = replyForm?.querySelector('.reply-comment');
-  const replyText = textarea?.innerHTML.trim();
-  if (!replyText) return;
+  const replyText = textarea?.innerHTML;
+  if (isEmptyString(replyText)) return;
+  textarea.innerHTML = '';
+  textarea.setAttribute('placeholder', 'Please wait, we are posting your comment...');
   const newReply = await prepareComment(comments, commentId, replyText, 1);
   if (!newReply.postedBy.id) return;
   try {
@@ -306,7 +312,11 @@ async function handleEventDelegation(event, comments) {
  * and setting up event delegation for comment interactions.
  * @param {Array} comments - The array of comment data objects to render.
  */
-function updateElement(comments) {
+function updateElement(comments, commentContainer = null) {
+  if (!commentsSectionDiv) {
+    commentsSectionDiv = htmlToElement('<div class="comments-section"></div>');
+    commentContainer.appendChild(commentsSectionDiv);
+  }
   commentsSectionDiv.innerHTML = '';
   const subContainer = document.createElement('div');
   subContainer.innerHTML = comments?.map(createCommentHtml).join('') || '';
@@ -321,8 +331,8 @@ function updateElement(comments) {
   const commentTexts = subContainer.querySelectorAll('.reply-comment');
   commentTexts.forEach((commentText) => {
     const reactionPanel = commentText.parentElement.querySelector('.comments-reaction');
-    if (isSignedIn) {
-      loadReactionWidget(reactionPanel, commentText);
+    if (isSignedIn && (config.enableEmoji || config.enableGify)) {
+      renderReactionWidget(reactionPanel, commentText, config);
     }
 
     commentText.addEventListener('input', () => {
@@ -426,11 +436,11 @@ async function initComments(block) {
   const commentText = block.querySelector('.main-comment');
   const submitBtn = block.querySelector('.submit-main-comment');
   if (comments.length) {
-    updateElement(comments);
+    updateElement(comments, commentContainer);
   }
-  if (isSignedIn) {
+  if (isSignedIn && (config.enableEmoji || config.enableGify)) {
     const reactionPanel = commentContainer.querySelector('.comments-reaction');
-    loadReactionWidget(reactionPanel, commentText);
+    renderReactionWidget(reactionPanel, commentText, config);
   }
   commentText.addEventListener('input change', () => {
     submitBtn.disabled = !commentText.innerHTML;
@@ -445,10 +455,10 @@ async function initComments(block) {
       window.adobeIMS.signIn();
     }
     const commentTextValue = block.querySelector('.main-comment').innerHTML;
-    if (!commentTextValue) return;
+    if (isEmptyString(commentTextValue)) return;
     submitBtn.disabled = true;
     block.querySelector('.main-comment').innerHTML = '';
-    commentText.placeholder = 'Please wait, we are posting your comment...';
+    commentText.setAttribute('placeholder', 'Please wait, we are posting your comment...');
     comments = await getCommentData();
     const parentId = comments.length > 0
       ? Math.max(...comments.map((comment) => parseInt(comment.commentId, 10))) : 0;
@@ -456,9 +466,9 @@ async function initComments(block) {
     const newComment = await prepareComment(comments, parentId, commentTextValue);
     if (!newComment.postedBy.id) return;
     comments = await postComment(newComment);
-    updateElement(comments);
+    updateElement(comments, commentContainer);
     submitBtn.disabled = false;
-    commentText.placeholder = 'What are your thoughts?';
+    commentText.setAttribute('What are your thoughts?');
   });
 }
 
@@ -471,7 +481,8 @@ export default async function decorate(block) {
     ...getAuthoredData(block),
     storyId: document.querySelector('meta[name="storyid"]')?.content || '',
   };
-
+  config.enableEmoji = config.enableEmoji !== 'false';
+  config.enableGify = config.enableGify !== 'false';
   config.replyLimit = isMobile ? 2 : config.replyLimit;
 
   // Update the block's inner HTML to show a loading spinner

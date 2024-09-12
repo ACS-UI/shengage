@@ -8,7 +8,7 @@ import { loadScript } from '../../scripts/aem.js';
  * @param {HTMLElement} parent - The parent element where the reaction widget will be appended.
  * @returns {Object} An object containing methods to handle GIF and emoji selection.
  */
-function createReactionHandler(inputElement, parent) {
+function createReactionHandler(inputElement, parent, config) {
   /**
    * Inserts the selected GIF into the inputElement.
    * @param {string} gifUrl - The URL of the selected GIF.
@@ -88,43 +88,48 @@ function createReactionHandler(inputElement, parent) {
   };
 
   /**
-   * Loads the reactions based on the tab type.
-   * @param {string} tabType - The type of tab ('emoji' or 'gif').
-   * @param {HTMLElement} tabContent - The container to hold the tab content.
-   */
-  const loadReactions = async (tabType, tabContent, reactionPanel) => {
-    if (tabType === 'emoji') {
-      if (!window.emojiPickerLoaded) {
-        window.emojiPickerLoaded = true;
-        await loadScript('https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js', { type: 'module' });
-      }
-      const emojiPicker = document.createElement('emoji-picker');
-      tabContent.appendChild(emojiPicker);
-      emojiPicker.addEventListener('emoji-click', (event) => {
-        const emoji = event.detail.unicode;
-        inputElement.innerHTML += emoji;
-        console.log('Selected emoji:', emoji);
-        reactionPanel.classList.remove('show');
-      });
-    } else if (tabType === 'gif') {
-      const gifContainer = htmlToElement(`
-        <div class="gif-picker-container">
-          <input type="text" class="gif-search" placeholder="Search for GIFs...">
-          <div class="gif-results"></div>
-        </div>
-        <div class="selected-gif-container"></div>`);
-      tabContent.appendChild(gifContainer);
-      const gifSearch = gifContainer.querySelector('.gif-search');
-      const gifElement = gifContainer.querySelector('.gif-results');
-      await searchGIFs();
-
-      gifSearch.addEventListener('input', debounce((event) => {
-        const query = event.target.value.trim();
-        if (query) {
-          searchGIFs(gifElement, query);
-        }
-      }, 1000));
+  * Loads the emoji picker and handles emoji selection.
+  * @param {HTMLElement} tabContent - The container to hold the emoji picker.
+  * @param {HTMLElement} reactionPanel - The reaction panel to be toggled after emoji selection.
+  */
+  const loadEmojiPicker = async (parentElement, reactionPanel) => {
+    if (!window.emojiPickerLoaded) {
+      window.emojiPickerLoaded = true;
+      await loadScript('https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js', { type: 'module' });
     }
+    const emojiPicker = document.createElement('emoji-picker');
+    parentElement.appendChild(emojiPicker);
+    emojiPicker.addEventListener('emoji-click', (event) => {
+      const emoji = event.detail.unicode;
+      inputElement.innerHTML += emoji;
+      console.log('Selected emoji:', emoji);
+      reactionPanel.classList.remove('show');
+    });
+  };
+
+  /**
+  * Loads the GIF picker, sets up search functionality, and handles GIF selection.
+  * @param {HTMLElement} tabContent - The container to hold the GIF picker.
+  */
+  const loadGIFPicker = async (parentElement) => {
+    const gifContainer = htmlToElement(`
+      <div class="gif-picker-container">
+        <input type="text" class="gif-search" placeholder="Search for GIFs...">
+        <div class="gif-results"></div>
+      </div>
+      <div class="selected-gif-container"></div>`);
+    parentElement.appendChild(gifContainer);
+
+    const gifSearch = gifContainer.querySelector('.gif-search');
+    const gifElement = gifContainer.querySelector('.gif-results');
+    await searchGIFs(gifElement);
+
+    gifSearch.addEventListener('input', debounce((event) => {
+      const query = event.target.value.trim();
+      if (query) {
+        searchGIFs(gifElement, query);
+      }
+    }, 1000));
   };
 
   /**
@@ -140,10 +145,6 @@ function createReactionHandler(inputElement, parent) {
     const clickedTab = e.target;
     clickedTab.classList.add('active');
     const tabType = clickedTab.getAttribute('data-tab');
-    if (tabType === 'gif') {
-      const gifElement = reactionWrapper.querySelector('.gif-results');
-      displayGIFs(gifElement);
-    }
     const reactionTabContent = reactionWrapper.querySelector(`.reaction-tab-item.${tabType}`);
     reactionTabContent.classList.add('active');
   };
@@ -156,19 +157,33 @@ function createReactionHandler(inputElement, parent) {
     const reactionButton = reactionWrapper.querySelector('.reaction-button');
     const reactionPanel = reactionWrapper.querySelector('.reaction-panel');
     const tabLinks = reactionWrapper.querySelectorAll('.reaction-tab-link');
-    reactionButton.addEventListener('click', () => {
+    reactionButton.addEventListener('click', async () => {
       reactionPanel.classList.toggle('show');
+      if (config.enableEmoji) {
+        const tabItem = reactionWrapper.querySelector('.reaction-tab-item.emoji');
+        await loadEmojiPicker(tabItem, reactionPanel);
+      }
+      if (config.enableGify) {
+        const tabItem = reactionWrapper.querySelector('.reaction-tab-item.gif');
+        await loadGIFPicker(tabItem);
+      }
+      // if (config.enableGify) {
+      //   const gifElement = reactionWrapper.querySelector('.gif-results');
+      //   displayGIFs(gifElement);
+      // }
     });
-
-    tabLinks.forEach((tab) => {
-      const tabVal = tab.getAttribute('data-tab');
-      const tabItem = reactionWrapper.querySelector(`.reaction-tab-item.${tabVal}`);
-      loadReactions(tabVal, tabItem, reactionPanel);
-
-      tab.addEventListener('click', (e) => {
-        handleTabClick(e, tabLinks, reactionWrapper);
+    if (config.enableEmoji && config.enableGify) {
+      tabLinks.forEach(async (tab) => {
+        // const tabVal = tab.getAttribute('data-tab');
+        // const tabItem = reactionWrapper.querySelector(`.reaction-tab-item.${tabVal}`);
+        // loadReactions(tabVal, tabItem, reactionPanel);
+        // await loadEmojiPicker(tabItem, reactionPanel);
+        // await loadGIFPicker(tabItem);
+        tab.addEventListener('click', (e) => {
+          handleTabClick(e, tabLinks, reactionWrapper);
+        });
       });
-    });
+    }
 
     window.addEventListener('click', (event) => {
       if (!reactionButton.contains(event.target) && !event.target.closest('.reaction-panel')) {
@@ -187,13 +202,13 @@ function createReactionHandler(inputElement, parent) {
         <button class="reaction-button emoji-button" title="React with Emoji">😁</button>
         <div class="reaction-panel">
           <div class="reaction-tab-container">
-            <div class="reaction-tab-header">
+            ${config.enableEmoji && config.enableGify ? `<div class="reaction-tab-header">
               <button class="reaction-tab-link active" data-tab="emoji">Emoji</button>
               <button class="reaction-tab-link" data-tab="gif">GIFs</button>
-            </div>
+            </div>` : ''}
             <div class="reaction-tab-content">
-              <div class="reaction-tab-item emoji active"></div>
-              <div class="reaction-tab-item gif"></div>
+            ${config.enableEmoji ? `<div class="reaction-tab-item emoji ${config.enableEmoji ? 'active' : ''}"></div>` : ''}
+            ${config.enableGify ? `<div class="reaction-tab-item gif ${config.enableGify && !config.enableEmoji ? 'active' : ''}"></div>` : ''}
             </div>
           </div>
         </div>
@@ -209,8 +224,8 @@ function createReactionHandler(inputElement, parent) {
   };
 }
 
-export default async function loadReactionWidget(parent, inputElement) {
-  const reactionHandler = createReactionHandler(inputElement, parent);
+export default async function renderReactionWidget(parent, inputElement, config) {
+  const reactionHandler = createReactionHandler(inputElement, parent, config);
   await reactionHandler.createReactionWidget();
   return true;
 }
