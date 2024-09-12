@@ -468,7 +468,7 @@ async function initComments(block) {
     comments = await postComment(newComment);
     updateElement(comments, commentContainer);
     submitBtn.disabled = false;
-    commentText.setAttribute('What are your thoughts?');
+    commentText.setAttribute('placeholder', 'What are your thoughts?');
   });
 }
 
