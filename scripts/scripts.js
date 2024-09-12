@@ -87,7 +87,8 @@ export function getConfig() {
   window.shengage = window.shengage || {};
   window.shengage.config = {
     ims,
-    adobeIoEndpoint: 'https://51837-shengageapp-dev.adobeioruntime.net/api/v1/web/shengage',
+    adobeIoEndpoint: 'https://51837-shengageapp.adobeioruntime.net/api/v1/web/shengage',
+    giphyApiKey: 'vcXGLBipjtwyEqhVQgBf8yfU6wAegwA3',
   };
   return window.shengage.config;
 }
@@ -244,6 +245,20 @@ export async function apiRequest({
     console.error(`${method} request to ${endpoint} failed:`, error);
     throw error;
   }
+}
+
+/**
+ * Creates a debounce function that delays the execution of the callback function.
+ * @param {Function} callback - The function to be debounced.
+ * @param {number} delay - The debounce delay in milliseconds.
+ * @returns {Function} A debounced function that delays the callback execution.
+ */
+export function debounce(callback, delay) {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => callback.apply(this, args), delay);
+  };
 }
 
 /**
