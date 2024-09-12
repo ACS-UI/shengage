@@ -84,6 +84,8 @@ function createReactionHandler(inputElement, parent, config) {
           displayGIFs(gifElement);
         })
         .catch((error) => console.error('Error fetching GIFs:', error));
+    } else {
+      displayGIFs(gifElement);
     }
   };
 
@@ -114,24 +116,26 @@ function createReactionHandler(inputElement, parent, config) {
   * @param {HTMLElement} tabContent - The container to hold the GIF picker.
   */
   const loadGIFPicker = async (parentElement) => {
-    const gifContainer = htmlToElement(`
-      <div class="gif-picker-container">
-        <input type="text" class="gif-search" placeholder="Search for GIFs...">
-        <div class="gif-results"></div>
-      </div>
-      <div class="selected-gif-container"></div>`);
-    parentElement.appendChild(gifContainer);
+    if (parentElement.querySelector('.gif-picker-container') === null) {
+      const gifContainer = htmlToElement(`
+        <div class="gif-picker-container">
+          <input type="text" class="gif-search" placeholder="Search for GIFs...">
+          <div class="gif-results"></div>
+        </div>
+        <div class="selected-gif-container"></div>`);
+      parentElement.appendChild(gifContainer);
 
-    const gifSearch = gifContainer.querySelector('.gif-search');
-    const gifElement = gifContainer.querySelector('.gif-results');
-    await searchGIFs(gifElement);
+      const gifSearch = gifContainer.querySelector('.gif-search');
+      const gifElement = gifContainer.querySelector('.gif-results');
+      await searchGIFs(gifElement);
 
-    gifSearch.addEventListener('input', debounce((event) => {
-      const query = event.target.value.trim();
-      if (query) {
-        searchGIFs(gifElement, query);
-      }
-    }, 1000));
+      gifSearch.addEventListener('input', debounce((event) => {
+        const query = event.target.value.trim();
+        if (query) {
+          searchGIFs(gifElement, query);
+        }
+      }, 1000));
+    }
   };
 
   /**
