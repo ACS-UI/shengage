@@ -44,7 +44,7 @@ main .section.comment-container {
 .comment-area .submit-comment {
   margin: 0;
   padding: 5px 15px;
-  background-color: #CACACA;
+  background-color: #2680EB;
   color: white;
   border: none;
   border-radius: 25px;
@@ -55,7 +55,12 @@ main .section.comment-container {
 }
 
 .comment-area .submit-comment:hover, .comment-area .submit-comment:focus {
-  background-color: #918d8d;
+  background-color: var(--link-hover-color);
+}
+
+.comment-area .submit-comment:disabled, .comment-area .submit-comment:disabled:hover {
+  background-color: #CACACA;
+  cursor: not-allowed;
 }
 
 .comment-area .comments-section {
