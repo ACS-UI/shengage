@@ -429,7 +429,7 @@ async function initComments(block) {
         </div>
         <div class="comment-actions align-right">
           ${isSignedIn ? '<div class="comments-reaction"></div>' : ''}
-          <button disabled class="submit-comment submit-main-comment">${btnText}</button>
+          <button ${isSignedIn ? 'disabled' : ''} class="submit-comment submit-main-comment">${btnText}</button>
         </div>
       </div>
       ${comments.length > 0 ? '<div class="comments-section"></div>' : ''}
@@ -453,7 +453,7 @@ async function initComments(block) {
     if (isEmptyString(commentText.innerHTML)) {
       commentText.innerHTML = '';
     }
-    submitBtn.disabled = isEmptyString(commentText.innerHTML);
+    submitBtn.disabled = isEmptyString(commentText.innerHTML) && isSignedIn;
     commentText.style.height = 'auto';
     commentText.style.height = `${commentText.scrollHeight - 40}px`;
   });
