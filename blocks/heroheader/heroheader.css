@@ -35,12 +35,21 @@
         justify-content: space-between;
         align-items: center;   
        
+        @media (width < 768px){
+            background-repeat: repeat;
+            flex-direction: column;
+        }
+
         .row-0 {
             h3 {
                 color: var(--white);
                 font-size: 48px;   
                 margin-block-end: 0;     
-                margin-bottom: 16px;       
+                margin-bottom: 16px;
+                
+                @media (width < 768px){
+                 margin-block-start: 0;
+                }
             }
         }
 
@@ -80,7 +89,8 @@
     }
 
     @media (width < 768px){
-        background-repeat: repeat; 
+        background-repeat: repeat;
+        padding: 10px 0;
     }
 
 }

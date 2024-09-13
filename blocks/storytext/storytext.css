@@ -34,8 +34,16 @@
 
             .box-0{
                 width: 100%;
+
+                @media (width < 768px){
+                a.button{
+                    padding: 5px 16px;
+                    white-space: wrap;
+                }
+                }
+
             }
-            
+
             .box-1{
                 width: 85%;
             }
