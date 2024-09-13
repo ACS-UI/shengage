@@ -299,3 +299,20 @@ textarea {
   visibility: visible;
   opacity: 1;
 }
+
+/* story section styles */
+.section.storytext{
+  font-size: 20px;
+  display: flex;
+
+  .default-content-wrapper{
+    width: 70%;
+    margin: 0;   
+  }
+
+  .quote-wrapper{
+    padding-top: 20px;
+    width: 30%;
+  }
+  
+}
