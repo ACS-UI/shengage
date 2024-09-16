@@ -326,6 +326,8 @@ textarea {
 /* story section styles */
 @media (width > 900px) {
   .section.storytext {
+    max-width: var(--gutter-width);
+    margin: auto;
     font-size: 20px;
     display: flex;
 
