@@ -1,0 +1,127 @@
+.section.title-card-container {
+    margin-top: 64px;
+    background-image: url("../../assets/progdetheader.webp");
+    background-repeat: no-repeat;  
+    background-color: #f4f4f6;
+    padding-bottom: 0;
+
+    .title-card.black {
+        padding-top: 40px;
+        position: relative;
+
+        h3 {
+            position: absolute;
+            left: 50px;
+            top: 35%;
+            color: var(--white);
+            z-index: 3;
+            font-size: 48px;
+        }
+
+        img {
+            z-index: 2;
+            border-radius: 10px;
+            box-shadow: 20px 20px var(--link-color);
+
+        }
+
+    }
+
+    /* no banner variation styles */
+
+    .title-card.no-banner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;   
+       
+        @media (width < 768px){
+            background-repeat: repeat;
+            flex-direction: column;
+        }
+
+        .row-0 {
+            h3 {
+                color: var(--white);
+                font-size: 48px;   
+                margin-block-end: 0;     
+                margin-bottom: 16px;
+                
+                @media (width < 768px){
+                 margin-block-start: 0;
+                }
+            }
+        }
+
+        .row-1 {
+            h3 {
+                font-size: 18px;
+                color: white;
+                background-color: #2680EB;
+                border-radius: 10px;
+                padding-right: 18px;
+                width: 150px;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 100px;
+              
+            }
+
+            h3::before {
+                content: url("../../assets/calendar.svg");
+                display: inline-block;
+                padding-right: 10px;
+            }
+
+
+        }
+
+    }
+
+    .default-content-wrapper{
+        p{
+            padding-top: 64px;
+            padding-bottom: 64px;
+            font-size: 20px;
+        }
+    }
+
+    @media (width < 768px){
+        background-repeat: repeat;
+        padding: 10px 0;
+    }
+
+}
+
+header nav .nav-sections .nav-drop[aria-expanded="false"]::after {
+    content: url('../../assets/arrow.svg') !important;
+
+}
+
+header.header-wrapper nav,
+header.header-wrapper nav a:any-link {
+    color: var(--black);
+}
+
+header.header-wrapper nav ul>li>ul a:any-link {
+    color: #fff
+}
+
+@media (width >=900px) {
+    header nav .nav-sections li.nav-drop[aria-expanded="true"] {
+        color: white;
+    }
+}
+
+@media (width < 900px) {
+    header.header-wrapper nav ul>li>ul a:any-link {
+        color: black;
+    }
+
+    header nav .nav-sections li.nav-drop[aria-expanded="true"] {
+        color: black;
+    }
+
+
+}

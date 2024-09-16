@@ -21,14 +21,14 @@
   --dark-color: #ccc;
   --text-color: black;
   --blue-heading: #31A6FF;
-  --blue-text:#0077B5;
+  --blue-text: #0077B5;
 
   /* fonts */
-  --body-font-family: 'Adobe Clean' , roboto, roboto-fallback;
+  --body-font-family: 'Adobe Clean', roboto, roboto-fallback;
   --heading-font-family: var(--body-font-family);
-  --fixed-font-family: 'Adobe Clean','Roboto Mono', menlo, consolas, 'Liberation Mono', monospace;
+  --fixed-font-family: 'Adobe Clean', 'Roboto Mono', menlo, consolas, 'Liberation Mono', monospace;
 
-/* body sizes */
+  /* body sizes */
   --body-font-size-m: 16px;
   --body-font-size-s: 12px;
   --body-font-size-xs: 10px;
@@ -45,7 +45,7 @@
   --nav-height: 64px;
 
   /* page width */
-  --gutter-width:1200px;
+  --gutter-width: 1200px;
 }
 
 @font-face {
@@ -55,7 +55,7 @@
   src: local('Arial');
 }
 
-@media (width >= 900px) {
+@media (width >=900px) {
   :root {
     --heading-font-size-xxl: 60px;
     --heading-font-size-xl: 48px;
@@ -74,7 +74,7 @@ body {
   color: var(--text-color);
   background-color: var(--background-color);
   display: none;
-  overflow-x: hidden ;
+  overflow-x: hidden;
 }
 
 body.appear {
@@ -99,12 +99,29 @@ h6 {
   scroll-margin: calc(var(--nav-height) + 1em);
 }
 
-h1 { font-size: var(--heading-font-size-xxl); }
-h2 { font-size: var(--heading-font-size-xl); }
-h3 { font-size: var(--heading-font-size-l); }
-h4 { font-size: var(--heading-font-size-m); }
-h5 { font-size: var(--heading-font-size-s); }
-h6 { font-size: var(--heading-font-size-xs); }
+h1 {
+  font-size: var(--heading-font-size-xxl);
+}
+
+h2 {
+  font-size: var(--heading-font-size-xl);
+}
+
+h3 {
+  font-size: var(--heading-font-size-l);
+}
+
+h4 {
+  font-size: var(--heading-font-size-m);
+}
+
+h5 {
+  font-size: var(--heading-font-size-s);
+}
+
+h6 {
+  font-size: var(--heading-font-size-xs);
+}
 
 p,
 dl,
@@ -169,6 +186,10 @@ button {
   overflow: hidden;
   text-overflow: ellipsis;
   border-radius: 30px;
+
+  @media (width <= 600px){
+    white-space: wrap;
+  }
 }
 
 a.button:hover,
@@ -214,15 +235,15 @@ main .section {
   padding: 64px 16px;
 }
 
-@media (width >= 600px) {
+@media (width >=600px) {
   main .section {
     padding: 64px 32px;
     padding-top: 0;
   }
 }
 
-@media (width >= 900px) {
-  .section > div {
+@media (width >=900px) {
+  .section>div {
     max-width: var(--gutter-width);
     margin: auto;
   }
@@ -234,7 +255,7 @@ main .section.highlight {
   background-color: transparent;
 }
 
-.d-none{
+.d-none {
   display: none !important;
 }
 
@@ -273,14 +294,16 @@ textarea {
   padding: 5px 10px;
   position: absolute;
   z-index: 1;
-  bottom: 125%; /* Position the tooltip above the trigger */
+  bottom: 125%;
+
+  /* Position the tooltip above the trigger */
   left: 50%;
   transform: translateX(-50%);
   opacity: 0;
   transition: opacity 0.3s;
-  white-space: nowrap; 
-  max-width: 200px; 
-  overflow-wrap: break-word; 
+  white-space: nowrap;
+  max-width: 200px;
+  overflow-wrap: break-word;
   word-wrap: break-word;
 }
 
@@ -298,4 +321,28 @@ textarea {
 .tooltip-container:hover .tooltip {
   visibility: visible;
   opacity: 1;
+}
+
+/* story section styles */
+@media (width > 900px) {
+  .section.two-column-layout {
+    max-width: var(--gutter-width);
+    margin: auto;
+    font-size: 20px;
+    display: flex;
+   gap: 30px;
+
+
+    .default-content-wrapper {
+      width: 70%;
+      margin: 0;
+    }
+
+    .quote-wrapper {
+      padding-top: 20px;
+      width: 30%;
+
+    }
+
+  }
 }
