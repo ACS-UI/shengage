@@ -1,11 +1,11 @@
-.section.heroheader-container {
+.section.title-card-container {
     margin-top: 64px;
     background-image: url("../../assets/progdetheader.webp");
     background-repeat: no-repeat;  
     background-color: #f4f4f6;
     padding-bottom: 0;
 
-    .heroheader.black {
+    .title-card.black {
         padding-top: 40px;
         position: relative;
 
@@ -29,7 +29,7 @@
 
     /* no banner variation styles */
 
-    .heroheader.no-banner {
+    .title-card.no-banner {
         display: flex;
         justify-content: space-between;
         align-items: center;   
