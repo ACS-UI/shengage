@@ -83,7 +83,7 @@ export async function loadIms() {
   window.imsLoaded = window.imsLoaded || new Promise((resolve, reject) => {
     const timeout = setTimeout(() => reject(new Error('IMS timeout')), 5000);
     window.adobeid = {
-      scope: 'AdobeID,additional_info.company,additional_info.ownerOrg,avatar,openid,read_organizations,read_pc,session,account_cluster.read',
+      scope: 'AdobeID,additional_info.company,additional_info.ownerOrg,avatar,openid,read_organizations,read_pc,session,account_cluster.read,pps.read',
       locale: 'en',
       ...ims,
       onReady: () => {
