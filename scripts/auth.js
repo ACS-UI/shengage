@@ -1,28 +1,6 @@
 // eslint-disable-next-line import/no-cycle, max-classes-per-file
 import { loadIms } from './scripts.js';
-
-/**
- * Fetches user data from Adobe IMS.
- * @returns {Promise<Object>} - The user data, including image, id, and name.
- */
-export async function getUserData() {
-  try {
-    await loadIms();
-    const profile = await window.adobeIMS.getProfile();
-    return {
-      image: '../assets/profile.png',
-      id: profile.userId,
-      name: profile.displayName,
-    };
-  } catch (error) {
-    console.error('Error fetching user data:', error);
-    return {
-      image: '../assets/profile.png',
-      id: null,
-      name: 'Unknown',
-    };
-  }
-}
+import getConfig from './config.js';
 
 /**
  * Checks if the user is signed in.
@@ -35,6 +13,58 @@ export async function isSignedInUser() {
   } catch (error) {
     console.error('Error checking sign-in status:', error);
     return false;
+  }
+}
+
+export async function getPPSProfile() {
+  const isSignedIn = await isSignedInUser();
+  if (!isSignedIn) return null;
+
+  const { token } = window.adobeIMS.getAccessToken();
+  const accountId = (await window.adobeIMS.getProfile()).userId;
+
+  const { ppsOrigin, ims } = getConfig();
+
+  const promise = new Promise((resolve, reject) => {
+    fetch(`${ppsOrigin}/api/profile`, {
+      headers: {
+        'X-Api-Key': ims.client_id,
+        'X-Account-Id': accountId,
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => (res.ok ? res.json() : undefined))
+      .then((json) => {
+        if (json) resolve(json);
+        else reject(new Error('Failed to fetch PPS profile'));
+      })
+      .catch(reject);
+  });
+  return promise;
+}
+
+/**
+ * Fetches user data from Adobe IMS.
+ * @returns {Promise<Object>} - The user data, including image, id, and name.
+ */
+export async function getUserData() {
+  try {
+    await loadIms();
+    const profile = await window.adobeIMS.getProfile();
+    const ppsProfile = await getPPSProfile();
+
+    return {
+      image: ppsProfile ? ppsProfile?.images['50'] : '../assets/profile.png',
+      id: profile.userId,
+      name: profile.displayName,
+    };
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    return {
+      image: '../assets/profile.png',
+      id: null,
+      name: 'Unknown',
+    };
   }
 }
 
