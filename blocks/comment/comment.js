@@ -110,6 +110,7 @@ const postComment = async (comment) => {
       method: 'POST',
       endpoint,
       data: comment,
+      headers: { 'x-ims-token': window.adobeIMS.getAccessToken()?.token || '' },
     });
 
     return sortCommentsDescending(response.data) ?? null;
@@ -268,6 +269,7 @@ async function submitLike(commentId, userHasLiked) {
       method: 'POST',
       endpoint: '/likeForComment',
       data: likedData,
+      headers: { 'x-ims-token': window.adobeIMS.getAccessToken()?.token || '' },
     });
 
     return data ?? null;
