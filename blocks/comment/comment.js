@@ -329,6 +329,7 @@ function updateElement(comments, commentContainer = null) {
   });
 
   const commentTexts = subContainer.querySelectorAll('.reply-comment');
+  const replyBtn = subContainer.querySelector('.submit-reply');
   commentTexts.forEach((commentText) => {
     const reactionPanel = commentText.parentElement.querySelector('.comments-reaction');
     if (isSignedIn && (config.enableEmoji || config.enableGif)) {
@@ -336,6 +337,10 @@ function updateElement(comments, commentContainer = null) {
     }
 
     commentText.addEventListener('input', () => {
+      if (isEmptyString(commentText.innerHTML)) {
+        commentText.innerHTML = '';
+      }
+      replyBtn.disabled = isEmptyString(commentText.innerHTML);
       commentText.style.height = 'auto';
       commentText.style.height = `${commentText.scrollHeight - 40}px`;
     });
@@ -391,7 +396,7 @@ function createCommentHtml(data) {
           <div class="reply-comment" contenteditable="true" placeholder="Write a reply..."></div>
           <div>
             ${isSignedIn ? '<div class="comments-reaction"></div>' : ''}
-            <button class="submit-comment submit-reply" data-comment-id="${commentId}">Reply</button>
+            <button disabled class="submit-comment submit-reply" data-comment-id="${commentId}">Reply</button>
           </div>
         </div>
       </div>
@@ -424,7 +429,7 @@ async function initComments(block) {
         </div>
         <div class="comment-actions align-right">
           ${isSignedIn ? '<div class="comments-reaction"></div>' : ''}
-          <button class="submit-comment submit-main-comment">${btnText}</button>
+          <button ${isSignedIn ? 'disabled' : ''} class="submit-comment submit-main-comment">${btnText}</button>
         </div>
       </div>
       ${comments.length > 0 ? '<div class="comments-section"></div>' : ''}
@@ -443,8 +448,12 @@ async function initComments(block) {
     const reactionPanel = commentContainer.querySelector('.comments-reaction');
     renderReactionWidget(reactionPanel, commentText, config);
   }
-  commentText.addEventListener('input change', () => {
-    submitBtn.disabled = !commentText.innerHTML;
+
+  commentText.addEventListener('input', () => {
+    if (isEmptyString(commentText.innerHTML)) {
+      commentText.innerHTML = '';
+    }
+    submitBtn.disabled = isEmptyString(commentText.innerHTML) && isSignedIn;
     commentText.style.height = 'auto';
     commentText.style.height = `${commentText.scrollHeight - 40}px`;
   });
@@ -455,10 +464,10 @@ async function initComments(block) {
     if (!isSignedIn) {
       window.adobeIMS.signIn();
     }
-    const commentTextValue = block.querySelector('.main-comment').innerHTML;
+    const commentTextValue = commentText.innerHTML;
     if (isEmptyString(commentTextValue)) return;
     submitBtn.disabled = true;
-    block.querySelector('.main-comment').innerHTML = '';
+    commentText.innerHTML = '';
     commentText.setAttribute('placeholder', 'Please wait, we are posting your comment...');
     comments = await getCommentData();
     const parentId = comments.length > 0
