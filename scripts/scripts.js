@@ -199,6 +199,7 @@ export async function apiRequest({
   method = 'GET',
   endpoint,
   data = {},
+  headers,
 }) {
   try {
     const { adobeIoEndpoint } = getConfig();
@@ -207,6 +208,7 @@ export async function apiRequest({
       method,
       headers: {
         'Content-Type': 'application/json',
+        ...headers,
       },
     };
 

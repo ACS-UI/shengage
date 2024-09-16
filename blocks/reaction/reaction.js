@@ -26,6 +26,7 @@ async function handleReaction(reaction = null) {
         userId: userDetails.id,
         ...(reaction && { reaction }),
       },
+      headers: { 'x-ims-token': window.adobeIMS.getAccessToken()?.token || '' },
     });
     // console.log(`${reaction ? 'Reaction submitted' : 'Reaction fetched'}:`, reaction );
     return data;
