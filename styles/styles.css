@@ -325,11 +325,12 @@ textarea {
 
 /* story section styles */
 @media (width > 900px) {
-  .section.storytext {
+  .section.two-column-layout {
     max-width: var(--gutter-width);
     margin: auto;
     font-size: 20px;
     display: flex;
+   gap: 30px;
 
 
     .default-content-wrapper {
