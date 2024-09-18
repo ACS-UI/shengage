@@ -15,6 +15,7 @@ import {
   loadCSS,
   loadScript,
 } from './aem.js';
+import getConfig from './config.js';
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
 
@@ -70,27 +71,6 @@ export function decorateMain(main) {
   buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
-}
-
-/**
- * get site config
- */
-export function getConfig() {
-  if (window.shengage && window.shengage.config) {
-    return window.shengage.config;
-  }
-  const ims = {
-    client_id: 'shengage',
-    environment: 'stage',
-  };
-
-  window.shengage = window.shengage || {};
-  window.shengage.config = {
-    ims,
-    adobeIoEndpoint: 'https://51837-shengageapp.adobeioruntime.net/api/v1/web/shengage',
-    giphyApiKey: 'vcXGLBipjtwyEqhVQgBf8yfU6wAegwA3',
-  };
-  return window.shengage.config;
 }
 
 /**
