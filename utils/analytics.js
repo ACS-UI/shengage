@@ -8,7 +8,7 @@ const adobeAnalyticWrapper = ({ ...obj }) => {
         event: 'socialClicks',
         web: {
           webPageDetails: {
-            name: ' <Page-Name> ',
+            name: document.title || '',
           },
         },
         social: {
@@ -16,7 +16,17 @@ const adobeAnalyticWrapper = ({ ...obj }) => {
         },
       };
       break;
+    case 'pageLoaded':
+      dataLayerObj = {
+        event: 'pageLoaded',
+        web: {
+          webPageDetails: {
+            name: document.title || '',
 
+          },
+        },
+      };
+      break;
     default:
       break;
   }
