@@ -3,7 +3,7 @@ const adobeAnalyticWrapper = ({ ...obj }) => {
   let dataLayerObj = {};
 
   switch (event) {
-    case 'linkClick':
+    case 'socialClicks':
       dataLayerObj = {
         event: 'socialClicks',
         web: {
@@ -13,6 +13,21 @@ const adobeAnalyticWrapper = ({ ...obj }) => {
         },
         social: {
           socialPlatform: '<social platform name>',
+        },
+      };
+      break;
+    case 'linkClicks':
+      dataLayerObj = {
+        event: 'linkClicks',
+        web: {
+          webPageDetails: {
+            name: document.title || '',
+          },
+        },
+        webInteraction: {
+          linkName: '<link-name>',
+          linkRegion: '<link-position>',
+          type: 'other',
         },
       };
       break;
