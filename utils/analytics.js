@@ -36,7 +36,7 @@ const adobeAnalyticWrapper = ({ ...obj }) => {
         event: 'pageLoaded',
         web: {
           webPageDetails: {
-            name: document.title || '',
+            name: document.title?.toLowerCase() || '',
 
           },
         },
