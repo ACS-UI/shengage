@@ -25,7 +25,7 @@ const adobeAnalyticWrapper = ({ ...obj }) => {
           },
         },
         webInteraction: {
-          linkName: '<link-name>',
+          linkName: state.linkName,
           linkRegion: '<link-position>',
           type: 'other',
         },
@@ -62,3 +62,4 @@ const pushAnalytics = (obj) => {
 
 export { pushAnalytics };
 export default adobeAnalyticWrapper;
+// pushAnalytics({ state: { linkName: 'viewmore', linkRegion: 'example' } });
