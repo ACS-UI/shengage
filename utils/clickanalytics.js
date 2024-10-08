@@ -1,17 +1,16 @@
-const clickanalytics = () =>{
-  const anchorTags = document.querySelectorAll("a");
-  console.log("s", anchorTags);
+import { pushAnalytics } from './analytics.js';
 
-  anchorTags.forEach((anchor) =>{   
-    const linkName = anchor.innerText;
-    const linkRegion = anchor.closest('.block').getAttribute('data-block-name');
-   
+const clickanalytics = () => {
+  const anchorTags = document.querySelectorAll('a');
+
+  anchorTags.forEach((anchor) => {
+    const linkName = anchor.innerText || '';
+    const linkRegion = anchor.closest('.block').getAttribute('data-block-name') || '';
+
     anchor.addEventListener('click', () => {
-      console.log('name', linkName);
-      console.log('region', linkRegion);
-  
+      pushAnalytics({ event: 'linkClicks', state: { linkName, linkRegion } });
     });
-  })
+  });
 };
 
 export default clickanalytics;

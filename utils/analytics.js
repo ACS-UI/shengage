@@ -21,12 +21,12 @@ const adobeAnalyticWrapper = ({ ...obj }) => {
         event: 'linkClicks',
         web: {
           webPageDetails: {
-            name: document.title || '',
+            name: document.title?.toLowerCase() || '',
           },
         },
         webInteraction: {
           linkName: state.linkName,
-          linkRegion: '<link-position>',
+          linkRegion: state.linkRegion,
           type: 'other',
         },
       };
@@ -45,7 +45,6 @@ const adobeAnalyticWrapper = ({ ...obj }) => {
     default:
       break;
   }
-
   window?.adobeDataLayer.push({
     ...dataLayerObj,
   });
