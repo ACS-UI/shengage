@@ -47,17 +47,20 @@
         margin: 0;
         right: -17px;
         color: #fff;
-        width: 150px;
+        min-width: 150px;
+        max-width:fit-content;
         height: 50px;
-        padding-left: 18px;
+        padding-right: 10px;
         background-color: #2680EB;
         display: flex;
         justify-content: center;
-        align-items: center;
-        background-image: url('../../assets/calendar.svg');
-        background-size: 28px;
-        background-repeat: no-repeat;
-        background-position: 18px;
+        align-items: center;        
+    }
+
+    blockquote::before{
+        content: url("../../assets/calendar.svg");
+        display: inline-block;
+        padding: 0 18px;
     }
 
     ul{
