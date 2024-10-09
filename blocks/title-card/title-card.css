@@ -58,8 +58,8 @@
                 color: white;
                 background-color: #2680EB;
                 border-radius: 10px;
-                padding-right: 18px;
-                width: 150px;
+                padding: 0 18px;
+                width: fit-content;
                 height: 50px;
                 display: flex;
                 align-items: center;
