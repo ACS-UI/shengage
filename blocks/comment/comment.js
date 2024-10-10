@@ -397,7 +397,7 @@ function createCommentHtml(data) {
           <div class="reply-comment" contenteditable="true" placeholder="Write a reply..."></div>
           <div>
             ${isSignedIn ? '<div class="comments-reaction"></div>' : ''}
-            <button  class="submit-comment submit-reply" data-comment-id="${commentId}">Reply</button>
+            <button disabled class="submit-comment submit-reply" data-comment-id="${commentId}">Reply</button>
           </div>
         </div>
       </div>
