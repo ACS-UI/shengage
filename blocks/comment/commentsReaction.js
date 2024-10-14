@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
-import { htmlToElement, debounce, getConfig } from '../../scripts/scripts.js';
+import { htmlToElement, debounce } from '../../scripts/scripts.js';
 import { loadScript } from '../../scripts/aem.js';
+import getConfig from '../../scripts/config.js';
 
 /**
  * Creates a reaction handler closure that encapsulates the inputElement and parent.

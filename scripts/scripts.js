@@ -15,6 +15,7 @@ import {
   loadCSS,
   loadScript,
 } from './aem.js';
+import getConfig from './config.js';
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
 
@@ -73,27 +74,6 @@ export function decorateMain(main) {
 }
 
 /**
- * get site config
- */
-export function getConfig() {
-  if (window.shengage && window.shengage.config) {
-    return window.shengage.config;
-  }
-  const ims = {
-    client_id: 'shengage',
-    environment: 'stage',
-  };
-
-  window.shengage = window.shengage || {};
-  window.shengage.config = {
-    ims,
-    adobeIoEndpoint: 'https://51837-shengageapp.adobeioruntime.net/api/v1/web/shengage',
-    giphyApiKey: 'vcXGLBipjtwyEqhVQgBf8yfU6wAegwA3',
-  };
-  return window.shengage.config;
-}
-
-/**
  * Loads Adobe IMS library and initializes the IMS object.
  * @returns {Promise<void>} - Resolves when IMS is ready or rejects on timeout/error.
  */
@@ -102,7 +82,7 @@ export async function loadIms() {
   window.imsLoaded = window.imsLoaded || new Promise((resolve, reject) => {
     const timeout = setTimeout(() => reject(new Error('IMS timeout')), 5000);
     window.adobeid = {
-      scope: 'AdobeID,additional_info.company,additional_info.ownerOrg,avatar,openid,read_organizations,read_pc,session,account_cluster.read',
+      scope: 'AdobeID,additional_info.company,additional_info.ownerOrg,avatar,openid,read_organizations,read_pc,session,account_cluster.read,pps.read',
       locale: 'en',
       ...ims,
       onReady: () => {

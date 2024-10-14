@@ -328,9 +328,10 @@ function updateElement(comments, commentContainer = null) {
     }
   });
 
-  const commentTexts = subContainer.querySelectorAll('.reply-comment');
-  const replyBtn = subContainer.querySelector('.submit-reply');
-  commentTexts.forEach((commentText) => {
+  const replyForm = subContainer.querySelectorAll('.reply-form');
+  replyForm.forEach((form) => {
+    const commentText = form.querySelector('.reply-comment');
+    const replyBtn = form.querySelector('.submit-reply');
     const reactionPanel = commentText.parentElement.querySelector('.comments-reaction');
     if (isSignedIn && (config.enableEmoji || config.enableGif)) {
       renderReactionWidget(reactionPanel, commentText, config);
