@@ -6,11 +6,10 @@ export default function getConfig() {
     return window.shengage.config;
   }
 
-  const HOSTS = ['main--shengage--acs-ui.hlx.page', 'main--shengage--acs-ui.hlx.live', 'https://shengage.adobe.com'];
+  const HOSTS = ['main--shengage--acs-ui.hlx.page', 'main--shengage--acs-ui.hlx.live', 'shengage.adobe.com'];
 
   const currentHost = window.location.hostname;
-  const currentEnv = HOSTS.includes(currentHost);
-  const isProd = currentEnv === 'PROD';
+  const isProd = HOSTS.includes(currentHost);
   const ppsOrigin = isProd ? 'https://pps.adobe.io' : 'https://pps-stage.adobe.io';
   const ims = {
     client_id: 'shengage',
