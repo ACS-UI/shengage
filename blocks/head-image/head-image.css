@@ -29,7 +29,7 @@
     .head-image.block {
         background-color: var(--link-color);
         border-radius: 10px;
-
+        padding: 10px;
         img{
             border-radius: 10px;
         }
@@ -54,5 +54,12 @@
             margin-top: 0;
             font-size: 20px;
         }
+    }
+}
+
+
+@media (width <= 600px) {
+    .head-image.block {
+        margin-top: -70px;
     }
 }
