@@ -1,5 +1,5 @@
 .section.shengage-header-container{      
-    padding: 0;
+    padding: 2px;
 }
 
 .shengage-header{
@@ -15,7 +15,8 @@
 
 @media screen and (width < 900px) {
     .shengage-header h2{
-        padding-left: 10px;
+        padding-left: 20px;
+        top: 100px;
         line-height: 35px;
         font-size: 36px;     
     }
