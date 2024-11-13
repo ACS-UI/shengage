@@ -9,6 +9,7 @@ footer {
 footer .footer {
   max-width: var(--gutter-width);
   margin: auto;
+  padding: 10px;
 }
 
 footer .footer p {
