@@ -1,26 +1,22 @@
 main .section.black-bar-container {
     @media (width < 900px) {
-        margin-top: 12px;
+        margin-top: 8px;
     }
-
     padding: 0;
     margin: 0;
     margin-top: 64px;
     background-color: #f4f4f6;
-  
     .black-bar-wrapper {
         max-width: 100vw;
         width: 100vw;
-
         .black-bar.block div:has(picture) {
-            height: 120px;
+            height:20vh;
             overflow: hidden;
         }
 
         picture {
             height: 100%;
             display: block;
-
             img {
                 width: 100vw;
                 height: 100%;
@@ -59,6 +55,4 @@ header.header-wrapper nav  ul > li > ul a:any-link{
     header nav .nav-sections li.nav-drop[aria-expanded="true"] {
      color:black;
     }
-
- 
 }
