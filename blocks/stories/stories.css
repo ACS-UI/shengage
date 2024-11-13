@@ -18,7 +18,9 @@
     flex-direction: column;
     align-items: center;
     overflow: hidden;
-
+    overflow-x: auto; 
+    -ms-overflow-style: none;  /* For Internet Explorer and Edge */
+    scrollbar-width: none;
     /* Centering elements */
 }
 
