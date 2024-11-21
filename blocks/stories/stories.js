@@ -1,6 +1,8 @@
+/* eslint-disable no-use-before-define */
 import { createOptimizedPicture } from '../../scripts/aem.js';
 
 export default function decorate(block) {
+  let currentPage = 0;
   const ul = document.createElement('ul');
   ul.classList.add('story-container');
 
@@ -24,7 +26,7 @@ export default function decorate(block) {
           .catch((error) => console.error('Error fetching SVG:', error));
       }
     });
-    ul.appendChild(li);
+    ul.prepend(li);
   });
 
   ul.querySelectorAll('img').forEach((img) => img.closest('picture').replaceWith(createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }])));
@@ -35,35 +37,28 @@ export default function decorate(block) {
   const controlsContainer = document.createElement('div');
   controlsContainer.classList.add('controls-container');
   block.appendChild(controlsContainer);
-
   const createArrow = (direction) => {
     const arrow = document.createElement('div');
     arrow.classList.add('arrow', direction);
-  
     const svgPath = '../../assets/carousel-arrow.svg';
-  
     fetch(svgPath)
       .then((response) => response.text())
       .then((svgContent) => {
         arrow.innerHTML = svgContent;
       })
       .catch((error) => console.error('Error fetching SVG:', error));
-  
     arrow.addEventListener('click', () => {
       if (direction === 'left' && currentPage > 0) {
-        currentPage--;
+        currentPage -= 1;
       } else if (direction === 'right' && currentPage < totalPages - 1) {
-        currentPage++;
+        currentPage += 1;
       }
       updateCarousel();
     });
-  
     return arrow;
   };
-
   const leftArrow = createArrow('left');
   controlsContainer.appendChild(leftArrow);
-
   const slides = ul.children;
   const totalSlides = slides.length;
   const slidesPerPage = 3;
@@ -71,11 +66,12 @@ export default function decorate(block) {
 
   const dotContainer = document.createElement('div');
   dotContainer.classList.add('dot-container');
-
+  // eslint-disable-next-line no-plusplus
   for (let i = 0; i < totalPages; i++) {
     const dot = document.createElement('div');
     dot.classList.add('dot');
     if (i === 0) dot.classList.add('active');
+    // eslint-disable-next-line no-loop-func
     dot.addEventListener('click', () => {
       currentPage = i;
       updateCarousel();
@@ -87,8 +83,6 @@ export default function decorate(block) {
 
   const rightArrow = createArrow('right');
   controlsContainer.appendChild(rightArrow);
-
-  let currentPage = 0;
 
   const updateCarousel = () => {
     const offset = -(currentPage * 100);
