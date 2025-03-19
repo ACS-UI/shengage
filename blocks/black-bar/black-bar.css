@@ -59,6 +59,18 @@ header.header-wrapper nav  ul > li > ul a:any-link{
     header nav .nav-sections li.nav-drop[aria-expanded="true"] {
      color:black;
     }
+}
 
- 
+/* Styling for work mentor program */
+
+@media (width > 900px) {
+
+    main .section.black-bar-container {
+        .black-bar-wrapper {
+            .black-bar.work-mentor.block div:has(picture) {
+                height: 458px;
+            }
+        }
+    }
+    
 }

@@ -87,3 +87,28 @@
 .programdetail-header .row-1 div p:first-of-type{
     max-width: 70%;
 }
+
+/* CSS Styles for work mentor program */
+
+@media (width > 700px) {
+    .work-mentor.programdetail-header .row-1 {
+        position: relative; 
+        margin-top: -286px; 
+        background-color: transparent;
+    }
+
+    .work-mentor.programdetail-header h2{
+        top: 160px;
+    }
+
+    .programdetail-header.bigger-image {
+        & .row-1 {
+            & > div {
+                h2 {
+                    color: white;
+                    font-size: 40px;
+                }
+            }
+        }
+    }
+}

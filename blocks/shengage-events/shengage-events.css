@@ -144,3 +144,67 @@ table.card {
         margin-bottom: 0;
     }
 }
+
+/* CSS Styles for work mentor program */
+.section.shengage-events-container:has(.work-mentor){
+    background-color: #F6EDF6;
+}
+
+@media(width > 768px){
+
+    .work-mentor .eventscontainer .col-0 {
+        width: 83vw;
+    }
+
+    .work-mentor .eventscontainer .col-0 .textfield1{
+        color:black;
+    }
+
+    .work-mentor .eventscontainer .col-0 .textfield1::before{
+        display:none;
+    }
+
+    #about{
+        text-align: center;
+        font-size: 35px;
+    }
+
+.work-mentor .col-1 ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    border: none; 
+    position: relative;
+}
+
+.work-mentor .col-1 ul::before,
+.work-mentor .col-1 ul::after {
+    content: '';
+    position: absolute;
+    background-color: #ccc;
+}
+
+.work-mentor .col-1 ul::before {
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+}
+
+.work-mentor .col-1 ul::after {
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+}
+
+.work-mentor .col-1 ul li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem; 
+}
+
+
+
+}
