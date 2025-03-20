@@ -96,7 +96,7 @@
 
 .work-mentor.programdetail-header .row-1 {
     position: relative;
-    margin-top: -257px;
+    margin-top: -75%;
     background-color: transparent;
 }
 
@@ -113,7 +113,7 @@
 }
 
 .work-mentor.programdetail-header h2 {
-    top: 184px;
+    top: 28%;
     font-size: var(--heading-font-size-xs);
 }
 
@@ -121,7 +121,7 @@
     & .row-1 {
         & > div {
             img {
-                top: 16px;
+                top: 16%;
             }
         }
     }
@@ -145,18 +145,18 @@
         & .row-1 {
             & > div {
                 img {
-                    top: -89px;
+                    top: -110%;
                 }
             }
         }
     }
 
     .work-mentor.programdetail-header h2{
-        top: 147px;
+        top: 25%;
         font-size: var(--heading-font-size-l);
     }
 
     .work-mentor.programdetail-header .row-1 {
-        margin-top: -265px; 
+        margin-top: -22%; 
     }
 }
