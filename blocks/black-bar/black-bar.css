@@ -63,12 +63,20 @@ header.header-wrapper nav  ul > li > ul a:any-link{
 
 /* Styling for work mentor program */
 
+main .section.black-bar-container {
+    .black-bar-wrapper {
+        .black-bar.work-mentor.block div:has(picture) {
+            height: 200px;
+        }
+    }
+}
+
 @media (width > 900px) {
 
     main .section.black-bar-container {
         .black-bar-wrapper {
             .black-bar.work-mentor.block div:has(picture) {
-                height: 458px;
+                height: 355px;
             }
         }
     }

@@ -148,36 +148,33 @@ table.card {
 /* CSS Styles for work mentor program */
 .section.shengage-events-container:has(.work-mentor){
     background-color: #F6EDF6;
+    padding-top: 2rem;
 }
 
-@media(width > 768px){
+.work-mentor .eventscontainer{
+    justify-content: center; 
+    align-items: center;
+    flex-direction: column; 
+    gap: 1rem;
+}
 
-    .work-mentor .eventscontainer .col-0 {
-        width: 83vw;
-    }
+.work-mentor .eventscontainer .col-0, .work-mentor .eventscontainer .col-1{
+    width: 90vw;
+}
 
-    .work-mentor .eventscontainer .col-0 .textfield1{
-        color:black;
-    }
 
-    .work-mentor .eventscontainer .col-0 .textfield1::before{
-        display:none;
-    }
-
-    #about{
-        text-align: center;
-        font-size: 35px;
-    }
+.work-mentor .col-1 ul li strong{
+    font-size: var(--heading-font-size-xl);
+}
 
 .work-mentor .col-1 ul {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    border: none; 
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    border: none;
     position: relative;
-}
+  }
 
-.work-mentor .col-1 ul::before,
+  .work-mentor .col-1 ul::before,
 .work-mentor .col-1 ul::after {
     content: '';
     position: absolute;
@@ -198,12 +195,52 @@ table.card {
     width: 1px;
 }
 
-.work-mentor .col-1 ul li {
+  .work-mentor .col-1 ul li {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 1rem; 
+    padding: 1rem;
+    padding-top:0; 
+    font-size: 20px;
+    align-self: start;
 }
+
+.work-mentor .eventscontainer .col-0 .textfield1{
+    color:black;
+    font-size: var(--heading-font-size-m);
+}
+
+.work-mentor .eventscontainer .col-0 .textfield1::before{
+    display:none;
+}
+
+#about{
+    text-align: center;
+    font-size: var(--heading-font-size-l);
+}
+  
+
+@media(width > 768px){
+
+    .work-mentor .eventscontainer .col-0 {
+        width: 83vw;
+    }
+
+    .work-mentor .eventscontainer .col-0 .textfield1{
+        padding-right: 60px;
+    }
+
+    .work-mentor .eventscontainer .col-1{
+        width: 40vw;
+        padding-right: 30px;
+    }
+
+    .work-mentor .eventscontainer{
+        flex-direction: row;
+    }
+
+    .work-mentor .eventscontainer{
+        gap: 0;
+    }
 
 
 

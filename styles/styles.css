@@ -346,4 +346,8 @@ textarea {
     }
 
   }
+
+  .section.about-work-mentor p, .section.about-work-mentor ul li{
+    font-size: 20px;
+  }
 }
