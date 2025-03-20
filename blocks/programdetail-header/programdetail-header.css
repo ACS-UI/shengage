@@ -87,3 +87,76 @@
 .programdetail-header .row-1 div p:first-of-type{
     max-width: 70%;
 }
+
+/* CSS Styles for work mentor program */
+
+.section.programdetail-header-container:has(.work-mentor){
+    padding-bottom: 0;
+}
+
+.work-mentor.programdetail-header .row-1 {
+    position: relative;
+    margin-top: -75%;
+    background-color: transparent;
+}
+
+.work-mentor.programdetail-header.bigger-image {
+    & .row-1 {
+        & > div {
+            h2 {
+                color: white;
+                font-size: 11px;
+                padding-top: 50px;
+            }
+        }
+    }
+}
+
+.work-mentor.programdetail-header h2 {
+    top: 28%;
+    font-size: var(--heading-font-size-xs);
+}
+
+.work-mentor.programdetail-header.bigger-image {
+    & .row-1 {
+        & > div {
+            img {
+                top: 16%;
+            }
+        }
+    }
+}
+
+
+@media (width > 700px) {
+
+    .work-mentor.programdetail-header.bigger-image {
+        & .row-1 {
+            & > div {
+                h2 {
+                    font-size: var(--heading-font-size-s);
+                    padding-top: 50px;
+                }
+            }
+        }
+    }
+
+    .work-mentor.programdetail-header.bigger-image {
+        & .row-1 {
+            & > div {
+                img {
+                    top: -110%;
+                }
+            }
+        }
+    }
+
+    .work-mentor.programdetail-header h2{
+        top: 25%;
+        font-size: var(--heading-font-size-l);
+    }
+
+    .work-mentor.programdetail-header .row-1 {
+        margin-top: -22%; 
+    }
+}
