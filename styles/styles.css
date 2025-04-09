@@ -147,6 +147,10 @@ pre {
   overflow: scroll;
 }
 
+main{
+  min-height: 100vh;
+}
+
 main pre {
   background-color: var(--light-color);
   padding: 1em;
