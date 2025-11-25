@@ -14,3 +14,38 @@ footer .footer {
 footer .footer p {
   margin: 0;
 }
+
+footer .footer-nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer .default-content-wrapper {
+  margin: 0;
+}
+.footer .footer-nav-wrapper {
+  margin: 0;
+}
+
+.footer .footer-nav-wrapper .footer-nav.block ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer .footer-nav-wrapper .footer-nav.block ul li {
+  margin: 0;
+  padding: 0;
+}
+
+.footer .footer-nav-wrapper .footer-nav.block ul li a {
+  clear: both;
+  padding: 0.2rem;
+  background-color: var(--black);
+  font-size: var(--body-font-size-s);
+  color: var(--white);
+}
