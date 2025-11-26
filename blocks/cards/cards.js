@@ -2,8 +2,8 @@ import { createOptimizedPicture } from '../../scripts/aem.js';
 
 export default function decorate(block) {
   // Build card list
-  const ul = document.createElement('ul');
-  ul.classList.add('card-container');
+  const cardList = document.createElement('ul');
+  cardList.classList.add('card-container');
   [...block.children].forEach((row) => {
     const li = document.createElement('li');
     li.classList.add('card-slide');
@@ -30,22 +30,57 @@ export default function decorate(block) {
             // Append the SVG content to the div
             div.appendChild(svgContainer);
           })
+          /* eslint-disable-next-line no-console */
           .catch((error) => console.error('Error fetching SVG:', error));
       }
     });
-    ul.append(li);
+    cardList.append(li);
   });
 
-  ul.querySelectorAll('img').forEach((img) => {
+  cardList.querySelectorAll('img').forEach((img) => {
     const pic = img.closest('picture');
     if (pic) pic.replaceWith(createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }]));
   });
 
   block.textContent = '';
-  block.append(ul);
+  block.append(cardList);
+
+  // BEGIN: Function declarations moved to function body root
+  function setScrollTo(cardSlides, cardUl, currentCard) {
+    const card = cardSlides[0];
+    const scrollLeft = currentCard * (card ? card.offsetWidth : 0);
+    cardUl.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+  }
+
+  function updateActiveDots(dots, currentCard) {
+    dots.forEach((dot, idx) => {
+      if (idx === currentCard) {
+        dot.classList.add('active');
+      } else {
+        dot.classList.remove('active');
+      }
+    });
+  }
+
+  function goToCard(idx, cardSlides, cardUl, dots, state) {
+    if (idx >= 0 && idx < cardSlides.length) {
+      state.currentCard = idx;
+      setScrollTo(cardSlides, cardUl, state.currentCard);
+      updateActiveDots(dots, state.currentCard);
+    }
+  }
+
+  function forward(cardSlides, cardUl, dots, state) {
+    if (state.currentCard < cardSlides.length - 1) {
+      goToCard(state.currentCard + 1, cardSlides, cardUl, dots, state);
+    } else {
+      goToCard(0, cardSlides, cardUl, dots, state); // Optionally loop back to start
+    }
+  }
+  // END: Function declarations moved to function body root
 
   // Determine if carousel should be activated (more than 4 cards)
-  const cardSlides = ul.querySelectorAll('.card-slide');
+  const cardSlides = cardList.querySelectorAll('.card-slide');
   if (cardSlides.length > 4) {
     block.classList.add('with-carousel');
     // Carousel UI elements
@@ -53,7 +88,7 @@ export default function decorate(block) {
     dotContainer.classList.add('dot-container');
 
     // Add one dot for each card, first dot is active by default
-    for (let i = 0; i < cardSlides.length; i++) {
+    for (let i = 0; i < cardSlides.length; i += 1) {
       const dot = document.createElement('div');
       dot.classList.add('carousel-dot', 'dot');
       if (i === 0) dot.classList.add('active');
@@ -70,48 +105,17 @@ export default function decorate(block) {
 
     const dots = dotContainer.querySelectorAll('.carousel-dot');
     const buttonArrow = dotContainer.querySelector('.arrow');
-    let currentCard = 0;
-
-    function setScrollTo() {
-      const card = cardSlides[0];
-      const scrollLeft = currentCard * (card ? card.offsetWidth : 0);
-      ul.scrollTo({ left: scrollLeft, behavior: 'smooth' });
-    }
-
-    function updateActiveDots() {
-      dots.forEach((dot, idx) => {
-        if (idx === currentCard) {
-          dot.classList.add('active');
-        } else {
-          dot.classList.remove('active');
-        }
-      });
-    }
-
-    function goToCard(idx) {
-      if (idx >= 0 && idx < cardSlides.length) {
-        currentCard = idx;
-        setScrollTo();
-        updateActiveDots();
-      }
-    }
-
-    function forward() {
-      if (currentCard < cardSlides.length - 1) {
-        goToCard(currentCard + 1);
-      } else {
-        goToCard(0); // Optionally loop back to start
-      }
-    }
+    // Use an object for mutable state since functions are now outside
+    const state = { currentCard: 0 };
 
     // Dot click event: Go to card on dot click
     dots.forEach((dot, idx) => {
-      dot.addEventListener('click', () => goToCard(idx));
+      dot.addEventListener('click', () => goToCard(idx, cardSlides, cardList, dots, state));
     });
 
     // Arrow click event
     if (buttonArrow) {
-      buttonArrow.addEventListener('click', forward);
+      buttonArrow.addEventListener('click', () => forward(cardSlides, cardList, dots, state));
     }
   } else {
     // Remove any carousel classes/elements if under 5 cards (simple cards layout)
